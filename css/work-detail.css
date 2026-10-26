@@ -285,3 +285,19 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
   .gallery { grid-template-columns: 1fr; }
   .gallery__lead { margin-left: 0; flex-wrap: wrap; }
 }
+
+/* 縦に長いページ全体の画像(Webサイトのスクリーンショットなど)。
+   ページ上では上の部分だけを見せ、押して拡大すると縦にスクロールして全部見られる */
+.detail__frame--long { aspect-ratio: 4 / 5; }
+.detail__frame--long img { object-position: 50% 0; }
+.piece__fig .detail__frame--long { --w: calc(var(--a) * .9); }
+.detail__frame--long::after { background:
+  linear-gradient(to bottom, transparent 70%, rgba(244, 238, 245, .55)),
+  radial-gradient(28% 22% at 22% 14%, rgba(255, 255, 255, .45), transparent 70%); }
+/* 拡大表示:縦長の画像は横幅を決めて、ステージの中で縦にスクロール */
+.lightbox__stage.is-long { overflow-y: auto; place-items: start center; overscroll-behavior: contain; padding: 12px 0 24px; }
+.lightbox__stage.is-long .lightbox__media { max-height: none; width: min(860px, 100%); height: auto; }
+.lightbox__stage.is-long .lightbox__nav { position: fixed; top: 50%; }
+.lightbox__stage.is-long .lightbox__nav--prev { left: clamp(8px, 2vw, 32px); }
+.lightbox__stage.is-long .lightbox__nav--next { right: clamp(8px, 2vw, 32px); }
+.lightbox__scrollhint { font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink-soft); }

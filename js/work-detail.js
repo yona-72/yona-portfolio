@@ -96,9 +96,14 @@
       el.src = src.currentSrc || src.src; el.alt = src.alt || '';
     }
     el.className = 'lightbox__media';
+    // 縦に長い画像(高さが幅の2倍以上)は、スクロールして全部見られる表示にする
+    var long = src.tagName === 'IMG' && src.naturalHeight > src.naturalWidth * 2;
+    stage.classList.toggle('is-long', long);
+    stage.scrollTop = 0;
     stage.insertBefore(el, stage.firstChild);
     box.querySelector('[data-lb-title]').textContent = piece ? (piece.querySelector('.piece__title') || {}).textContent || '' : '';
     box.querySelector('[data-lb-jp]').textContent = piece ? (piece.querySelector('.piece__jp') || {}).textContent || '' : '';
+    if (long) box.querySelector('[data-lb-jp]').textContent += '  ―  SCROLL ↓';
     box.querySelector('[data-lb-now]').textContent = String(current + 1).padStart(2, '0');
     box.querySelector('[data-lb-all]').textContent = String(list.length).padStart(2, '0');
     if (list.length < 2) box.setAttribute('data-single', ''); else box.removeAttribute('data-single');
