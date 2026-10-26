@@ -185,7 +185,7 @@
       <header class="sec-head">
         <p class="sec-head__label" data-reveal>(SELECTED WORKS) <span>2025 — 2026</span></p>
         <h2 class="sec-head__title" data-reveal>Works</h2>
-        <p class="sec-head__count" data-reveal><b>08</b><span>ITEMS /<br>ARCHIVE</span></p>
+        <p class="sec-head__count" data-reveal><b>07</b><span>ITEMS /<br>ARCHIVE</span></p>
         <p class="sec-head__v" aria-hidden="true">さくひん</p>
         <div class="sec-head__lead" data-reveal>
           <p class="jp">Webサイト、映像、3D、グラフィック、イラスト。<br>光と色を手がかりに、ひとつずつ形にしてきたものたち。</p>
@@ -200,8 +200,9 @@
              左右交互に、少しずつずらして並ぶ。枠の形は4種類が順番に付く。
              クリックできるのは「画像(.work__thumb)」と「View project(.work__more)」の2か所だけ。
              リンク先を変えるときは、この2つの href を両方そろえて書き換える。リンク先はすべて新しいタブで開く(target="_blank")。
-               01・06 → 外部サイト / 02・03・05 → work-02.html・work-03.html・work-05.html / 04 → videos/wedding-profile.mp4 / 07 → リンクなし / 08 → work-08.html
+               01・06 → 外部サイト / 02・03・05 → work-02.html・work-03.html・work-05.html / 04 → videos/wedding-profile.mp4 / 07(イラスト) → work-08.html
              見出し:.work__title-sub が小見出し(上の小さい文字)、.work__title-main が大見出し。小見出しが不要なら、その span ごと消す。
+             ※ イラストは表示上 No.07 だが、ファイル名・リンク(work-08.html・#work-08)は 08 のまま
              画像:images/works/ に、作品ごとの名前で置く(ふだん/ホバー中だけ)。同じ名前で上書きすれば差し替わる。
                01 → 01-marine-site.png / 01-marine-site-hover.png(船舶用品サイト)
                02 → 02-banner-web.png / -hover.png(バナー・Web)
@@ -209,8 +210,7 @@
                04 → 04-profile-movie.png / -hover.png(プロフィールムービー)
                05 → 05-3d-objects.png / -hover.png(Blender)
                06 → 06-wedding-invitation.png / -hover.png(結婚式 招待状)
-               07 → 07-portfolio.png / -hover.png(ポートフォリオ)
-               08 → 08-illustration.jpg / -hover.jpg(イラスト)
+               07 → 08-illustration.jpg / -hover.jpg(イラスト。ファイル名は 08 のまま)
              (正方形がおすすめ。ほかの名前にしたいときは src を書き換える) -->
         <article class="work" data-work="01">
           <div class="work__media">
@@ -339,37 +339,17 @@
             <a class="work__more" href="https://ivory746433.studio.site/" target="_blank" rel="noopener">View project <i>↗</i></a>
           </div>
         </article>
-        <article class="work" data-work="07">
-          <div class="work__media">
-            <div class="work__thumb">
-              <img class="work__img" src="images/works/07-portfolio.png" alt="yona. PORTFOLIO" data-work-img>
-              <img class="work__img work__img--hover" src="images/works/07-portfolio-hover.png" alt="" aria-hidden="true" data-work-img>
-            </div>
-            <span class="work__no">No.07</span>
-          </div>
-          <div class="work__body">
-            <p class="work__index">(07) <span>— 2026.10</span></p>
-            <h3 class="work__title"><span class="work__title-sub">ポートフォリオサイト</span><span class="work__title-main">yona. PORTFOLIO</span></h3>
-            <p class="work__en">PORTFOLIO WEBSITE</p>
-            <span class="tagbox">WEB</span>
-            <p class="work__desc">ポートフォリオサイトになります。十分に余白をとり、見せたい情報への視線誘導をしております。情報の見やすさだけでなく、自身を知っていただくためのデザイン・好みの世界観を取り入れております。カーソルに反応して揺らめく背景をWebGLで描いています。</p>
-            <dl class="work__spec">
-              <div><dt>Role</dt><dd>Design / Code</dd></div>
-              <div><dt>Tool</dt><dd>HTML / CSS / WebGL</dd></div>
-            </dl>
-            <!-- この作品はリンクなし(画像のホバーで切り替わるだけ) -->
-          </div>
-        </article>
+        <!-- 07 だったポートフォリオサイトの項目は外した(画像 07-portfolio.png は images/works に残してある) -->
         <article class="work" data-work="08">
           <div class="work__media">
             <a class="work__thumb" href="work-08.html" target="_blank" rel="noopener">
               <img class="work__img" src="images/works/08-illustration.jpg" alt="ILLUSTRATION" data-work-img>
               <img class="work__img work__img--hover" src="images/works/08-illustration-hover.jpg" alt="" aria-hidden="true" data-work-img>
             </a>
-            <span class="work__no">No.08</span>
+            <span class="work__no">No.07</span>
           </div>
           <div class="work__body">
-            <p class="work__index">(08) <span>— 2026</span></p>
+            <p class="work__index">(07) <span>— 2026</span></p>
             <h3 class="work__title"><span class="work__title-sub">イラスト</span><span class="work__title-main">ILLUSTRATION</span></h3>
             <p class="work__en">ILLUSTRATION GALLERY</p>
             <span class="tagbox">ILLUSTRATION</span>
@@ -383,7 +363,7 @@
         </article>
           <!-- 作品の進み具合を示すバー。スクロールするほど中の色が満ちていく。押すとその作品へ移動 -->
           <nav class="works-bar" aria-label="作品の切り替え">
-            <p class="works-bar__count"><b data-works-now>01</b><span>/ 08</span></p>
+            <p class="works-bar__count"><b data-works-now>01</b><span>/ 07</span></p>
             <ol class="works-bar__list">
               <li><button type="button" data-works-go="0"><span class="works-bar__fill"></span><em>01 — Web</em></button></li>
               <li><button type="button" data-works-go="1"><span class="works-bar__fill"></span><em>02 — Banner / Web</em></button></li>
@@ -391,8 +371,7 @@
               <li><button type="button" data-works-go="3"><span class="works-bar__fill"></span><em>04 — Video</em></button></li>
               <li><button type="button" data-works-go="4"><span class="works-bar__fill"></span><em>05 — 3D</em></button></li>
               <li><button type="button" data-works-go="5"><span class="works-bar__fill"></span><em>06 — Web</em></button></li>
-              <li><button type="button" data-works-go="6"><span class="works-bar__fill"></span><em>07 — Web</em></button></li>
-              <li><button type="button" data-works-go="7"><span class="works-bar__fill"></span><em>08 — Illust</em></button></li>
+              <li><button type="button" data-works-go="6"><span class="works-bar__fill"></span><em>07 — Illust</em></button></li>
             </ol>
             <p class="works-bar__pct"><span data-works-pct>000</span>%</p>
           </nav>
