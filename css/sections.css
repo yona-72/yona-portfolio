@@ -896,3 +896,6 @@ html.is-end .to-top { opacity: 1; visibility: visible; transform: none; }
 .sns__item--soon:hover { padding-left: 4px; background: none; }
 .sns__item--soon:hover .sns__arrow { transform: none; }
 @media (max-width: 560px) { .sns__item--soon .sns__id { display: block; font-size: 10px; } .sns__item--soon .sns__arrow { display: none; } }   /* スマホでもX の「準備中」は見せる */
+
+/* 作品の注釈(「※ トップページのみ制作」など)。説明文の下に小さく添える */
+.work__note { font: 400 11px / 1.8 var(--f-serif); letter-spacing: .05em; color: var(--c-ink-soft); margin-top: -4px; }
