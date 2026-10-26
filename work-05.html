@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja" class="is-scrolled">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>3D Objects — Yona</title>
+  <meta name="description" content="Blenderで制作した3Dオブジェクトのまとめです。金属の重さ、布のやわらかさ、ガラスの透明感と、質感のまったく違うモデルを、それぞれの素材がいちばんそれらしく見える光で仕上げました。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Zen+Kaku+Gothic+New:wght@400;500&family=Zen+Old+Mincho:wght@400;500&family=DM+Mono:wght@300;400;500&display=swap">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/work-detail.css">
+</head>
+<body>
+  <!-- =============================================================
+       作品ページ No.05(Blender 3Dオブジェクト)
+       ・中の作品は <article class="piece"> 1つ分ずつ。画像1枚 + 見出し + 短い説明
+         増やすときは1つ分コピーして、id(piece-4 …)と上の一覧(detail-toc)にも1行足す
+       ・画像は images/works/detail/ に 05-3d-objects-2-horse.jpg(ぬいぐるみ)、05-3d-objects-3-glass.jpg(ガラス)を置く
+         動画は videos/ に 05-3d-objects-1-machine.mp4(機械)、05-3d-objects-4-jelly.mp4(ゼリー)を置く
+         (動画の読み込み中に出す1コマは images/works/detail/ の -poster.jpg)
+       ・画像の形は detail__frame--wide(横長)/ --arch(アーチ)/ --square(まる)。付け替えれば形が変わる
+         (どの形でも見た目の大きさがそろうようにしてある。全体の大きさは work-detail.css の .piece の --a)
+       ============================================================= -->
+
+  <!-- ===== ヘッダー(トップと同じ) ===== -->
+  <header class="site-header">
+    <a class="site-logo" href="index.html"><img src="images/logo-hero.svg" alt="Yona" width="247" height="74"></a>
+    <nav class="site-nav" aria-label="メインメニュー">
+      <a href="index.html" data-nav="top">Home</a>
+      <a href="index.html#work-05" data-nav="works" class="is-current">Works</a>
+      <a href="index.html#about" data-nav="about">About</a>
+      <a href="index.html#sns" data-nav="sns">SNS</a>
+    </nav>
+  </header>
+
+  <!-- ===== 画面のふちの飾り(固定) ===== -->
+  <div class="frame" aria-hidden="true">
+    <span class="frame__plus" style="--x: 0; --y: 34%"></span>
+    <span class="frame__plus" style="--x: 0; --y: 70%"></span>
+    <span class="frame__plus" style="--x: 1; --y: 34%"></span>
+    <span class="frame__plus" style="--x: 1; --y: 70%"></span>
+    <span class="frame__v frame__v--l">ポートフォリオ</span>
+    <span class="frame__v frame__v--r">つくることの記録</span>
+    <span class="frame__index"><b>05</b><i></i><span>Project</span></span>
+  </div>
+
+  <main class="content content--page">
+    <section class="section">
+      <header class="sec-head detail-head">
+        <p class="sec-head__label" data-reveal><a class="back" href="index.html#work-05">← Back</a>(PROJECT No.05) <span>2026</span></p>
+        <h1 class="sec-head__title" data-reveal>3D<br>Objects</h1>
+        <p class="sec-head__count" data-reveal><b>04</b><span>ITEMS /<br>No.05</span></p>
+        <p class="sec-head__v" aria-hidden="true">さくひん</p>
+      </header>
+
+      <!-- このページ全体の説明と、中の作品の一覧 -->
+      <div class="detail-intro">
+        <div class="detail-toc-wrap" data-reveal>
+          <p class="detail-toc-label">(CONTENTS)</p>
+          <ul class="detail-toc">
+            <li><a href="#piece-1"><span>01</span>Recycling Machine</a></li>
+            <li><a href="#piece-2"><span>02</span>Snake Plush</a></li>
+            <li><a href="#piece-3"><span>03</span>Glass Objects</a></li>
+            <li><a href="#piece-4"><span>04</span>Jelly</a></li>
+          </ul>
+        </div>
+        <div class="detail__body" data-reveal>
+          <p class="work__index">(05) <span>— 2026</span></p>
+          <h2 class="work__title"><span class="work__title-sub">Blender 3Dオブジェクト</span><span class="work__title-main">3D Objects</span></h2>
+          <p class="work__en">3D MODELING</p>
+          <span class="tagbox">3D</span>
+          <p class="work__desc">Blenderで制作した3Dオブジェクトのまとめです。金属の重さ、布のやわらかさ、ガラスの透明感と、質感のまったく違うモデルを、それぞれの素材がいちばんそれらしく見える光で仕上げました。</p>
+          <dl class="work__spec">
+            <div><dt>Role</dt><dd>Modeling / Render</dd></div>
+            <div><dt>Tool</dt><dd>Blender</dd></div>
+            <div><dt>Year</dt><dd>2026</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="pieces">
+        <!-- 01:リサイクル工場の機械(動画:音なしで自動再生・くり返し) -->
+        <article class="piece" id="piece-1">
+          <figure class="piece__fig" data-reveal>
+            <div class="detail__frame detail__frame--wide" data-label="VIDEO 01">
+              <video src="videos/05-3d-objects-1-machine.mp4" poster="images/works/detail/05-3d-objects-1-machine-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="リサイクル工場の機械"></video>
+            </div>
+            <figcaption class="detail__cap">(01) Recycling Machine</figcaption>
+          </figure>
+          <div class="piece__text" data-reveal>
+            <p class="piece__no">(01) <span>/ 04</span></p>
+            <h2 class="piece__title">Recycling Machine</h2>
+            <p class="piece__jp">リサイクル工場の機械</p>
+            <p class="piece__desc">リサイクル工場で使われる大型の機械をモデリングしました。細かな部品まで組み立て、ゴミが大小分別され処理される流れを再現しております。</p>
+          </div>
+        </article>
+        <!-- 02:馬のぬいぐるみ -->
+        <article class="piece" id="piece-2">
+          <figure class="piece__fig" data-reveal>
+            <div class="detail__frame detail__frame--square" data-label="IMAGE 02">
+              <img src="images/works/detail/05-3d-objects-2-horse.jpg" alt="馬のぬいぐるみ" data-detail-img>
+            </div>
+            <figcaption class="detail__cap">(02) Horse Plush</figcaption>
+          </figure>
+          <div class="piece__text" data-reveal>
+            <p class="piece__no">(05) <span>/ 04</span></p>
+            <h2 class="piece__title">Horse Plush</h2>
+            <p class="piece__jp">へびのぬいぐるみ</p>
+            <p class="piece__desc">ふわふわとした質感を目指した、ぬいぐるみのモデルです。ふくらみのやわらかさが伝わるよう、毛並みと光の当て方を調整しました。</p>
+          </div>
+        </article>
+        <!-- 03:光の反射の実験 ガラスオブジェクト -->
+        <article class="piece" id="piece-3">
+          <figure class="piece__fig" data-reveal>
+            <div class="detail__frame detail__frame--wide" data-label="IMAGE 03">
+              <img src="images/works/detail/05-3d-objects-3-glass.jpg" alt="光の反射の実験 ガラスオブジェクト" data-detail-img>
+            </div>
+            <figcaption class="detail__cap">(03) Glass Objects</figcaption>
+          </figure>
+          <div class="piece__text" data-reveal>
+            <p class="piece__no">(03) <span>/ 04</span></p>
+            <h2 class="piece__title">Glass Objects</h2>
+            <p class="piece__jp">光の反射の実験 ガラスオブジェクト</p>
+            <p class="piece__desc">光の反射と屈折を試すために制作したガラスのオブジェクトです。背景の色や光の位置・色を変えながら、透明なものに映り込む表情を探りました。</p>
+          </div>
+        </article>
+        <!-- 04:ゼリー(アニメーション)(動画:音なしで自動再生・くり返し) -->
+        <article class="piece" id="piece-4">
+          <figure class="piece__fig" data-reveal>
+            <div class="detail__frame detail__frame--wide" data-label="VIDEO 04">
+              <video src="videos/05-3d-objects-4-jelly.mp4" poster="images/works/detail/05-3d-objects-4-jelly-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="ゼリー(アニメーション)"></video>
+            </div>
+            <figcaption class="detail__cap">(04) Jelly</figcaption>
+          </figure>
+          <div class="piece__text" data-reveal>
+            <p class="piece__no">(04) <span>/ 04</span></p>
+            <h2 class="piece__title">Jelly</h2>
+            <p class="piece__jp">ゼリー(アニメーション)</p>
+            <p class="piece__desc">さくらんぼとクリームをのせたゼリーのアニメーションです。透明感のあるゼリーの質感と、ゆっくり回り込むカメラの動きで、ぷるんとした立体感を表現しました。</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- ほかの作品へ -->
+      <nav class="detail-pager" aria-label="ほかの作品" data-reveal>
+        <a href="work-03.html"><small>← PREV / No.03</small><b>Print & Booth</b></a>
+        <a href="work-02.html"><small>NEXT / No.02 →</small><b>Banner & Web</b></a>
+      </nav>
+      <div class="detail-back" data-reveal>
+        <a class="btn btn--ink btn--flip" href="index.html#work-05"><span class="btn__roll"><span>← Back to works</span><span aria-hidden="true">← Back to works</span></span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer__copy">© <span data-year></span> Yona</p>
+    <span class="site-footer__bars" aria-hidden="true"></span>
+    <p class="site-footer__thanks">THANK YOU FOR VISITING</p>
+    <a class="site-footer__top" href="#">BACK TO TOP <i>↑</i></a>
+  </footer>
+
+  <script src="js/work-detail.js"></script>
+</body>
+</html>

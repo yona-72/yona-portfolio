@@ -1,0 +1,898 @@
+/* =============================================================
+   sections.css  ― ヘッダーと、ファーストビュー以降のセクション
+   ============================================================= */
+.site-header {
+  position: fixed; inset: 0 0 auto; z-index: 10;
+  transition: opacity 1.2s var(--ease-soft) .5s;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: calc(clamp(26px, 3.2vw, 40px) + env(safe-area-inset-top, 0px)) var(--gutter) 18px;   /* 上の余白 */
+  pointer-events: none;          /* 余白部分は背景のカーソル反応を邪魔しない */
+}
+.site-header > * { pointer-events: auto; }
+.site-logo { display: block; line-height: 0; }
+.site-logo img { width: auto; height: clamp(17px, 1.6vw, 22px); }
+.site-nav { display: flex; gap: clamp(14px, 2.4vw, 32px); }
+.site-nav a {
+  display: inline-flex; align-items: center; gap: .4em;
+  font: var(--fs-small) / 1 var(--f-mono); letter-spacing: .18em; text-transform: uppercase;
+  text-decoration: none; color: var(--c-ink);
+  padding-block: 6px; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size .4s var(--ease);
+}
+.site-nav a:hover { background-size: 100% 1px; }
+/* 下のコンテンツまでスクロールしたら、すりガラスの帯は敷かずに、文字そのものを読みやすくする
+   ・文字のまわりに、背景の色になじむ光のにじみ(text-shadow)を付けて、下を流れる文字と重なっても輪郭が浮くように
+   ・ロゴも同じように、ふちに淡い光をまとわせる
+   にじみの色は --c-halo。About / SNS で背景の色が変わると、それに合わせて変わる(下の「セクションごとの背景の色替え」) */
+.site-header {
+  --c-halo: 246, 241, 247;   /* にじみの色(R, G, B)。ふだんはラベンダーの地の色 */
+}
+.site-nav a, .site-logo img {
+  transition: background-size .4s var(--ease), text-shadow .6s var(--ease-soft), filter .6s var(--ease-soft);
+}
+html.is-scrolled .site-nav a {
+  text-shadow:
+    0 0 1px rgba(var(--c-halo), 1),
+    0 0 2px rgba(var(--c-halo), 1),
+    0 0 4px rgba(var(--c-halo), 1),
+    0 0 8px rgba(var(--c-halo), 1),
+    0 0 14px rgba(var(--c-halo), .95),
+    0 0 24px rgba(var(--c-halo), .85);
+}
+/* 文字の後ろに、上から下へすっと消えていく淡い霧を敷く(ぼかしは使わない・境目の線も出ない)。
+   大きな見出しが真下を通っても、ナビの文字がまぎれないようにするため */
+.site-header::before {
+  content: ""; position: absolute; inset: 0 0 -28px; z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(var(--c-halo), .82) 0%,
+    rgba(var(--c-halo), .62) 45%,
+    rgba(var(--c-halo), .24) 75%,
+    rgba(var(--c-halo), 0) 100%);
+  opacity: 0;
+  transition: opacity .5s var(--ease-soft);
+}
+html.is-scrolled .site-header::before { opacity: 1; }
+html.is-scrolled .site-logo img {
+  filter:
+    drop-shadow(0 0 1px rgba(var(--c-halo), 1))
+    drop-shadow(0 0 3px rgba(var(--c-halo), 1))
+    drop-shadow(0 0 8px rgba(var(--c-halo), 1))
+    drop-shadow(0 0 16px rgba(var(--c-halo), .85));
+}
+.site-nav .ext { width: 8px; height: 8px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; }
+
+/* ---- 下のコンテンツ全体 ----
+   ファーストビューの上に重なって上がってくる面。奥行きのある空間に見せるため、背景を3つの層で作っている
+   ・部屋:上から光が差し、下(床)に向かって深くなる色+周りを少し落とした陰影+斜めの光の帯
+   ・浮かぶ光の玉:遠い玉ほど小さく淡く、スクロールしたときゆっくり動く(視差)
+     動く量は main.js が --d(このエリアをどれだけ進んだかのpx)として入れる
+   色はすべて背景画像(ラベンダー・ピンク・淡い青)から取っている */
+.content {
+  --d: 0;
+  --sx: 0px;
+  --sy: 0px;
+  position: relative;
+  z-index: 3;
+  background:
+    /* 一番上はファーストビューとの境目なので無地にして、そこから色をにじませる */
+    linear-gradient(to bottom, var(--c-content) 0, rgba(244, 238, 245, 0) 380px),
+
+    /* 手前の玉:大きく、少し色が濃い(ほとんど動かない) */
+    radial-gradient(circle 34vw at 88% 22%, rgba(236, 206, 226, .70), transparent),
+    radial-gradient(circle 30vw at 6% 64%,  rgba(206, 190, 232, .65), transparent),
+    /* 中間の玉 */
+    radial-gradient(circle 22vw at 30% 30%, rgba(214, 222, 246, .70), transparent),
+    radial-gradient(circle 20vw at 76% 78%, rgba(240, 214, 232, .65), transparent),
+    /* 遠くの玉:小さく、淡い(ゆっくり動く) */
+    radial-gradient(circle 9vw  at 58% 12%, rgba(255, 255, 255, .75), transparent),
+    radial-gradient(circle 11vw at 18% 46%, rgba(226, 216, 244, .80), transparent),
+    radial-gradient(circle 8vw  at 92% 56%, rgba(255, 255, 255, .70), transparent),
+    radial-gradient(circle 10vw at 44% 88%, rgba(232, 222, 246, .75), transparent),
+
+    /* 上から差す光(アーチから漏れる光のイメージ) */
+    radial-gradient(120% 55% at 50% 0%, rgba(255, 255, 255, .55), transparent 65%),
+    /* 斜めに差し込む光の帯(背景画像の左上の光) */
+    linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, .32) 40%, transparent 52%),
+    /* 周りを少し落として、空間の奥を感じさせる陰影 */
+    radial-gradient(140% 90% at 50% 38%, transparent 52%, rgba(130, 100, 168, .16) 100%),
+    /* 床に向かって深くなる地の色 */
+    linear-gradient(180deg, var(--c-content) 0%, #eee6f2 38%, #e6dbea 72%, #dccfe3 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  /* 各層の位置 = スクロールの視差(--d)+ ゆらめき(--sx / --sy、下の @keyframes でゆっくり動く) */
+  background-position:
+    0 0,
+    calc(var(--sx) * .6)  calc(var(--d) * .05px + var(--sy) * -.5),
+    calc(var(--sx) * -.7) calc(var(--d) * .05px + var(--sy) * .6),
+    calc(var(--sx) * 1.1) calc(var(--d) * .18px + var(--sy) * .9),
+    calc(var(--sx) * -1)  calc(var(--d) * .18px + var(--sy) * -.8),
+    calc(var(--sx) * 1.4) calc(var(--d) * .34px + var(--sy) * 1.2),
+    calc(var(--sx) * -1.3) calc(var(--d) * .34px + var(--sy) * -1.1),
+    calc(var(--sx) * 1.2) calc(var(--d) * .34px + var(--sy) * -1.3),
+    calc(var(--sx) * -1.5) calc(var(--d) * .34px + var(--sy) * 1),
+    0 0,
+    calc(var(--sx) * 2.2) 0,
+    0 0, 0 0;
+  /* 横と縦で周期をずらして、同じ動きを繰り返さない水面のような揺らぎにする */
+  animation: content-sway-x 23s ease-in-out infinite alternate, content-sway-y 17s ease-in-out infinite alternate;
+}
+/* ゆらめきの幅。大きくすると大きく揺れる */
+@property --sx { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --sy { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@keyframes content-sway-x { 0% { --sx: -40px; } 45% { --sx: 18px; } 100% { --sx: 40px; } }
+@keyframes content-sway-y { 0% { --sy: 32px; } 55% { --sy: -14px; } 100% { --sy: -32px; } }
+@media (prefers-reduced-motion: reduce) { .content { animation: none; } }
+/* 上端:ファーストビューとの境目を、霧がかかるようにふわっとぼかす */
+.content::before {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 100%;
+  height: clamp(130px, 24vh, 260px);   /* ファーストビューの下の方の文字が見えるよう、霧は低め・薄めに */
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(244, 238, 245, 0) 0%,
+    rgba(244, 238, 245, .18) 40%,
+    rgba(244, 238, 245, .62) 75%,
+    var(--c-content) 100%);
+}
+
+/* ---- セクションごとの背景の色替え ----
+   About まで来たら水色、SNS まで来たらピンク寄りのグラデーションが、上の地の色にふわっと重なる。
+   main.js が html に data-tone="about" / "sns" を付ける(何も付いていない間は元のラベンダーのまま)。
+   .content__tone は .content 全体を覆い、中の .content__tone-in が画面に貼りつく(sticky)ので、
+   どこまでスクロールしても「いま見えている画面」全体がグラデーションになる */
+.content__tone {
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+.content__tone-in {
+  position: sticky; top: 0;
+  height: 100vh; height: 100lvh;   /* スマホでアドレスバーが縮んでも下が切れないように大きい方の高さ */
+  overflow: hidden;
+}
+.content__tone-layer {
+  position: absolute; inset: -6%;
+  opacity: 0;
+  transition: opacity 1.4s var(--ease-soft);
+  background-repeat: no-repeat;
+  animation: tone-drift 26s ease-in-out infinite alternate;
+}
+/* 水色:ガラスに映る淡い青(--c-scene-sky)を主役に、少しだけラベンダーを残してサイトの色となじませる */
+.content__tone-layer--about {
+  background:
+    radial-gradient(circle 34vw at 86% 18%, rgba(186, 228, 242, .85), transparent),
+    radial-gradient(circle 30vw at 6% 68%,  rgba(198, 214, 246, .70), transparent),
+    radial-gradient(circle 20vw at 32% 30%, rgba(214, 240, 246, .80), transparent),
+    radial-gradient(circle 18vw at 74% 80%, rgba(206, 226, 248, .70), transparent),
+    radial-gradient(circle 9vw  at 58% 12%, rgba(255, 255, 255, .80), transparent),
+    radial-gradient(circle 8vw  at 92% 56%, rgba(255, 255, 255, .70), transparent),
+    radial-gradient(120% 55% at 50% 0%, rgba(255, 255, 255, .60), transparent 65%),
+    linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, .34) 40%, transparent 52%),
+    radial-gradient(140% 90% at 50% 38%, transparent 52%, rgba(90, 130, 175, .14) 100%),
+    linear-gradient(170deg, #eef8fb 0%, #dcf0f6 38%, #cde7f2 70%, #d6dff3 100%);
+}
+/* ピンク:背景画像の室内光のピンクを主役に、ほんのり桃〜ラベンダーへ流す */
+.content__tone-layer--sns {
+  background:
+    radial-gradient(circle 34vw at 84% 22%, rgba(246, 204, 224, .85), transparent),
+    radial-gradient(circle 30vw at 8% 66%,  rgba(232, 200, 236, .70), transparent),
+    radial-gradient(circle 20vw at 30% 28%, rgba(252, 222, 230, .80), transparent),
+    radial-gradient(circle 18vw at 76% 80%, rgba(244, 208, 226, .75), transparent),
+    radial-gradient(circle 9vw  at 56% 12%, rgba(255, 255, 255, .80), transparent),
+    radial-gradient(circle 8vw  at 92% 56%, rgba(255, 255, 255, .70), transparent),
+    radial-gradient(120% 55% at 50% 0%, rgba(255, 255, 255, .60), transparent 65%),
+    linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, .34) 40%, transparent 52%),
+    radial-gradient(140% 90% at 50% 38%, transparent 52%, rgba(170, 100, 140, .14) 100%),
+    linear-gradient(170deg, #fdf1f5 0%, #f8e2ec 38%, #f1d2e2 70%, #e8d2e8 100%);
+}
+html[data-tone="about"] .content__tone-layer--about,
+html[data-tone="sns"]   .content__tone-layer--sns { opacity: 1; }
+/* 光の玉がゆっくり漂う */
+@keyframes tone-drift {
+  0%   { transform: translate3d(-1.5%, 1%, 0) scale(1); }
+  100% { transform: translate3d(1.5%, -1%, 0) scale(1.03); }
+}
+@media (prefers-reduced-motion: reduce) { .content__tone-layer { animation: none; } }
+
+/* ヘッダーの文字のにじみとフッターも、いまの色に合わせる */
+html[data-tone="about"] .site-header { --c-halo: 236, 247, 251; }
+html[data-tone="sns"]   .site-header { --c-halo: 252, 238, 244; }
+.site-footer { transition: background-color 1.4s var(--ease-soft); }
+html[data-tone="sns"] .site-footer { background-color: #e8d2e8; }
+html[data-tone="sns"] body { background-color: #e8d2e8; }   /* 下へのオーバースクロールでもピンクのまま */
+
+/* =============================================================
+   ここから下:エディトリアル風のレイアウト
+   小さな英字・( )付きのラベル・縦書き・細い線・反転したラベル箱を散らして、
+   少しずつずらした「不揃い」なリズムをつくっている
+   ============================================================= */
+.section {
+  position: relative;
+  padding: clamp(80px, 10vw, 140px) var(--gutter) clamp(40px, 5vw, 72px);
+  max-width: 1280px; margin-inline: auto;
+}
+
+/* 共通:小さな英字 / 反転したラベル箱 / 丸いピル */
+.tagbox {
+  display: inline-block;
+  padding: .28em .6em .22em;
+  background: var(--c-ink); color: #f6f1f7;
+  font: 500 10px / 1.2 var(--f-mono); letter-spacing: .16em; text-transform: uppercase;
+}
+.pill {
+  display: inline-block; padding: .3em 1.1em;
+  border: 1px solid currentColor; border-radius: 999px;
+  font: 400 10px / 1.2 var(--f-mono); letter-spacing: .16em;
+}
+.jp { font-family: var(--f-serif); font-size: 14px; line-height: 2.1; letter-spacing: .06em; }
+.en { font: 400 10.5px / 1.75 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--c-ink-soft); }
+
+/* ---- セクションの見出し ----
+   (ラベル)・大きな英字・数字・縦書き・リード文を、グリッドの上にずらして置く */
+.sec-head {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: end;
+  column-gap: 16px;
+  margin-bottom: clamp(56px, 9vw, 120px);
+}
+.sec-head__label {
+  grid-column: 1 / -1;
+  font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink);
+  margin-bottom: 18px;
+}
+.sec-head__label span { margin-left: 2.4em; color: var(--c-ink-soft); }
+.sec-head__title {
+  grid-column: 1 / 8;
+  font-family: var(--f-display);
+  font-size: clamp(4rem, 11vw, 9.5rem);
+  line-height: .82; letter-spacing: .01em;
+  margin-left: -.04em;
+}
+.sec-head__count {
+  grid-column: 10 / 13; justify-self: end;
+  display: flex; align-items: flex-end; gap: 12px;
+  margin-bottom: .6em;
+}
+.sec-head__count b { font: 300 clamp(3rem, 6vw, 5rem) / .8 var(--f-display); font-weight: 400; }
+.sec-head__count span { font: 400 9.5px / 1.5 var(--f-mono); letter-spacing: .18em; color: var(--c-ink-soft); }
+.sec-head__lead {
+  grid-column: 6 / 12;
+  margin-top: clamp(28px, 4vw, 48px);
+  display: grid; gap: 14px;
+}
+.sec-head__v {
+  position: absolute; right: calc(var(--gutter) * -.4); top: 0;
+  writing-mode: vertical-rl;
+  font: 400 11px / 1 var(--f-serif); letter-spacing: .5em; color: var(--c-ink-soft);
+}
+/* About / SNS は見出しを右寄せにして、ページ全体で左右に揺らす */
+.sec-head--about .sec-head__title { grid-column: 5 / 13; justify-self: end; }
+.sec-head--about .sec-head__label { text-align: right; }
+.sec-head--about .sec-head__v { right: auto; left: calc(var(--gutter) * -.4); }
+.sec-head--sns .sec-head__title { grid-column: 3 / 10; }
+.sec-head--sns .sec-head__label { padding-left: calc(100% / 6); }
+
+/* ---- Works:大きな水滴の枠を、左右交互に少しずつずらして並べる ---- */
+.works { display: grid; gap: clamp(72px, 10vw, 140px); }
+.work {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: center;
+  column-gap: 16px;
+  text-decoration: none;
+}
+.work__media { position: relative; grid-column: 1 / 8; grid-row: 1; width: min(560px, 100%); }
+.work__body  { grid-column: 8 / 12; grid-row: 1; display: grid; justify-items: start; gap: 12px; }
+/* 偶数番目は左右を入れ替え、上下の位置もずらす */
+.work:nth-child(even) .work__media { grid-column: 6 / 13; justify-self: end; }
+.work:nth-child(even) .work__body  { grid-column: 2 / 6; align-self: start; margin-top: 8%; }
+.work:nth-child(4n+1) .work__body { align-self: end; margin-bottom: 6%; }
+.work:nth-child(4n+3) .work__media { margin-left: 8%; }
+.work:nth-child(4n+3) .work__body { grid-column: 9 / 13; }
+.work:nth-child(4n+4) .work__media { margin-right: 6%; }
+
+.work__no {
+  position: absolute; left: -4px; top: 6%;
+  font: 400 10px / 1 var(--f-mono); letter-spacing: .2em;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+}
+.work:nth-child(even) .work__no { left: auto; right: -4px; transform: none; }
+.work__index { font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
+.work__index span { color: var(--c-ink-soft); margin-left: .6em; }
+.work__title { font: 400 clamp(1.4rem, 2.2vw, 1.9rem) / 1.3 var(--f-serif); letter-spacing: .08em; margin-top: 6px; }
+/* 見出しを「小見出し」+「大見出し」の2段に分ける。
+   <h3 class="work__title"><span class="work__title-sub">小見出し</span><span class="work__title-main">大見出し</span></h3> */
+.work__title-sub {
+  display: block;
+  margin-bottom: .55em;
+  font: 400 12.5px / 1.6 var(--f-serif); letter-spacing: .12em;
+  color: var(--c-ink-soft);
+}
+.work__title-main { display: block; }
+.work__en { font: 400 11px / 1 var(--f-mono); letter-spacing: .28em; margin-top: -4px; }
+.work__desc { font: 400 13.5px / 2.05 var(--f-serif); letter-spacing: .05em; margin-top: 14px; }
+.work__desc-en { font: 400 10px / 1.75 var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--c-ink-soft); }
+.work__spec {
+  margin: 10px 0 0; width: 100%;
+  border-top: 1px solid var(--c-line);
+}
+.work__spec div { display: flex; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--c-line); }
+.work__spec dt { width: 4.5em; font: 400 9.5px / 1.6 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--c-ink-soft); }
+.work__spec dd { margin: 0; font: 400 10.5px / 1.6 var(--f-mono); letter-spacing: .08em; }
+.work__more {
+  margin-top: 10px;
+  font: 500 10.5px / 1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase;
+  padding-bottom: 6px;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+}
+.work__more i { display: inline-block; font-style: normal; margin-left: .6em; transition: transform .5s var(--ease); }
+/* クリックできるのは画像と「View project」だけ。どちらかに乗ったら矢印が動く */
+a.work__more { text-decoration: none; color: inherit; cursor: pointer; transition: opacity .4s var(--ease); }
+a.work__more:hover { opacity: .7; }
+.work:has(.work__thumb:hover, .work__more:hover, .work__thumb:focus-visible, .work__more:focus-visible) .work__more i { transform: translateX(6px); }
+
+/* ---- Works:1つずつ画面に固定して、スクロールで次の作品に切り替える ----
+   main.js が .works に .is-pinned と --n(作品の数)を付ける。
+   .works の高さ = 作品の数 × --step 分のスクロール。その間 .works__stage が画面に貼り付き、
+   今の作品(.is-active)だけがふわっと現れ、前後の作品は消える。
+   JSが動かないときは、ふつうに縦に並ぶ */
+.works.is-pinned {
+  --step: 90svh;                          /* 1作品あたりのスクロール量。大きくするとゆっくり切り替わる */
+  display: block;
+  height: calc(var(--n) * var(--step) + 100svh);
+  margin-top: calc(clamp(56px, 9vw, 120px) * -.4);
+}
+.works.is-pinned .works__stage {
+  position: sticky; top: 0;
+  height: 100vh; height: 100svh;
+  padding: clamp(84px, 11vh, 120px) 0 clamp(92px, 13vh, 130px);
+}
+.works.is-pinned .work {
+  position: absolute; inset: clamp(84px, 11vh, 120px) 0 clamp(92px, 13vh, 130px);
+  opacity: 0;
+  pointer-events: none;
+  perspective: 1600px;            /* 奥行きのある空間。数字が小さいほど遠近感が強くなる */
+  perspective-origin: 50% 45%;
+  transition: opacity 1s var(--ease) .1s;
+}
+.works.is-pinned .work.is-active { opacity: 1; pointer-events: auto; transition-delay: 0s; }
+
+/* ---- 作品の切り替え:奥から手前へ ----
+   次の作品の枠は、右奥(遠く・小さく・ぼやけた所)から、ゆっくり回り込みながら手前に来る。
+   見終わった作品の枠は、左手前へすり抜けるように消える。
+   --oy は作品ごとのほんの少しの上下のずれ */
+.works.is-pinned .work__media {
+  --oy: 0%;
+  transform: translate3d(34%, var(--oy), -1100px) rotateY(-26deg) scale(.92);
+  filter: blur(14px);
+  opacity: 0;
+  transition: transform 1.6s cubic-bezier(.16, .8, .2, 1), filter 1.3s var(--ease), opacity 1.1s var(--ease);
+}
+.works.is-pinned .work.is-before .work__media {
+  transform: translate3d(-38%, var(--oy), 360px) rotateY(20deg) scale(1.04);
+  filter: blur(16px);
+}
+.works.is-pinned .work.is-active .work__media {
+  transform: translate3d(0, var(--oy), 0) rotateY(0) scale(1);
+  filter: none; opacity: 1;
+}
+/* 手前に来たあとも、水面に浮かぶように、ほんのわずかに近づいたり離れたりし続ける
+   (ホバーの判定がずれないよう、立体ではなく平面の拡大・回転で表現している) */
+.works.is-pinned .work.is-active .work__thumb { animation: drop-float 9s ease-in-out 1.6s infinite alternate; }
+@keyframes drop-float {
+  0%   { transform: scale(1)     rotate(-1.2deg) translateY(0); }
+  50%  { transform: scale(1.035) rotate(.6deg)   translateY(-1.2%); }
+  100% { transform: scale(1.015) rotate(1.4deg)  translateY(-.4%); }
+}
+/* 枠の下に落ちる、やわらかい影(手前に来るほど濃く) */
+.works.is-pinned .work__media::after {
+  content: ""; position: absolute; left: 14%; right: 14%; top: 100%; height: 9%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(110, 80, 160, .28), transparent);
+  filter: blur(6px);
+  transform: translateY(-30%);
+  opacity: 0; transition: opacity 1.4s var(--ease) .5s;
+}
+.works.is-pinned .work.is-active .work__media::after { opacity: 1; }
+/* 文章は、枠と同じ向きに少しだけ横へ流れて入れ替わる */
+.works.is-pinned .work .work__body > * { transform: translateX(36px); }
+.works.is-pinned .work.is-before .work__body > * { transform: translateX(-36px); }
+@media (prefers-reduced-motion: reduce) {
+  .works.is-pinned .work__media, .works.is-pinned .work.is-before .work__media { transform: none; filter: none; }
+  .works.is-pinned .work.is-active .work__thumb { animation: none; }
+}
+/* 固定中の並び:枠と文章を中央に寄せて間を詰め、まわりの余白の方を広くとる
+   (間の広さは gap、全体の幅は .work__media / .work__body の width で調整) */
+.works.is-pinned .work {
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(36px, 4.5vw, 72px);
+}
+.works.is-pinned .work:nth-child(even) { flex-direction: row-reverse; }
+.works.is-pinned .work__media,
+.works.is-pinned .work:nth-child(n) .work__media { flex: none; width: min(500px, 44%, 60svh); margin: 0; }
+.works.is-pinned .work:nth-child(4n+3) .work__media { --oy: 4%; }   /* ほんの少しだけ上下をずらす */
+.works.is-pinned .work:nth-child(4n+4) .work__media { --oy: -3%; }
+/* 固定中の説明文:縦の真ん中より少し上にそろえ、行ごとに少しずらして遊びを付ける */
+.works.is-pinned .work__body,
+.works.is-pinned .work:nth-child(n) .work__body { flex: none; width: min(400px, 36%); align-self: center; margin: 0; transform: translateY(-6%); position: relative; padding-left: 2.6em; }
+/* 番号と日付は縦書きにして、文章の左わきに添える */
+.works.is-pinned .work__index {
+  position: absolute; left: 0; top: .35em;
+  writing-mode: vertical-rl; letter-spacing: .24em;
+}
+.works.is-pinned .work__en { margin-left: 3.2em; }
+.works.is-pinned .work__desc { margin-top: 10px; }
+.works.is-pinned .work__spec { width: 86%; margin-left: 14%; }
+.works.is-pinned .work__more { margin-left: auto; margin-right: 14%; }
+/* 固定中は画面の高さに収まるように、枠の大きさを高さでも制限する */
+/* 現れるとき、文章は枠より少し遅れて出る */
+.works.is-pinned .work__body > * { opacity: 0; transform: translateY(14px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.works.is-pinned .work.is-active .work__body > * { opacity: 1; transform: none; }
+.works.is-pinned .work.is-active .work__body > :nth-child(1) { transition-delay: .35s; }
+.works.is-pinned .work.is-active .work__body > :nth-child(2) { transition-delay: .42s; }
+.works.is-pinned .work.is-active .work__body > :nth-child(3) { transition-delay: .49s; }
+.works.is-pinned .work.is-active .work__body > :nth-child(4) { transition-delay: .56s; }
+.works.is-pinned .work.is-active .work__body > :nth-child(5) { transition-delay: .63s; }
+.works.is-pinned .work.is-active .work__body > :nth-child(6) { transition-delay: .7s; }
+.works.is-pinned .work.is-active .work__body > :nth-child(n+7) { transition-delay: .77s; }
+
+/* ---- 作品の進み具合のバー ----
+   4つの区切りの中に、スクロールするほど色が満ちていく(--f:0〜1 を main.js が入れる)。
+   満ちるほど色も濃くなる */
+.works-bar { display: none; }
+.works.is-pinned .works-bar {
+  position: absolute; left: 0; right: 0; bottom: clamp(48px, 7.5vh, 72px);   /* 左下の番号と重ならない高さ */
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+  gap: clamp(16px, 3vw, 40px);
+}
+.works-bar__count { display: flex; align-items: baseline; gap: 8px; font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink-soft); }
+.works-bar__count b { font: 300 24px / 1 var(--f-mono); letter-spacing: .04em; color: var(--c-ink); min-width: 1.4em; }
+.works-bar__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 6px; }
+.works-bar__list button {
+  all: unset; cursor: pointer; box-sizing: border-box;
+  display: grid; gap: 10px; width: 100%; padding: 10px 0;
+}
+.works-bar__list button:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 4px; }
+.works-bar__fill {
+  --f: 0;
+  position: relative; display: block; height: 3px; border-radius: 3px; overflow: hidden;
+  background: rgba(70, 50, 80, .12);
+  box-shadow: inset 0 0 0 .5px rgba(255, 255, 255, .6);
+}
+.works-bar__fill::before {
+  content: ""; position: absolute; inset: 0;
+  transform-origin: left; transform: scaleX(var(--f));
+  background: linear-gradient(90deg, #d9cbee, #a98fd6 55%, var(--c-ink));
+  opacity: calc(.45 + var(--f) * .55);
+}
+.works-bar__list button em {
+  font: 400 9.5px / 1 var(--f-mono); font-style: normal; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--c-ink-soft); opacity: .7; transition: color .5s, opacity .5s;
+}
+.works-bar__list button.is-active em, .works-bar__list button:hover em { color: var(--c-ink); opacity: 1; }
+.works-bar__list button.is-active .works-bar__fill { box-shadow: 0 0 10px rgba(169, 143, 214, .55); }
+.works-bar__pct { font: 400 10px / 1 var(--f-mono); letter-spacing: .16em; color: var(--c-ink-soft); }
+
+/* ---- 作品の枠:水が落ちたような、ゆるく波打つ円 ----
+   形は index.html の <svg class="drop-defs"> にある drop-1〜4。4種類が順番に付き、ゆっくり揺らめく。
+   (古いブラウザで形が使えないときは、ただの円になる) */
+.work__thumb {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  clip-path: url(#drop-1);
+  /* 画像が無いときの面:背景画像のラベンダーの壁 → アーチの明るい壁 → 床の色 */
+  background:
+    radial-gradient(70% 60% at 50% 35%, rgba(255, 255, 255, .45), transparent 70%),
+    linear-gradient(135deg, var(--c-scene-lilac), var(--c-scene-blush) 50%, var(--c-scene-floor));
+  transition: transform .9s var(--ease);
+}
+.work:nth-child(4n+2) .work__thumb { clip-path: url(#drop-2); }
+.work:nth-child(4n+3) .work__thumb { clip-path: url(#drop-3); }
+.work:nth-child(4n+4) .work__thumb { clip-path: url(#drop-4); }
+/* 水滴のつや:左上の映り込みと、ふちの明るい輪 */
+.work__thumb::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(22% 16% at 32% 24%, rgba(255, 255, 255, .7), transparent 70%),
+    radial-gradient(circle at 50% 50%, transparent 58%, rgba(255, 255, 255, .28) 70%, rgba(255, 255, 255, .5) 76%),
+    radial-gradient(circle at 60% 72%, rgba(120, 90, 160, .12), transparent 55%);
+}
+/* 枠の中の画像。2枚重ねて、ホバーしている間だけ2枚目(--hover)がふわっと現れる */
+.work__thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease), opacity .7s var(--ease); }
+.work__img--hover { opacity: 0; }
+/* 判定は画像(水滴の形の内側)だけ。カーソルが画像から離れると元の画像に戻る */
+.work__thumb:hover .work__img--hover,
+.work__thumb:focus-visible .work__img--hover { opacity: 1; }
+a.work__thumb { display: block; cursor: pointer; }
+a.work__thumb:focus-visible { outline: none; }   /* 水滴の形で外枠が切れるので、代わりにホバー画像を出す */
+/* 枠そのものは動かさず(判定の範囲がずれないように)、中の画像だけ少し寄る */
+.work__thumb:hover img { transform: scale(1.06); }
+
+/* ---- 枠のまわりの波紋 ----
+   ホバーすると、水面に落ちたように波打つ輪がひとつ、ぼやけながら広がって消えていく。
+   輪の形は作品ごとに違う(下の --ring-a。ランダムな波線のSVG)。
+   main.js がホバーのたびに .is-rippling を付け直して、1回ずつ再生する */
+.work__media::before {
+  content: "";
+  position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 1;
+  pointer-events: none; z-index: -1;
+  background: var(--ring-a) center / 100% 100% no-repeat;
+  /* 線のぼかし具合。blur を大きくするほど柔らかくにじむ */
+  filter: blur(2px) drop-shadow(0 0 7px rgba(255, 255, 255, .85));
+  opacity: 0;
+}
+.work.is-rippling .work__media::before, .arc.is-rippling .work__media::before { animation: work-ripple 3.2s cubic-bezier(.25, .5, .35, 1) both; --rot: 14deg; }
+/* 枠の下からにじみ出て、広がりながらゆっくり消える */
+@keyframes work-ripple {
+  0%   { opacity: 0;   transform: scale(.9) rotate(0deg); }
+  12%  { opacity: 1; }
+  45%  { opacity: .6; }
+  100% { opacity: 0;   transform: scale(1.36) rotate(var(--rot)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work.is-rippling .work__media::before, .arc.is-rippling .work__media::before { animation: none; }
+}
+.work, .arc {
+  --ring-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M92.7 50.0C93.0 52.3 93.7 54.6 93.8 56.9C94.0 59.3 94.2 61.9 93.7 64.2C93.3 66.5 92.2 68.9 90.9 70.9C89.6 72.8 87.6 74.5 85.8 76.0C84.1 77.6 82.1 78.8 80.3 80.3C78.6 81.8 77.0 83.3 75.3 84.8C73.6 86.4 72.1 88.3 70.2 89.6C68.3 91.0 66.2 92.4 64.0 93.1C61.8 93.8 59.3 94.0 56.9 93.9C54.6 93.8 52.2 92.9 50.0 92.4C47.8 91.9 45.7 91.2 43.5 90.8C41.4 90.4 39.2 90.3 37.0 90.0C34.8 89.7 32.3 89.6 30.1 89.0C28.0 88.3 25.7 87.3 23.9 86.0C22.1 84.6 20.6 82.6 19.3 80.7C18.0 78.8 17.1 76.6 16.1 74.7C15.0 72.7 14.0 70.8 12.8 69.0C11.5 67.1 10.0 65.4 8.7 63.4C7.5 61.4 6.0 59.3 5.3 57.1C4.6 54.8 4.2 52.3 4.3 50.0C4.5 47.7 5.4 45.3 6.1 43.1C6.9 40.8 8.2 38.8 9.0 36.7C9.9 34.6 10.7 32.5 11.5 30.4C12.3 28.2 12.8 25.8 13.8 23.7C14.8 21.5 15.9 19.2 17.5 17.5C19.1 15.7 21.2 14.3 23.3 13.3C25.4 12.2 28.0 11.8 30.3 11.2C32.5 10.7 34.8 10.5 37.0 10.0C39.2 9.5 41.2 8.7 43.4 8.1C45.5 7.4 47.7 6.4 50.0 6.1C52.3 5.7 54.7 5.5 57.0 5.9C59.2 6.3 61.5 7.4 63.5 8.5C65.5 9.7 67.2 11.4 69.0 12.7C70.8 14.1 72.4 15.5 74.2 16.7C76.0 17.9 78.0 18.8 80.0 20.0C81.9 21.2 84.1 22.4 85.8 24.0C87.5 25.6 89.1 27.5 90.1 29.6C91.0 31.7 91.4 34.1 91.8 36.4C92.1 38.7 91.9 41.1 92.1 43.3C92.2 45.6 92.4 47.7 92.7 50.0Z' fill='none' stroke='white' stroke-width='.55'/%3E%3C/svg%3E");
+}
+.work:nth-child(4n+2), .arc:nth-child(4n+2) {
+  --ring-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M94.6 50.0C94.7 52.3 93.8 54.7 92.9 56.8C91.9 58.9 90.1 60.7 89.0 62.7C87.8 64.6 86.9 66.3 86.2 68.4C85.4 70.5 85.4 73.0 84.6 75.2C83.9 77.3 83.1 79.9 81.6 81.6C80.1 83.3 77.9 84.5 75.8 85.5C73.7 86.4 71.1 86.5 69.0 87.2C66.8 87.9 64.9 88.6 62.9 89.7C60.9 90.7 59.0 92.5 56.9 93.5C54.7 94.6 52.3 95.8 50.0 96.0C47.7 96.2 45.2 95.4 42.9 94.6C40.7 93.7 38.8 91.9 36.8 90.8C34.7 89.6 32.9 88.6 30.7 87.8C28.6 87.0 26.1 86.9 23.9 86.0C21.7 85.1 19.2 84.1 17.5 82.5C15.8 80.9 14.7 78.5 13.9 76.3C13.0 74.0 13.1 71.3 12.5 69.1C12.0 66.8 11.5 64.8 10.7 62.8C9.8 60.7 8.2 58.9 7.4 56.8C6.5 54.6 5.4 52.3 5.4 50.0C5.3 47.7 6.2 45.3 7.1 43.2C8.1 41.1 9.9 39.3 11.0 37.3C12.2 35.4 13.1 33.7 13.8 31.6C14.6 29.5 14.6 27.0 15.4 24.8C16.1 22.7 16.9 20.1 18.4 18.4C19.9 16.7 22.1 15.5 24.2 14.5C26.3 13.6 28.9 13.5 31.0 12.8C33.2 12.1 35.1 11.4 37.1 10.3C39.1 9.3 41.0 7.5 43.1 6.5C45.3 5.4 47.7 4.2 50.0 4.0C52.3 3.8 54.8 4.6 57.1 5.4C59.3 6.3 61.2 8.1 63.2 9.2C65.3 10.4 67.1 11.4 69.3 12.2C71.4 13.0 73.9 13.1 76.1 14.0C78.3 14.9 80.8 15.9 82.5 17.5C84.2 19.1 85.3 21.5 86.1 23.7C87.0 26.0 86.9 28.7 87.5 30.9C88.0 33.2 88.5 35.2 89.3 37.2C90.2 39.3 91.8 41.1 92.6 43.2C93.5 45.4 94.6 47.7 94.6 50.0Z' fill='none' stroke='white' stroke-width='.55'/%3E%3C/svg%3E");
+}
+.work:nth-child(4n+3), .arc:nth-child(4n+3) {
+  --ring-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M92.4 50.0C91.8 52.2 91.0 54.3 90.5 56.4C89.9 58.5 89.6 60.6 89.1 62.7C88.7 64.9 88.5 67.1 88.0 69.3C87.4 71.5 86.7 73.9 85.7 75.9C84.6 78.0 83.2 79.9 81.5 81.5C79.9 83.1 77.8 84.4 75.8 85.5C73.8 86.7 71.6 87.5 69.5 88.3C67.4 89.2 65.4 90.0 63.3 90.8C61.2 91.7 59.1 92.7 56.9 93.4C54.7 94.2 52.3 95.1 50.0 95.4C47.7 95.8 45.1 95.9 42.8 95.4C40.5 95.0 38.1 94.0 36.1 92.8C34.0 91.7 32.2 89.9 30.5 88.3C28.7 86.8 27.3 85.0 25.7 83.4C24.2 81.8 22.7 80.4 21.1 78.9C19.4 77.5 17.6 76.2 16.0 74.7C14.3 73.2 12.5 71.6 11.1 69.8C9.7 68.0 8.4 65.9 7.6 63.8C6.8 61.6 6.5 59.2 6.3 56.9C6.2 54.6 6.5 52.3 6.7 50.0C6.9 47.7 7.4 45.5 7.7 43.3C8.0 41.1 8.2 38.8 8.6 36.5C9.0 34.3 9.2 31.8 9.9 29.6C10.6 27.3 11.5 24.9 12.8 23.0C14.1 21.0 15.9 19.2 17.8 17.8C19.7 16.4 22.1 15.4 24.3 14.6C26.5 13.8 28.9 13.4 31.0 12.8C33.2 12.2 35.3 11.8 37.4 11.1C39.5 10.5 41.4 9.7 43.5 9.0C45.6 8.2 47.8 7.3 50.0 6.8C52.2 6.4 54.7 6.0 56.9 6.1C59.2 6.3 61.6 6.9 63.7 7.7C65.9 8.5 67.9 9.9 69.8 11.2C71.7 12.4 73.4 13.9 75.2 15.3C77.0 16.7 78.7 18.0 80.5 19.5C82.3 20.9 84.3 22.2 86.0 23.9C87.7 25.5 89.5 27.2 90.8 29.2C92.0 31.2 93.1 33.5 93.6 35.8C94.1 38.1 94.1 40.7 93.9 43.0C93.7 45.4 92.9 47.8 92.4 50.0Z' fill='none' stroke='white' stroke-width='.55'/%3E%3C/svg%3E");
+}
+.work:nth-child(4n+4), .arc:nth-child(4n+4) {
+  --ring-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M93.0 50.0C92.6 52.3 92.2 54.4 91.8 56.6C91.3 58.8 90.9 61.0 90.4 63.1C89.8 65.3 89.3 67.5 88.5 69.6C87.7 71.8 86.9 73.9 85.7 75.9C84.5 77.9 83.1 79.9 81.5 81.5C79.9 83.2 78.1 84.7 76.2 86.0C74.2 87.3 72.1 88.3 70.0 89.2C67.9 90.1 65.6 90.8 63.4 91.4C61.2 92.0 59.0 92.5 56.8 92.8C54.5 93.2 52.3 93.5 50.0 93.6C47.7 93.7 45.4 93.8 43.1 93.5C40.8 93.3 38.5 92.8 36.3 92.1C34.1 91.4 32.0 90.4 30.0 89.2C28.0 88.1 26.2 86.6 24.5 85.1C22.8 83.6 21.2 82.0 19.7 80.3C18.2 78.6 16.8 76.9 15.5 75.1C14.1 73.3 12.7 71.5 11.5 69.6C10.3 67.7 9.0 65.7 8.0 63.7C7.0 61.6 6.0 59.3 5.4 57.1C4.9 54.8 4.5 52.3 4.6 50.0C4.6 47.7 5.0 45.2 5.7 43.0C6.4 40.7 7.4 38.6 8.5 36.5C9.7 34.5 11.0 32.6 12.3 30.8C13.6 29.0 15.0 27.3 16.3 25.5C17.6 23.8 18.9 22.0 20.3 20.3C21.6 18.5 23.0 16.6 24.5 14.9C26.1 13.2 27.7 11.4 29.6 9.9C31.5 8.5 33.6 7.1 35.8 6.3C38.0 5.4 40.4 4.8 42.8 4.6C45.2 4.5 47.7 4.8 50.0 5.2C52.3 5.7 54.6 6.6 56.7 7.4C58.9 8.3 60.9 9.3 62.9 10.3C64.9 11.2 66.8 12.1 68.8 13.0C70.8 14.0 72.8 14.8 74.9 15.8C76.9 16.8 79.0 17.8 81.0 19.0C82.9 20.3 84.9 21.7 86.6 23.4C88.2 25.1 89.7 27.1 90.8 29.2C91.9 31.3 92.6 33.7 93.1 36.0C93.6 38.3 93.6 40.8 93.6 43.1C93.6 45.4 93.3 47.7 93.0 50.0Z' fill='none' stroke='white' stroke-width='.55'/%3E%3C/svg%3E");
+}
+
+/* ---- About ---- */
+.about {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 16px; row-gap: clamp(48px, 7vw, 96px);
+}
+.about__name { grid-column: 1 / 5; align-self: start; }
+.about__big { font: 400 clamp(3.2rem, 6vw, 5.4rem) / 1 var(--f-display); letter-spacing: .02em; }
+/* 「。」は文字ではなく細い線の輪で描いて、yona の線の細さに合わせる(太さは border の数字) */
+.about__maru {
+  display: inline-block;
+  width: .2em; aspect-ratio: 1;
+  margin-left: .1em;
+  border: max(1px, .026em) solid currentColor;
+  border-radius: 50%;
+  vertical-align: baseline;
+}
+.about__role { margin-top: 18px; font: 400 10.5px / 1.9 var(--f-mono); letter-spacing: .22em; }
+.about__role span { display: inline-block; margin-left: 3.2em; color: var(--c-ink-soft); }
+.about__text { grid-column: 6 / 12; display: grid; gap: 1.2em; padding-top: 24px; }
+.about__facts {
+  grid-column: 2 / 8; margin: 0;
+  border-top: 1px solid var(--c-line);
+}
+.about__facts div { display: grid; grid-template-columns: 11em 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--c-line); }
+.about__facts dt { font: 400 10px / 1.7 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--c-ink-soft); }
+.about__facts dd { margin: 0; font: 400 11px / 1.7 var(--f-mono); letter-spacing: .08em; }
+.about__note { grid-column: 9 / 13; align-self: end; display: grid; justify-items: start; gap: 12px; transform: translateY(24px); }
+.about__note .jp { font-size: 13px; }
+
+/* ---- SNS:細い線で区切った一覧 ---- */
+.sns { list-style: none; margin: 0 0 0 auto; padding: 0; width: min(100%, 980px); border-top: 1px solid var(--c-line); }
+.sns__item {
+  display: grid;
+  grid-template-columns: 4em minmax(0, 1fr) 10em 9em 2em;
+  align-items: baseline; gap: 16px;
+  padding: 22px 4px;
+  border-bottom: 1px solid var(--c-line);
+  text-decoration: none;
+  transition: padding .5s var(--ease), background .5s var(--ease);
+}
+.sns__item:hover { padding-left: 20px; background: linear-gradient(90deg, rgba(255, 255, 255, .45), transparent 70%); }
+.sns__no { font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink-soft); }
+.sns__name { font: 400 clamp(1.6rem, 3vw, 2.4rem) / 1 var(--f-display); letter-spacing: .03em; }
+.sns__what { font: 400 9.5px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink-soft); }
+.sns__id { font: 400 11px / 1 var(--f-mono); letter-spacing: .1em; }
+.sns__arrow { font: 400 14px / 1 var(--f-mono); justify-self: end; transition: transform .5s var(--ease); }
+.sns__item:hover .sns__arrow { transform: translate(3px, -3px); }
+
+/* ---- フッター ---- */
+.site-footer {
+  position: relative; z-index: 3;
+  background: #dccfe3;   /* .content の一番下の色につなげる */
+  display: grid; grid-template-columns: 1fr auto 1fr auto; align-items: center; gap: 24px;
+  padding: 28px var(--gutter) calc(28px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--c-line);
+  font: 400 10px / 1 var(--f-mono); letter-spacing: .18em; color: var(--c-ink);
+}
+.site-footer__bars {
+  width: 120px; height: 18px;
+  background: repeating-linear-gradient(90deg, var(--c-ink) 0 1px, transparent 1px 3px, var(--c-ink) 3px 5px, transparent 5px 6px, var(--c-ink) 6px 7px, transparent 7px 10px);
+  opacity: .55;
+}
+.site-footer__thanks { justify-self: center; color: var(--c-ink-soft); }
+.site-footer__top { text-decoration: none; }
+.site-footer__top i { font-style: normal; display: inline-block; margin-left: .5em; transition: transform .5s var(--ease); }
+.site-footer__top:hover i { transform: translateY(-3px); }
+
+/* ---- 画面のふちの飾り(固定) ---- */
+.frame { position: fixed; inset: 0; z-index: 9; pointer-events: none; color: var(--c-ink); transition: opacity 1.2s var(--ease-soft) .6s; }
+.frame__index { transition: opacity .5s var(--ease-soft); }
+html.is-end .frame__index { opacity: 0; }   /* 一番下ではフッターと重ならないように隠す */
+html.is-intro .frame { opacity: 0; }
+.frame__plus {
+  position: absolute; top: var(--y);
+  left: calc(var(--x) * (100% - 2 * var(--gutter) * .5) + var(--gutter) * .5 - 7px);
+  width: 14px; height: 14px;
+  background: linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat,
+              linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat;
+  opacity: .55;
+}
+/* 縦書きの文字は、上下の十字(34% と 70%)のちょうど真ん中に置く。十字の中心は top から 7px 下 */
+.frame__v {
+  position: absolute; top: calc((34% + 70%) / 2 + 7px); transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font: 400 10.5px / 1 var(--f-serif); letter-spacing: .55em; opacity: .7;
+}
+.frame__v--l { left: calc(var(--gutter) * .5 - 6px); }
+.frame__v--r { right: calc(var(--gutter) * .5 - 6px); }
+.frame__index {
+  position: absolute; left: calc(var(--gutter) * .5); bottom: max(20px, env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 10px;
+  font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase;
+}
+.frame__index b { font-weight: 500; }
+.frame__index i { width: 28px; height: 1px; background: currentColor; opacity: .6; }
+
+/* ---- ファーストビューの間だけ、ナビをメニューボタンにまとめる ----
+   main.js が、ファーストビューにいる間 html に .at-hero を付ける。
+   Works 以降に進むと .at-hero が外れて、いつものナビが現れる(works.html はいつものナビのまま) */
+.site-nav { transition: opacity .6s var(--ease), transform .6s var(--ease), visibility .6s; }
+html.at-hero .site-nav { opacity: 0; transform: translateY(-8px); visibility: hidden; }
+
+.menu-btn {
+  all: unset; cursor: pointer; box-sizing: border-box; pointer-events: auto;   /* ヘッダーは pointer-events: none なので、ボタンだけ押せるように戻す */
+  position: absolute; right: var(--gutter); top: calc(clamp(26px, 3.2vw, 40px) + env(safe-area-inset-top, 0px) - 10px);
+  width: 44px; height: 44px;
+  opacity: 0; visibility: hidden; transform: translateY(-8px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease), visibility .6s;
+}
+html.at-hero .menu-btn, html.menu-open .menu-btn { opacity: 1; visibility: visible; transform: none; }
+.menu-btn:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 2px; border-radius: 4px; }
+/* 3本の斜め線:平行に並べ、長さを少しずつ変える */
+.menu-btn span {
+  position: absolute; left: 50%; top: 50%;
+  width: var(--len); height: 1px; background: var(--c-ink);
+  transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) rotate(-45deg);
+  transition: transform .6s var(--ease), width .6s var(--ease), opacity .4s var(--ease);
+}
+.menu-btn span:nth-child(1) { --len: 18px; --dx: -6px; --dy: -6px; }
+.menu-btn span:nth-child(2) { --len: 28px; --dx: 0px;  --dy: 0px; }
+.menu-btn span:nth-child(3) { --len: 14px; --dx: 6px;  --dy: 6px; }
+.menu-btn:hover span:nth-child(1) { --len: 24px; }
+.menu-btn:hover span:nth-child(3) { --len: 22px; }
+/* 開いているときは × に変わる */
+html.menu-open .menu-btn span:nth-child(1) { --len: 26px; --dx: 0px; --dy: 0px; transform: translate(-50%, -50%) rotate(45deg); }
+html.menu-open .menu-btn span:nth-child(2) { opacity: 0; }
+html.menu-open .menu-btn span:nth-child(3) { --len: 26px; --dx: 0px; --dy: 0px; transform: translate(-50%, -50%) rotate(-45deg); }
+
+/* メニューの中身:すりガラスの上に、大きな英字を不揃いに並べる */
+.menu {
+  position: fixed; inset: 0; z-index: 9;
+  display: grid; align-content: center;
+  padding: 120px var(--gutter) 80px;
+  background: rgba(244, 238, 245, .72);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  backdrop-filter: blur(20px) saturate(1.2);
+  opacity: 0; visibility: hidden;
+  transition: opacity .7s var(--ease), visibility .7s;
+}
+html.menu-open .menu { opacity: 1; visibility: visible; }
+html.menu-open body { overflow: hidden; }
+.menu__label { padding-left: 14%; margin-bottom: clamp(20px, 4vh, 40px); font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
+.menu__label span { margin-left: 2em; color: var(--c-ink-soft); }
+.menu__list { display: grid; justify-items: start; gap: clamp(4px, 1.2vh, 14px); padding-left: 14%; }
+.menu__list a {
+  font: 400 clamp(2.6rem, 7vw, 5.6rem) / 1.05 var(--f-display); letter-spacing: .02em;
+  text-decoration: none; color: var(--c-ink);
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .8s var(--ease), transform .8s var(--ease), letter-spacing .5s var(--ease);
+}
+.menu__list a:nth-child(2) { margin-left: 12%; }
+.menu__list a:nth-child(3) { margin-left: 4%; }
+.menu__list a:nth-child(4) { margin-left: 22%; }
+.menu__list a:nth-child(5) { margin-left: 9%; }
+.menu__list a:hover { letter-spacing: .08em; }
+.menu__list sup { font: 400 10px / 1 var(--f-mono); letter-spacing: .1em; margin-right: 1.2em; vertical-align: 2.6em; color: var(--c-ink-soft); }
+.menu__list i { font: 400 .4em / 1 var(--f-mono); font-style: normal; vertical-align: .9em; }
+html.menu-open .menu__list a { opacity: 1; transform: none; }
+html.menu-open .menu__list a:nth-child(1) { transition-delay: .1s; }
+html.menu-open .menu__list a:nth-child(2) { transition-delay: .16s; }
+html.menu-open .menu__list a:nth-child(3) { transition-delay: .22s; }
+html.menu-open .menu__list a:nth-child(4) { transition-delay: .28s; }
+.menu__v { position: absolute; right: calc(var(--gutter) + 60px); top: 26%; writing-mode: vertical-rl; font: 400 11px / 1 var(--f-serif); letter-spacing: .5em; color: var(--c-ink-soft); }
+.menu__note { position: absolute; right: calc(var(--gutter) + 44px); bottom: 12%; text-align: right; font: 400 10px / 1.8 var(--f-mono); letter-spacing: .2em; }
+.menu__note span { color: var(--c-ink-soft); }
+@media (max-width: 560px) {
+  .menu__list { padding-left: 4%; }
+  .menu__v { display: none; }
+  .menu__label { padding-left: 4%; }
+  .menu__note { right: var(--gutter); }
+}
+
+/* ナビ:いま見ているセクションに取り消し線(main.js が .is-current を付ける) */
+.site-nav a.is-current { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+/* ---- スクロールで下からふわっと現れる(main.js が .is-inview を付ける) ----
+   html.has-reveal はJSが動いたときだけ付くので、JSが無くても内容は見える */
+html.has-reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  filter: blur(6px);
+  transition:
+    opacity 1.2s var(--ease) calc(var(--i, 0) * .12s),
+    transform 1.2s var(--ease) calc(var(--i, 0) * .12s),
+    filter 1.2s var(--ease) calc(var(--i, 0) * .12s);
+}
+html.has-reveal [data-reveal].is-inview { opacity: 1; transform: none; filter: none; }
+
+
+/* ---- 「すべての作品を見る」 ---- */
+.works-more {
+  display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap;
+  gap: 18px 32px;
+  margin-top: clamp(24px, 4vw, 48px);
+  padding-right: 8%;
+}
+.works-more__note { font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
+.works-more__note span { margin-left: 1.4em; font: 400 12px / 1 var(--f-serif); letter-spacing: .12em; color: var(--c-ink-soft); }
+.works-more__btn { min-height: 48px; padding-inline: 2.4em; }
+
+/* =============================================================
+   作品一覧ページ(works.html)
+   ============================================================= */
+.content--page { min-height: 100vh; padding-top: 40px; }
+.content--page::before { display: none; }
+.back { text-decoration: none; margin-right: 2.4em; }
+.back:hover { text-decoration: line-through; }
+
+.arc-filter { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 0 0 clamp(48px, 7vw, 88px) calc(100% / 12 * 5); }
+.arc-filter button {
+  all: unset; cursor: pointer;
+  padding: .55em 1.4em .5em;
+  border: 1px solid var(--c-line); border-radius: 999px;
+  font: 400 10px / 1 var(--f-mono); letter-spacing: .18em; text-transform: uppercase;
+  transition: background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease);
+}
+.arc-filter button:hover { border-color: var(--c-ink); }
+.arc-filter button.is-current { background: var(--c-ink); color: #f6f1f7; border-color: var(--c-ink); }
+.arc-filter button:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 3px; }
+
+.arc-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(56px, 7vw, 96px) clamp(28px, 4vw, 56px);
+}
+/* 列ごとに上下をずらして、不揃いなリズムにする */
+.arc:nth-child(3n+2) { margin-top: clamp(40px, 7vw, 110px); }
+.arc:nth-child(3n+3) { margin-top: clamp(16px, 3vw, 44px); }
+.arc.is-hidden { display: none; }
+.arc a { position: relative; display: grid; justify-items: start; gap: 10px; text-decoration: none; }
+.arc .work__media { grid-column: auto; grid-row: auto; width: 100%; margin-bottom: 14px; }
+.arc:nth-child(4n+2) .work__thumb { clip-path: url(#drop-2); }
+.arc:nth-child(4n+3) .work__thumb { clip-path: url(#drop-3); }
+.arc:nth-child(4n+4) .work__thumb { clip-path: url(#drop-4); }
+.arc__index { font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; }
+.arc__index span { color: var(--c-ink-soft); margin-left: .6em; }
+.arc__title { font: 400 1.25rem / 1.3 var(--f-serif); letter-spacing: .08em; }
+.arc__en { font: 400 10px / 1 var(--f-mono); letter-spacing: .26em; margin-bottom: 4px; }
+@media (max-width: 900px) {
+  .arc-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .arc:nth-child(n) { margin-top: 0; }
+  .arc:nth-child(even) { margin-top: 48px; }
+  .arc-filter { margin-left: 0; }
+}
+@media (max-width: 560px) {
+  .arc-list { grid-template-columns: 1fr; }
+  .arc:nth-child(even) { margin-top: 0; }
+  .arc .work__media { width: 82%; }
+  .arc:nth-child(even) .work__media { margin-left: auto; }
+  .works-more { justify-content: flex-start; padding-right: 0; }
+}
+
+/* ---- タブレット・スマホ ---- */
+@media (max-width: 900px) {
+  .work { row-gap: 28px; }
+  .work__media, .work:nth-child(n) .work__media { grid-column: 1 / -1; grid-row: 1; justify-self: center; width: min(460px, 92%); margin: 0; }
+  .work__body,  .work:nth-child(n) .work__body  { grid-column: 2 / 12; grid-row: 2; margin: 0; align-self: start; }
+  .work:nth-child(even) .work__media { justify-self: end; }
+  .work:nth-child(odd)  .work__media { justify-self: start; }
+  .sec-head__title { grid-column: 1 / -1; }
+  .sec-head--about .sec-head__title { grid-column: 1 / -1; }
+  .sec-head__count { grid-column: 1 / -1; justify-self: start; margin-top: 20px; }
+  .sec-head__lead { grid-column: 3 / -1; }
+  .about__name, .about__text, .about__facts, .about__note { grid-column: 1 / -1; }
+  .about__text { padding-left: 12%; }
+  .about__note { transform: none; padding-left: 30%; }
+  .sns__item { grid-template-columns: 3em minmax(0, 1fr) auto 1.5em; }
+  .sns__what { display: none; }
+  .site-footer { grid-template-columns: 1fr auto; row-gap: 14px; }
+  .site-footer__thanks, .site-footer__bars { display: none; }
+}
+@media (max-width: 900px) {
+  .works.is-pinned .work, .works.is-pinned .work:nth-child(even) { flex-direction: column; gap: 22px; }
+  .works.is-pinned .work:nth-child(n) .work__body { width: min(420px, 88%); transform: none; }
+  .works.is-pinned .work__media, .works.is-pinned .work:nth-child(n) .work__media { width: min(400px, 82%, 40svh); align-self: center; }
+  .works.is-pinned .work__desc-en, .works.is-pinned .work__spec { display: none; }
+  .works.is-pinned .work__desc { margin-top: 4px; font-size: 12.5px; line-height: 1.9; }
+  .works-bar__pct { display: none; }
+}
+@media (max-width: 560px) {
+  .works.is-pinned .works-bar { grid-template-columns: auto minmax(0, 1fr); gap: 14px; bottom: 56px; }   /* 左下の番号と重ならないように少し上げる */
+  .works-bar__count b { font-size: 18px; }
+  .works-bar__list button em { display: none; }
+}
+@media (max-width: 560px) {
+  .site-nav { gap: 12px; }
+  .site-nav a { letter-spacing: .08em; font-size: 10.5px; }
+  .site-nav a[data-nav="top"] { display: none; }
+  .frame__v, .frame__plus { display: none; }
+  .sec-head__v { display: none; }
+  .sec-head__lead { grid-column: 1 / -1; padding-left: 10%; }
+  .sns__id { display: none; }
+}
+
+
+/* ---- 「TOPへ戻る」ボタン ----
+   ページの一番下まで来たら(main.js が html に .is-end を付ける)右下にふわっと現れる。
+   押すとページの一番上までなめらかに戻る */
+.to-top {
+  position: fixed; z-index: 11;
+  right: var(--gutter);
+  bottom: calc(100px + env(safe-area-inset-bottom, 0px));   /* フッターの少し上(SNS の一覧との間の余白に浮かぶ) */
+  width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-content: center; justify-items: center; gap: 2px;
+  text-decoration: none; color: var(--c-ink);
+  border: 1px solid rgba(255, 255, 255, .78);
+  background: linear-gradient(135deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, .25));
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+  box-shadow: 0 10px 30px -12px rgba(110, 80, 160, .5), inset 0 1px 0 rgba(255, 255, 255, .95);
+  opacity: 0; visibility: hidden; transform: translateY(16px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease), visibility .6s, background .4s var(--ease), color .4s var(--ease);
+}
+html.is-end .to-top { opacity: 1; visibility: visible; transform: none; }
+.to-top__arrow { font: 400 16px / 1 var(--f-mono); transition: transform .5s var(--ease); }
+.to-top__label { font: 500 9px / 1 var(--f-mono); letter-spacing: .2em; margin-right: -.2em; }
+@media (hover: hover) {
+  .to-top:hover { background: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn)); color: #f3f4fa; border-color: rgba(255, 255, 255, .2); }
+  .to-top:hover .to-top__arrow { transform: translateY(-3px); }
+}
+.to-top:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 3px; }
+@media (max-width: 560px) {
+  .to-top { width: 54px; height: 54px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* メインページのフッター:BACK TO TOP は右下の丸いボタンに任せて外したので、3つを両端と真ん中にそろえる
+   (© 2026 Yona ── バーコード ── THANK YOU FOR VISITING) */
+.site-footer--no-top { grid-template-columns: 1fr auto 1fr; }
+.site-footer--no-top .site-footer__thanks { justify-self: end; }
+@media (max-width: 900px) {
+  .site-footer--no-top { grid-template-columns: 1fr auto; }
+  .site-footer--no-top .site-footer__thanks { display: block; }   /* スマホでは © とあいさつを左右に */
+}
+/* 一番下(SNS)の下に、TOPボタンが浮かぶ分の余白をとる */
+.sns-sec { padding-bottom: calc(clamp(40px, 5vw, 72px) + 72px); }
+@media (max-width: 560px) { .sns-sec { padding-bottom: 104px; } }
+
+/* SNS:準備中の行(リンクなし)。少し薄くして、ホバーしても動かさない */
+.sns__item--soon { cursor: default; }
+.sns__item--soon .sns__name, .sns__item--soon .sns__no, .sns__item--soon .sns__what { opacity: .5; }
+.sns__item--soon .sns__id { font-family: var(--f-serif); letter-spacing: .2em; color: var(--c-ink-soft); }
+.sns__item--soon .sns__arrow { color: var(--c-ink-soft); }
+.sns__item--soon:hover { padding-left: 4px; background: none; }
+.sns__item--soon:hover .sns__arrow { transform: none; }
+@media (max-width: 560px) { .sns__item--soon .sns__id { display: block; font-size: 10px; } .sns__item--soon .sns__arrow { display: none; } }   /* スマホでもX の「準備中」は見せる */

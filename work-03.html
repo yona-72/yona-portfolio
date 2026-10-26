@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja" class="is-scrolled">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Print & Booth — Yona</title>
+  <meta name="description" content="チラシ・ポスター・パンフレットなどの紙媒体と、ブースのデザインのまとめです。情報の順番と余白を整理し、見る人が迷わず受け取れる形に組み立てています。">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Zen+Kaku+Gothic+New:wght@400;500&family=Zen+Old+Mincho:wght@400;500&family=DM+Mono:wght@300;400;500&display=swap">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/work-detail.css">
+</head>
+<body>
+  <!-- =============================================================
+       作品ページ No.03(パンフレット・チラシ・ブースデザイン等)
+       ・中の作品は <article class="piece"> 1つ分ずつ。画像1枚 + 見出し + 短い説明
+         増やすときは1つ分コピーして、id(piece-4 …)と上の一覧(detail-toc)にも1行足す
+       ・画像は images/works/detail/ に 03-print-booth-1-print.jpg、03-print-booth-2-booth.jpg を置けば表示される
+       ・画像の形は detail__frame--wide(横長)/ --arch(アーチ)/ --square(まる)。付け替えれば形が変わる
+         (どの形でも見た目の大きさがそろうようにしてある。全体の大きさは work-detail.css の .piece の --a)
+       ============================================================= -->
+
+  <!-- ===== ヘッダー(トップと同じ) ===== -->
+  <header class="site-header">
+    <a class="site-logo" href="index.html"><img src="images/logo-hero.svg" alt="Yona" width="247" height="74"></a>
+    <nav class="site-nav" aria-label="メインメニュー">
+      <a href="index.html" data-nav="top">Home</a>
+      <a href="index.html#work-03" data-nav="works" class="is-current">Works</a>
+      <a href="index.html#about" data-nav="about">About</a>
+      <a href="index.html#sns" data-nav="sns">SNS</a>
+    </nav>
+  </header>
+
+  <!-- ===== 画面のふちの飾り(固定) ===== -->
+  <div class="frame" aria-hidden="true">
+    <span class="frame__plus" style="--x: 0; --y: 34%"></span>
+    <span class="frame__plus" style="--x: 0; --y: 70%"></span>
+    <span class="frame__plus" style="--x: 1; --y: 34%"></span>
+    <span class="frame__plus" style="--x: 1; --y: 70%"></span>
+    <span class="frame__v frame__v--l">ポートフォリオ</span>
+    <span class="frame__v frame__v--r">つくることの記録</span>
+    <span class="frame__index"><b>03</b><i></i><span>Project</span></span>
+  </div>
+
+  <main class="content content--page">
+    <section class="section">
+      <header class="sec-head detail-head">
+        <p class="sec-head__label" data-reveal><a class="back" href="index.html#work-03">← Back</a>(PROJECT No.03) <span>2026</span></p>
+        <h1 class="sec-head__title" data-reveal>Print<br>&amp; Booth</h1>
+        <p class="sec-head__count" data-reveal><b>02</b><span>ITEMS /<br>No.03</span></p>
+        <p class="sec-head__v" aria-hidden="true">さくひん</p>
+      </header>
+
+      <!-- このページ全体の説明と、中の作品の一覧 -->
+      <div class="detail-intro">
+        <div class="detail-toc-wrap" data-reveal>
+          <p class="detail-toc-label">(CONTENTS)</p>
+          <ul class="detail-toc">
+            <li><a href="#piece-1"><span>01</span>Print</a></li>
+            <li><a href="#piece-2"><span>02</span>Booth Design</a></li>
+          </ul>
+        </div>
+        <div class="detail__body" data-reveal>
+          <p class="work__index">(03) <span>— 2026</span></p>
+          <h2 class="work__title"><span class="work__title-sub">パンフレット・チラシ・ブースデザイン等</span><span class="work__title-main">Print & Booth</span></h2>
+          <p class="work__en">PRINT / BOOTH DESIGN</p>
+          <span class="tagbox">PRINT</span>
+          <p class="work__desc">チラシ・ポスター・パンフレットなどの紙媒体と、ブースのデザインのまとめです。クライアントの要望はもちろん、情報の順番と余白を整理し、見る人が迷わず受け取れる形に組み立てています。</p>
+          <dl class="work__spec">
+            <div><dt>Role</dt><dd>Design / Layout</dd></div>
+            <div><dt>Tool</dt><dd>Illustrator / InDesign</dd></div>
+            <div><dt>Year</dt><dd>2026</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="pieces">
+        <!-- 01:チラシ・ポスター・パンフレット -->
+        <article class="piece" id="piece-1">
+          <figure class="piece__fig" data-reveal>
+            <div class="detail__frame detail__frame--wide" data-label="IMAGE 01">
+              <img src="images/works/detail/03-print-booth-1-print.jpg" alt="チラシ・ポスター・パンフレット" data-detail-img>
+            </div>
+            <figcaption class="detail__cap">(01) Print</figcaption>
+          </figure>
+          <div class="piece__text" data-reveal>
+            <p class="piece__no">(01) <span>/ 02</span></p>
+            <h2 class="piece__title">Print</h2>
+            <p class="piece__jp">チラシ・ポスター・パンフレット</p>
+            <p class="piece__desc">チラシやポスター、パンフレットなどの紙媒体のデザインです。遠くからでも目に留まり、手に取ると必要な情報がすぐに分かるよう、見出しと写真のメリハリや情報の順番を整理しています。</p>
+          </div>
+        </article>
+        <!-- 02:ブースデザイン -->
+        <article class="piece" id="piece-2">
+          <figure class="piece__fig" data-reveal>
+            <div class="detail__frame detail__frame--arch" data-label="IMAGE 02">
+              <img src="images/works/detail/03-print-booth-2-booth.jpg" alt="ブースデザイン" data-detail-img>
+            </div>
+            <figcaption class="detail__cap">(02) Booth Design</figcaption>
+          </figure>
+          <div class="piece__text" data-reveal>
+            <p class="piece__no">(02) <span>/ 02</span></p>
+            <h2 class="piece__title">Booth Design</h2>
+            <p class="piece__jp">ブースデザイン</p>
+            <p class="piece__desc">実際に制作したブースのデザイン案になります。離れた場所からでも目を引き、立ち寄った人が自然に内容を受け取れるよう、立体物の配置・色味・見せ方をトータルで考え制作いたしました。</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- ほかの作品へ -->
+      <nav class="detail-pager" aria-label="ほかの作品" data-reveal>
+        <a href="work-02.html"><small>← PREV / No.02</small><b>Banner & Web</b></a>
+        <a href="work-05.html"><small>NEXT / No.05 →</small><b>3D Objects</b></a>
+      </nav>
+      <div class="detail-back" data-reveal>
+        <a class="btn btn--ink btn--flip" href="index.html#work-03"><span class="btn__roll"><span>← Back to works</span><span aria-hidden="true">← Back to works</span></span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer__copy">© <span data-year></span> Yona</p>
+    <span class="site-footer__bars" aria-hidden="true"></span>
+    <p class="site-footer__thanks">THANK YOU FOR VISITING</p>
+    <a class="site-footer__top" href="#">BACK TO TOP <i>↑</i></a>
+  </footer>
+
+  <script src="js/work-detail.js"></script>
+</body>
+</html>

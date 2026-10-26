@@ -1,0 +1,260 @@
+/* =============================================================
+   hero.css  ― ファーストビュー
+   レイヤー構成(下から)
+     z0  .hero__bg      背景(WebGL。JSが無いときは画像のまま)
+     z1  .hero__stage   アーチの中に収まる中央コンテンツ
+         ├ .hero__logo    ロゴ(線描きアニメーション)
+         ├ .hero__lead    portfolio の文字
+         └ .hero__actions Works / About / SNS ボタン
+     z2  .site-header   ナビ(index.html側)
+   ============================================================= */
+.hero {
+  /* JS(arch-layout.js)が実際のアーチ位置で上書きする。これは読み込み前の仮の値 */
+  --arch-left: 27%;
+  --arch-top: 16%;
+  --arch-width: 46%;
+  --arch-height: 64%;
+
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--c-intro);
+}
+
+/* ---- 背景 ---- */
+.hero__bg {
+  position: absolute; inset: 0; z-index: 0;
+  transition: opacity 1.8s var(--ease-soft);
+  background: var(--c-wall) url("../images/hero/scene.jpg") center / cover no-repeat;
+}
+.prism-bg__canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+
+/* ---- 中央ステージ(アーチの内側) ---- */
+.hero__stage {
+  position: absolute; z-index: 1;
+  left: var(--arch-left);
+  top: var(--arch-top);
+  width: var(--arch-width);
+  height: var(--arch-height);
+  /* 余白:ロゴ〜portfolio は近く、portfolio〜ボタンは大きく離して間を取る */
+  --space-label: clamp(16px, 2.8vh, 28px);
+  --space-actions: clamp(40px, 8vh, 80px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vh, 40px) clamp(8px, 2vw, 32px);
+  text-align: center;
+}
+.hero__lead { margin-top: var(--space-label); }
+.hero__actions { margin-top: var(--space-actions); }
+
+/* 他のJSオブジェクトの置き場。サイズはここで調整 */
+.hero__title { margin: 0; line-height: 0; }
+
+/* ロゴ:書き終わりの大きさ。画面幅に合わせて伸縮 */
+.hero__logo {
+  display: block;
+  width: clamp(150px, 17vw, 260px);   /* 画面幅に合わせて伸縮。アーチの中で一番目立つ大きさ */
+  height: auto;
+  overflow: visible;
+}
+.hero__logo path {
+  fill: var(--c-logo);
+  stroke: var(--c-logo);
+  stroke-width: var(--sw, .75px); /* 元データどおりの線の太さ(index.html の --sw) */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hero__logo [data-sparkle] { stroke: none; }   /* 星は塗りのみ */
+.hero__logo.is-drawing path[data-draw] { stroke-width: 1.1px; }  /* 書いている間は少し太い線 */
+/* 描き始める前は線も塗りも見せない(JSが無い場合は最初から表示される) */
+.hero__logo.is-drawing path[data-draw] { fill-opacity: 0; }
+/* JSがロゴを書き始めるまでの一瞬、完成形が見えないようにする */
+html.is-intro .hero__logo:not(.is-drawing):not(.is-drawn) { opacity: 0; }
+.hero__logo.is-drawing [data-sparkle] { opacity: 0; }
+
+.hero__lead {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: .48em;
+  margin-right: -.48em;          /* 字間ぶん右にずれる分を戻して中央をそろえる */
+  color: var(--c-ink-soft);
+  opacity:0.7;
+}
+
+.hero__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+/* スクロール案内 */
+.hero__scroll {
+  position: absolute; z-index: 1; left: 50%; bottom: max(18px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  font: 10px / 1 var(--f-mono); letter-spacing: .3em; text-transform: uppercase;
+  color: var(--c-ink-soft); text-decoration: none;
+  display: grid; justify-items: center; gap: 10px;
+}
+.hero__scroll::after {
+  content: ""; width: 1px; height: 36px;
+  background: linear-gradient(var(--c-ink-soft), transparent);
+  animation: scrollLine 2.4s var(--ease) infinite;
+  transform-origin: top;
+}
+@keyframes scrollLine { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* ---- 登場演出 ----
+   html.is-intro の間は白い画面にロゴだけ。外れると背景・ヘッダーがフェードイン */
+html.is-intro body { overflow: hidden; }
+html.is-intro .hero__bg,
+html.is-intro .hero__scroll,
+html.is-intro .site-header { opacity: 0; }
+html.is-intro .site-header { pointer-events: none; }
+.hero__scroll { transition: opacity 1.2s var(--ease-soft) .9s; }
+
+/* 登場:ロゴが書かれた後に、キャッチコピーとボタンが順に出る */
+.hero__lead, .hero__actions > * { transition: opacity 1s var(--ease), transform 1s var(--ease); }
+.hero:not(.is-revealed) .hero__lead,
+.hero:not(.is-revealed) .hero__actions > * { opacity: .001; transform: translateY(10px); }
+.hero.is-revealed .hero__actions > :nth-child(1) { transition-delay: .15s; }
+.hero.is-revealed .hero__actions > :nth-child(2) { transition-delay: .25s; }
+.hero.is-revealed .hero__actions > :nth-child(3) { transition-delay: .35s; }
+/* JSが動かない環境では最初から表示 */
+@media (scripting: none) {
+  .hero__lead, .hero__actions > * { opacity: 1 !important; transform: none !important; }
+}
+
+/* ---- スクロール:ファーストビューは固定、下のコンテンツが重なってくる ----
+   .hero は画面の上に貼り付いたまま動かない(sticky)。
+   main.js が登場演出の後から、スクロール量を --p(0〜1)として .hero に入れる。
+   ・中央のロゴとボタンは、コンテンツが近づくにつれて少し上へ浮きながら消える
+   ・背景はうっすら淡くなり、上がってくるコンテンツになじむ
+   登場演出の間は --p が入らないので、ロゴを書く様子が隠れることはない */
+.hero {
+  --p: 0;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+.hero::after {
+  content: "";
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none;
+  background: var(--c-content);
+  opacity: calc(var(--p) * .55);
+}
+.hero__stage {
+  opacity: calc(1 - var(--p) * 1.5);
+  translate: 0 calc(var(--p) * -40px);
+}
+
+/* ---- ファーストビューのまわりの小さな文字 ----
+   アーチの外側の余白に、不揃いに散らしている。ボタンと一緒に現れ、スクロールで消える */
+.hero__meta { position: absolute; inset: 0; z-index: 1; pointer-events: none; color: var(--c-ink); }
+.hm { position: absolute; font: 400 10px / 1.6 var(--f-mono); letter-spacing: .2em; text-shadow: 0 0 10px rgba(255, 255, 255, .85), 0 0 2px rgba(255, 255, 255, .6); }
+.hm--year { left: calc(var(--gutter) + 44px); top: 30%; display: grid; font: 400 clamp(18px, 1.6vw, 24px) / 1.25 var(--f-display); letter-spacing: .06em; }
+.hm--year span:last-child { margin-left: 1.1em; }
+.hm--vol { left: calc(var(--gutter) + 44px); top: calc(30% + 84px); color: var(--c-ink-soft); }
+/* 左下:声明文。右上のジグザグ(線でつなぐ)とは逆に、大小の文字を重ねるように組み、左に縦の細い線を添える */
+.hm--made {
+  left: calc(var(--gutter) + 44px); bottom: 17%;
+  display: grid; justify-items: start; row-gap: 2px;
+  padding-left: 14px;
+  border-left: 1px solid rgba(70, 50, 80, .3);
+  opacity: .82;   /* 飾りなので控えめに。数字を下げるほど背景になじむ */
+}
+.hm--made > span { display: block; }
+.mm-label { font: 400 7.5px / 1 var(--f-mono); letter-spacing: .3em; color: var(--c-ink-soft); margin-bottom: 10px; }
+.mm-small { font: 300 8.5px / 1 var(--f-mono); letter-spacing: .34em; text-transform: uppercase; margin-bottom: 3px; }
+.mm-big { font: 400 clamp(16px, 1.5vw, 22px) / 1.05 var(--f-display); letter-spacing: .03em; }
+.mm-big em {
+  font-style: normal; font-size: 1.55em; line-height: 0;
+  color: var(--c-lilac); opacity: .85;
+  margin-left: .08em; vertical-align: -.12em;
+}
+.mm-big--in { margin-left: 1.8em; }
+.mm-jp {
+  display: flex !important; align-items: center; gap: 10px;
+  margin-top: 10px; margin-left: 1.8em;
+  font: 400 9px / 1 var(--f-serif); letter-spacing: .32em; color: var(--c-ink);
+}
+.mm-jp i { width: 20px; height: 1px; background: currentColor; opacity: .6; }
+/* 右上:4つのカテゴリーを、光がプリズムで折れ曲がるようなジグザグに並べ、文字と文字を細い斜めの線でつなぐ。
+   01 → 02 は右下へ、02 → 03 は左下へ折り返し、03 → 04 はまた右下へ。
+   文字の位置と線は main.js(layoutCats)が文字の幅に合わせて計算する */
+.hm--cats {
+  right: calc(var(--gutter) + 44px); top: 19%;
+  display: grid; justify-items: start; gap: 20px;
+  font: 300 10px / 1 var(--f-mono); letter-spacing: .32em; text-transform: uppercase;
+  color: rgba(70, 50, 80, .66);   /* 英字は薄く */
+}
+.hm--cats a { position: relative; white-space: nowrap; color: inherit; text-decoration: none; pointer-events: auto; }   /* リンク。ホバーの動きは付けない */
+.hm--cats a:focus-visible { outline: 1px solid currentColor; outline-offset: 4px; }
+.hm--cats a:nth-child(2) { margin-left: 8.5em; }   /* JSが動かないときの仮の位置 */
+.hm--cats a:nth-child(3) { margin-left: 2em; }
+.hm--cats a:nth-child(4) { margin-left: 10.5em; }
+/* 番号は左上の「20 / 26」と同じ書体・濃さにして、右側のアクセントにする */
+.hm--cats sup {
+  font: 400 clamp(15px, 1.25vw, 19px) / 1 var(--f-display); letter-spacing: .04em;
+  color: var(--c-ink);
+  margin-right: .7em; vertical-align: -.05em;
+}
+.hm--cats svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.hm--cats line { stroke: currentColor; stroke-width: .6; opacity: .6; }
+.hm--cats circle { fill: currentColor; opacity: .5; }   /* 線の折れ目の小さな点 */
+/* 右下:このページの目次。本の目次のように、点線でつないだ小さな一覧にする(左下と同じく控えめに) */
+.hm--note {
+  right: calc(var(--gutter) + 44px); bottom: 17%;
+  width: 168px;
+  display: grid; gap: 8px;
+  opacity: .85;
+}
+.hm--note p, .hm--note ul { margin: 0; }
+.mn-label { font: 400 7.5px / 1 var(--f-mono); letter-spacing: .3em; color: var(--c-ink-soft); }
+.mn-list { list-style: none; padding: 0; display: grid; gap: 5px; }
+.mn-list a {
+  display: flex; align-items: baseline; gap: 6px;
+  font: 300 9px / 1 var(--f-mono); letter-spacing: .22em; text-transform: uppercase;
+  color: inherit; text-decoration: none; pointer-events: auto;   /* 下のセクションへのリンク。ホバーの動きは付けない */
+}
+.mn-list a:focus-visible { outline: 1px solid currentColor; outline-offset: 3px; }
+.mn-list li:nth-child(2) { padding-left: 14px; }   /* 1行だけ少しずらして、一覧にゆらぎを付ける */
+.mn-list b { font-weight: 400; }
+.mn-list i { flex: 1; border-bottom: 1px dotted currentColor; opacity: .45; transform: translateY(-2px); }
+.mn-list em { font-style: normal; font-size: 7.5px; color: var(--c-ink-soft); }
+.mn-base {
+  display: flex; align-items: center; gap: 8px;
+  padding-top: 8px; border-top: 1px solid rgba(70, 50, 80, .22);
+  font: 300 8px / 1 var(--f-mono); letter-spacing: .26em; text-transform: uppercase; color: var(--c-ink-soft);
+}
+.mn-dot { width: 5px; height: 5px; border: 1px solid currentColor; border-radius: 50%; }
+.mn-jp { margin-left: auto; font: 400 9px / 1 var(--f-serif); letter-spacing: .3em; color: var(--c-ink); }
+.hero__meta { opacity: calc(1 - var(--p) * 1.6); transition: opacity 1.2s var(--ease); }
+.hero:not(.is-revealed) .hero__meta { opacity: 0; }
+@media (max-width: 900px) {
+  .hm--cats, .hm--vol { display: none; }
+  .hm--year, .hm--made { left: calc(var(--gutter) + 8px); }
+}
+@media (max-width: 420px) {
+  .hm--year { top: 17%; font-size: 16px; }
+  .hm--made { bottom: 10%; padding-left: 12px; }
+  .mm-big { font-size: 15px; }
+  .mm-label { margin-bottom: 8px; }
+  .hm--note { display: none; }
+}
+
+/* ---- スマホ(420px以下):縦長の背景に切り替え ---- */
+@media (max-width: 420px) {
+  /* .hero__bg { background-image: url("../images/hero/scene-sp.jpg"); }  スマホ用の縦長画像を用意したら戻す */
+  .hero__stage { --space-label: 14px; --space-actions: 30px; padding: 8px 0; }
+  .hero__logo { width: min(44vw, 176px); }
+  .hero__lead { font-size: 10px; letter-spacing: .42em; margin-right: -.42em; }
+  .hero__actions { gap: 8px; }
+  .hero__actions .btn { min-height: 36px; padding: .5em 1.3em; letter-spacing: .12em; }
+}

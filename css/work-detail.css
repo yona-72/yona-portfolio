@@ -1,0 +1,271 @@
+/* =============================================================
+   work-detail.css  ― 作品ページ(work-03.html 〜 work-06.html)
+   トップの Works と同じ色・文字・余白のルールで、
+   「大きな画像 1枚目」+「説明文」+「アーチ形の画像 2枚目」+「ひとこと」を不揃いに並べる
+   ============================================================= */
+
+/* 見出し:英字の作品名を大きく。長い名前でも2行に収まるように少し小さめ */
+.detail-head .sec-head__title { grid-column: 1 / 10; font-size: clamp(3.2rem, 8.4vw, 7.6rem); line-height: .9; }
+.detail-head .sec-head__label { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4em 0; }
+.detail-head .back { font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
+
+.detail {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: clamp(64px, 9vw, 130px);
+  align-items: start;
+}
+
+/* ---- 画像の枠 ----
+   画像:images/works/detail/03-1.png(1枚目)・03-2.png(2枚目)を同じ名前で置けば表示される。
+   画像が無いあいだは、背景画像の色のグラデーションと「IMAGE 01」の文字が出る */
+.detail__fig { margin: 0; display: grid; gap: 14px; }
+.detail__fig--1 { grid-column: 1 / 9; grid-row: 1; }
+.detail__fig--2 { grid-column: 6 / 12; grid-row: 2; }
+.detail__frame {
+  position: relative; overflow: hidden;
+  border-radius: 22px;
+  background:
+    radial-gradient(70% 60% at 50% 35%, rgba(255, 255, 255, .45), transparent 70%),
+    linear-gradient(135deg, var(--c-scene-lilac), var(--c-scene-blush) 50%, var(--c-scene-floor));
+  box-shadow: 0 34px 70px -40px rgba(110, 80, 160, .55);
+  isolation: isolate;
+}
+/* 枠の形。detail__frame--wide / --arch / --square を html 側で付け替えれば形が変わる */
+.detail__frame--wide   { aspect-ratio: 3 / 2; }                                                /* 横長 */
+.detail__frame--arch   { aspect-ratio: 4 / 5; border-radius: 999px 999px 22px 22px; }          /* ファーストビューと同じアーチ形 */
+.detail__frame--square { aspect-ratio: 1; border-radius: 50%; }                                /* まるい枠(トップの水滴に合わせて) */
+/* 3枚目(画像が3枚ある作品ページだけ):2枚目の左下に、少し小さめに置く */
+.detail__fig--3 { grid-column: 2 / 6; grid-row: 3; margin-top: calc(-1 * clamp(40px, 10vw, 180px)); }
+.detail__fig--3 .detail__cap { justify-content: flex-start; }
+.detail__frame img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  transition: transform 1.4s var(--ease);
+}
+.detail__frame:hover img { transform: scale(1.035); }
+/* 動画も画像と同じように枠いっぱいに表示する */
+.detail__frame video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* ガラスのつや:左上の映り込みと、ふちの細い光 */
+.detail__frame::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(28% 22% at 22% 14%, rgba(255, 255, 255, .45), transparent 70%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .55);
+}
+/* 画像が無いときの文字 */
+.detail__frame:not(:has(img, video))::before {
+  content: attr(data-label);
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font: 400 10.5px / 1 var(--f-mono); letter-spacing: .3em; color: var(--c-ink-soft);
+}
+.detail__cap {
+  display: flex; align-items: center; gap: 12px;
+  font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--c-ink-soft);
+}
+.detail__cap::before { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .6; }
+.detail__fig--2 .detail__cap { justify-content: flex-end; }
+
+/* ---- 説明文 ---- */
+.detail__body {
+  grid-column: 9 / 13; grid-row: 1; align-self: end;
+  display: grid; justify-items: start; gap: 12px;
+  position: relative; padding-left: 2.6em; margin-bottom: 4%;
+}
+.detail__body .work__index { position: absolute; left: 0; top: .35em; writing-mode: vertical-rl; letter-spacing: .24em; }
+.detail__body .work__en { margin-left: 3.2em; }
+.detail__body .work__desc + .work__desc { margin-top: 0; }
+.detail__body .en { margin-top: 4px; }
+.detail__body .work__spec { width: 100%; }
+
+/* ---- 2枚目の横のひとこと ---- */
+.detail__note { grid-column: 2 / 6; grid-row: 2; align-self: center; display: grid; justify-items: start; gap: 14px; padding-right: 8%; }
+.detail__note-label { font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
+.detail__note-label span { margin-left: 1.6em; color: var(--c-ink-soft); }
+.detail__note .jp { font-size: 13.5px; }
+
+/* ---- ほかの作品へ(前 / 次) ---- */
+.detail-pager {
+  margin-top: clamp(96px, 12vw, 170px);
+  border-top: 1px solid var(--c-line);
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.detail-pager a {
+  display: grid; gap: 10px; padding: 26px 4px 28px;
+  text-decoration: none; border-bottom: 1px solid var(--c-line);
+  transition: padding .5s var(--ease), background .5s var(--ease);
+}
+.detail-pager a + a { text-align: right; border-left: 1px solid var(--c-line); }
+.detail-pager a:first-child:hover { padding-left: 20px; background: linear-gradient(90deg, rgba(255, 255, 255, .45), transparent 70%); }
+.detail-pager a + a:hover { padding-right: 20px; background: linear-gradient(270deg, rgba(255, 255, 255, .45), transparent 70%); }
+.detail-pager small { font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink-soft); }
+.detail-pager b { font: 400 clamp(1.5rem, 3vw, 2.4rem) / 1.05 var(--f-display); letter-spacing: .03em; }
+.detail-back { display: flex; justify-content: flex-end; margin-top: clamp(32px, 4vw, 48px); padding-right: 8%; }
+.detail-back .btn { min-height: 48px; padding-inline: 2.4em; }
+
+/* ---- タブレット・スマホ ---- */
+@media (max-width: 900px) {
+  .detail-head .sec-head__title { grid-column: 1 / -1; }
+  .detail__fig--1, .detail__body, .detail__fig--2, .detail__note, .detail__fig--3 { grid-row: auto; }
+  .detail__fig--3 { grid-column: 1 / 9; margin-top: 0; }
+  .detail__fig--1 { grid-column: 1 / -1; }
+  .detail__body { grid-column: 2 / 12; margin: 0; }
+  .detail__fig--2 { grid-column: 3 / -1; }
+  .detail__note { grid-column: 1 / 11; padding: 0; }
+  .detail { row-gap: 56px; }
+}
+@media (max-width: 560px) {
+  .detail__body { grid-column: 1 / -1; }
+  .detail__fig--2 { grid-column: 2 / -1; }
+  .detail__note { grid-column: 1 / -1; }
+  .detail-pager { grid-template-columns: 1fr; }
+  .detail-pager a + a { border-left: 0; }
+  .detail-back { justify-content: flex-start; padding-right: 0; }
+}
+
+/* =============================================================
+   作品ページ:中の作品を「画像1枚 + 見出し + 短い説明」で1つずつ並べる(.piece)
+   左右交互に置き、画像の形(横長・アーチ・まる)が違っても、見た目の大きさがそろうように
+   面積がほぼ同じになる幅にしている(--a が基準の大きさ。大きくすると全部まとめて大きくなる)
+   ============================================================= */
+.detail-intro {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 16px;
+  align-items: start;
+  margin-bottom: clamp(80px, 11vw, 150px);
+}
+.detail-intro .detail__body { grid-column: 6 / 12; grid-row: 1; align-self: start; margin: 0; }
+/* 左側:このページの中身の一覧(押すとその作品へ) */
+.detail-toc-wrap { grid-column: 1 / 5; grid-row: 1; padding-top: 6px; }
+.detail-toc { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--c-line); }
+.detail-toc a {
+  display: flex; gap: 14px; align-items: baseline; padding: 12px 2px;
+  border-bottom: 1px solid var(--c-line); text-decoration: none;
+  font: 400 10.5px / 1.4 var(--f-mono); letter-spacing: .16em; text-transform: uppercase;
+  transition: padding .5s var(--ease);
+}
+.detail-toc a:hover { padding-left: 12px; }
+.detail-toc span { color: var(--c-ink-soft); }
+.detail-toc-label { margin-bottom: 14px; font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
+
+.pieces { display: grid; gap: clamp(90px, 12vw, 170px); }
+.piece {
+  --a: clamp(240px, 30vw, 400px);
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 16px;
+  align-items: center;
+  scroll-margin-top: 120px;
+}
+.piece__fig { grid-column: 1 / 8; grid-row: 1; justify-self: center; margin: 0; display: grid; gap: 14px; max-width: 100%; }
+.piece__text { grid-column: 8 / 12; grid-row: 1; display: grid; justify-items: start; gap: 12px; }
+.piece:nth-child(even) .piece__fig  { grid-column: 6 / 13; }
+.piece:nth-child(even) .piece__text { grid-column: 2 / 6; }
+.piece:nth-child(3n+2) .piece__text { transform: translateY(-8%); }   /* 少しずつ上下をずらして、不揃いなリズムに */
+.piece:nth-child(3n) .piece__text { transform: translateY(6%); }
+
+/* 形ごとの大きさ:面積がほぼ同じ(--a × --a)になる幅 */
+.piece__fig .detail__frame { width: var(--w); max-width: 100%; }
+.piece__fig .detail__frame--wide   { --w: calc(var(--a) * 1.22); }
+.piece__fig .detail__frame--arch   { --w: calc(var(--a) * .9); }
+.piece__fig .detail__frame--square { --w: var(--a); }
+.piece:nth-child(even) .detail__cap { justify-content: flex-end; }
+
+.piece__no { font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
+.piece__no span { margin-left: .8em; color: var(--c-ink-soft); }
+.piece__title { font: 400 clamp(2.4rem, 4.6vw, 3.8rem) / 1 var(--f-display); letter-spacing: .02em; margin-top: 4px; }
+.piece__jp { font: 400 12.5px / 1.6 var(--f-serif); letter-spacing: .12em; color: var(--c-ink-soft); }
+.piece__desc { font: 400 13.5px / 2.05 var(--f-serif); letter-spacing: .05em; margin-top: 8px; padding-top: 16px; border-top: 1px solid var(--c-line); width: 100%; }
+
+@media (max-width: 900px) {
+  .detail-intro { row-gap: 56px; }
+  .detail-intro .detail__body, .detail-toc-wrap { grid-column: 1 / -1; grid-row: auto; }
+  .detail-toc-wrap { order: 2; }   /* スマホでは説明文のあとに一覧 */
+  .piece { --a: clamp(220px, 58vw, 380px); row-gap: 28px; }
+  .piece__fig, .piece:nth-child(n) .piece__fig { grid-column: 1 / -1; grid-row: 1; }
+  .piece__text, .piece:nth-child(n) .piece__text { grid-column: 2 / 12; grid-row: 2; transform: none; }
+}
+@media (max-width: 560px) {
+  .piece { --a: 64vw; }
+  .piece__text, .piece:nth-child(n) .piece__text { grid-column: 1 / -1; }
+}
+
+
+/* =============================================================
+   画像・動画の拡大表示(モーダル)
+   作品ページの画像・動画を押すと、すりガラスの上に大きく表示される。
+   ← → キー / 左右の矢印でほかの作品へ、× ・まわりを押す ・Esc で閉じる(js/work-detail.js)
+   ============================================================= */
+.piece__fig .detail__frame { cursor: zoom-in; }
+.piece__fig .detail__frame:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 4px; }
+/* ホバーで右下に出る「拡大」の小さな丸 */
+.piece__fig .detail__frame::before {
+  content: "+"; position: absolute; z-index: 2; right: 14px; bottom: 14px;
+  width: 38px; height: 38px; border-radius: 50%;
+  display: grid; place-items: center;
+  font: 300 20px / 1 var(--f-mono); color: var(--c-ink);
+  background: rgba(255, 255, 255, .7);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px -8px rgba(110, 80, 160, .6);
+  opacity: 0; transform: scale(.8);
+  transition: opacity .4s var(--ease), transform .4s var(--ease);
+  pointer-events: none;
+}
+.piece__fig .detail__frame--square::before { right: 50%; bottom: 10%; margin-right: -19px; }
+.piece__fig .detail__frame:hover::before,
+.piece__fig .detail__frame:focus-visible::before { opacity: 1; transform: none; }
+/* 画像が無い枠(IMAGE 01 の文字)は、文字の方を優先 */
+.piece__fig .detail__frame:not(:has(img, video))::before { content: attr(data-label); width: auto; height: auto; inset: 0; margin: 0; border-radius: inherit; background: none; box-shadow: none; opacity: 1; transform: none; font-size: 10.5px; letter-spacing: .3em; color: var(--c-ink-soft); }
+.piece__fig .detail__frame:not(:has(img, video)) { cursor: default; }
+
+.lightbox {
+  position: fixed; inset: 0; z-index: 50;
+  display: grid; grid-template-rows: auto minmax(0, 1fr) auto; justify-items: center;
+  padding: clamp(16px, 3vw, 32px) clamp(16px, 5vw, 80px) clamp(20px, 3vw, 32px);
+  background: rgba(244, 238, 245, .78);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2); backdrop-filter: blur(22px) saturate(1.2);
+  opacity: 0; visibility: hidden;
+  transition: opacity .5s var(--ease), visibility .5s;
+}
+.lightbox.is-open { opacity: 1; visibility: visible; }
+html.lightbox-open, html.lightbox-open body { overflow: hidden; }
+.lightbox__top { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; }
+.lightbox__count { font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink-soft); }
+.lightbox__count b { font-weight: 500; color: var(--c-ink); }
+.lightbox__stage { position: relative; width: 100%; min-height: 0; display: grid; place-items: center; padding: 12px 0; }
+.lightbox__media {
+  max-width: 100%; max-height: calc(100vh - 220px); max-height: calc(100svh - 220px);   /* 上のボタンと下の見出しの分をあける */
+  width: auto; height: auto; object-fit: contain;
+  border-radius: 14px;
+  box-shadow: 0 40px 90px -40px rgba(70, 50, 110, .65);
+  background: #fff;
+  transform: scale(.96); transition: transform .6s var(--ease);
+}
+.lightbox.is-open .lightbox__media { transform: none; }
+.lightbox__cap { display: grid; justify-items: center; gap: 6px; text-align: center; padding-top: 6px; }
+.lightbox__title { font: 400 clamp(1.4rem, 2.6vw, 2rem) / 1.1 var(--f-display); letter-spacing: .03em; }
+.lightbox__jp { font: 400 12px / 1.6 var(--f-serif); letter-spacing: .12em; color: var(--c-ink-soft); }
+/* ボタン(閉じる・前・次):サイトのすりガラスの丸ボタン */
+.lightbox__btn {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center;
+  font: 300 18px / 1 var(--f-mono); color: var(--c-ink);
+  border: 1px solid rgba(255, 255, 255, .8);
+  background: linear-gradient(135deg, rgba(255, 255, 255, .7), rgba(255, 255, 255, .3));
+  box-shadow: 0 10px 26px -12px rgba(110, 80, 160, .55), inset 0 1px 0 rgba(255, 255, 255, .95);
+  transition: background .4s var(--ease), color .4s var(--ease), transform .4s var(--ease);
+}
+.lightbox__btn:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 3px; }
+@media (hover: hover) {
+  .lightbox__btn:hover { background: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn)); color: #f3f4fa; }
+}
+.lightbox__nav { position: absolute; top: 50%; translate: 0 -50%; }
+.lightbox__nav--prev { left: clamp(-64px, -4vw, -8px); }
+.lightbox__nav--next { right: clamp(-64px, -4vw, -8px); }
+.lightbox[data-single] .lightbox__nav { display: none; }
+@media (max-width: 560px) {
+  .lightbox { padding-inline: 12px; }
+  .lightbox__media { max-height: calc(100svh - 260px); }
+  .lightbox__btn { width: 42px; height: 42px; }
+  .lightbox__nav { top: auto; bottom: -6px; translate: none; }
+  .lightbox__nav--prev { left: 4px; }
+  .lightbox__nav--next { right: 4px; }
+}

@@ -1,0 +1,151 @@
+/* =============================================================
+   base.css  ― 色・文字・リセット(サイト全体で共通)
+   ============================================================= */
+:root {
+  /* Color:背景画像のラベンダー〜ピンクの室内光から取った色 */
+  --c-ink: #463250;          /* 文字:ロゴと同じ深いプラム */
+  --c-ink-soft: #66646d;     /* 補足テキスト */
+  --c-paper: #f6f1f7;        /* ページ背景 */
+  --c-wall: #efe6ee;         /* アーチの壁色に近い面 */
+  --c-lilac: #a98fd6;        /* アクセント */
+  --c-logo: #463250;         /* 中央ロゴの色(images/logo-hero.svg と同じ) */
+  --c-btn: #463250;          /* Worksボタン:中央ロゴと同じ色 */
+  --c-btn-hi: #574262;       /* ボタン上側のハイライト */
+  --c-btn-deep: #382841;     /* ホバー時 */
+  --c-glass: rgba(255, 255, 255, .42);  /* ガラス風ボタンの面 */
+  --c-line: rgba(59, 49, 80, .14);
+  /* 背景画像(scene.jpg)から取った色。Worksの画像なし枠に使う */
+  --c-scene-lilac: #d6cbe0;   /* 左側のラベンダーの壁 */
+  --c-scene-blush: #ece0e5;   /* アーチの内側の明るい壁 */
+  --c-scene-floor: #d9cada;   /* 床の反射 */
+  --c-scene-sky: #dfe3f4;     /* ガラスに映る淡い青 */
+  --c-content: #f4eef5;       /* 下のコンテンツの地の色(グラデーションの土台) */
+
+  /* Type */
+  --f-display: "Italiana", "Cormorant Garamond", "Times New Roman", serif;
+  --f-body: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
+  --f-serif: "Zen Old Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;   /* 日本語の説明文 */
+  --f-mono: "DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --fs-hero: clamp(2.6rem, 6.2vw, 5.6rem);
+  --fs-h2: clamp(1.8rem, 3.4vw, 2.8rem);
+  --fs-body: 1rem;
+  --fs-small: .8125rem;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --ease-soft: cubic-bezier(.4, 0, .2, 1);
+  --c-intro: #ffffff;         /* 登場演出の最初の白 */
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: #dccfe3;   /* 一番下(フッター)の色。下へのオーバースクロールでも違和感が出ないように */
+  color: var(--c-ink);
+  font-family: var(--f-body);
+  font-size: var(--fs-body);
+  line-height: 1.8;
+  overflow-x: hidden;
+  overflow-x: clip;   /* hidden だとファーストビューの固定(sticky)が効かないので、対応ブラウザでは clip を使う */
+}
+img, canvas, video { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 3px; }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---- 共通ボタン:グラスモーフィズム ---- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .75em;
+  min-height: 40px;
+  padding: .6em 1.9em;          /* 縦を気持ち詰め、横を少し広げた */
+  border: 1px solid rgba(255, 255, 255, .78);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, .22));
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+  box-shadow: 0 8px 28px -12px rgba(110, 80, 160, .45), inset 0 1px 0 rgba(255, 255, 255, .95);
+  color: var(--c-ink);
+  font-family: var(--f-mono);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform .45s var(--ease), background .45s var(--ease), box-shadow .45s var(--ease);
+}
+.btn:hover { transform: translateY(-2px); background: linear-gradient(135deg, rgba(255, 255, 255, .72), rgba(255, 255, 255, .34)); }
+
+/* 中央ロゴと同じ色のボタン */
+.btn--ink {
+  border-color: rgba(255, 255, 255, .14);
+  background: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn));
+  -webkit-backdrop-filter: none; backdrop-filter: none;
+  box-shadow: 0 10px 30px -14px rgba(55, 35, 65, .7), inset 0 1px 0 rgba(255, 255, 255, .14);
+  color: #f3f4fa;
+}
+.btn--ink:hover { background: linear-gradient(180deg, var(--c-btn), var(--c-btn-deep)); }
+
+/* ---- くるっと回るボタン(.btn--flip) ----
+   ホバーすると文字が上下方向に箱のように回って次の面に替わり、
+   同時に下から色が満ちてボタンの色が反転する。
+   HTML: <a class="btn btn--flip"><span class="btn__roll"><span>Works</span><span aria-hidden="true">Works</span></span></a> */
+.btn--flip {
+  --flip-bg: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn));   /* ホバー後の面の色 */
+  --flip-fg: #f3f4fa;                                                    /* ホバー後の文字色 */
+  --flip-dur: .6s;                                                       /* 回る速さ */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+/* 下から満ちる色の面。上辺を丸めて、波が上がってくるように */
+.btn--flip::before {
+  content: "";
+  position: absolute; inset: -1px; z-index: -1;
+  background: var(--flip-bg);
+  border-radius: 50% 50% 0 0 / 60% 60% 0 0;
+  transform: translateY(105%);
+  transition: transform var(--flip-dur) var(--ease), border-radius var(--flip-dur) var(--ease);
+}
+/* 文字の箱:手前の面と、下に隠れている面を同じ場所に重ねる */
+.btn__roll { display: inline-grid; perspective: 300px; line-height: 1.2; }
+.btn__roll > span {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  transform-origin: 50% 50% -.6em;   /* 奥に軸を置くと、箱が回るように見える */
+  transition: transform var(--flip-dur) var(--ease), opacity var(--flip-dur) var(--ease);
+}
+.btn__roll > span:last-child { color: var(--flip-fg); transform: rotateX(-90deg); opacity: 0; }
+
+@media (hover: hover) {
+  .btn--flip:hover::before { transform: translateY(0); border-radius: 0; }
+  .btn--flip:hover .btn__roll > span:first-child { transform: rotateX(90deg); opacity: 0; }
+  .btn--flip:hover .btn__roll > span:last-child { transform: rotateX(0); opacity: 1; }
+}
+.btn--flip:focus-visible::before { transform: translateY(0); border-radius: 0; }
+.btn--flip:focus-visible .btn__roll > span:first-child { transform: rotateX(90deg); opacity: 0; }
+.btn--flip:focus-visible .btn__roll > span:last-child { transform: rotateX(0); opacity: 1; }
+
+/* 濃い色のボタン(Works)は逆に、明るい色+プラムの文字に反転する */
+.btn--ink.btn--flip { --flip-bg: linear-gradient(180deg, #ffffff, #efe6f6); --flip-fg: var(--c-ink); }
+@media (hover: hover) {
+  .btn--ink.btn--flip:hover { background: #f6f0fa; border-color: rgba(255, 255, 255, .9); }
+}
+
+.btn__arrow {
+  width: 20px; height: 10px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round;
+  transition: transform .45s var(--ease);
+}
+.btn:hover .btn__arrow { transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
