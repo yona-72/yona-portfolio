@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja" class="is-scrolled">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Dreamy Cloud City — Yona</title>
+  <meta name="description" content="楽曲「ラビアクト」の世界観で作った、2D横スクロールアクションのブラウザゲームです。">
+  <!-- ファビコン(ブラウザのタブのアイコン)。画像は images/favicon.svg と favicon.ico / iPhoneのホーム画面用は images/apple-touch-icon.png -->
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Zen+Kaku+Gothic+New:wght@400;500&family=Zen+Old+Mincho:wght@400;500&family=DM+Mono:wght@300;400;500&display=swap">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/work-detail.css">
+</head>
+<body>
+  <!-- =============================================================
+       作品ページ No.07(ゲーム DREAMY CLOUD CITY。ファイル名は work-10)
+       ・画面写真は images/works/detail/10-game-1-title.jpg・10-game-2-play.jpg
+       ・操作説明は下の .howto の表。ゲームのURLは https://yona-72.github.io/dream-cloudcity/
+       ============================================================= -->
+
+  <!-- ===== ヘッダー(トップと同じ) ===== -->
+  <header class="site-header">
+    <a class="site-logo" href="index.html"><img src="images/logo-hero.svg" alt="Yona" width="247" height="74"></a>
+    <nav class="site-nav" aria-label="メインメニュー">
+      <a href="index.html" data-nav="top">Home</a>
+      <a href="index.html#work-10" data-nav="works" class="is-current">Works</a>
+      <a href="index.html#about" data-nav="about">About</a>
+      <a href="index.html#sns" data-nav="sns">SNS</a>
+    </nav>
+  </header>
+
+  <!-- ===== 画面のふちの飾り(固定) ===== -->
+  <div class="frame" aria-hidden="true">
+    <span class="frame__plus" style="--x: 0; --y: 34%"></span>
+    <span class="frame__plus" style="--x: 0; --y: 70%"></span>
+    <span class="frame__plus" style="--x: 1; --y: 34%"></span>
+    <span class="frame__plus" style="--x: 1; --y: 70%"></span>
+    <span class="frame__v frame__v--l">ポートフォリオ</span>
+    <span class="frame__v frame__v--r">つくることの記録</span>
+    <span class="frame__index"><b>07</b><i></i><span>Game</span></span>
+  </div>
+
+  <main class="content content--page">
+    <section class="section">
+      <header class="sec-head detail-head">
+        <p class="sec-head__label" data-reveal><a class="back" href="index.html#work-10">← Back</a>(PROJECT No.07) <span>2026</span></p>
+        <h1 class="sec-head__title" data-reveal>Dreamy<br>Cloud City</h1>
+        <p class="sec-head__count" data-reveal><b>07</b><span>GAME /<br>No.07</span></p>
+        <p class="sec-head__v" aria-hidden="true">げーむ</p>
+      </header>
+
+      <!-- このページ全体の説明と、中の一覧 -->
+      <div class="detail-intro">
+        <div class="detail-toc-wrap" data-reveal>
+          <p class="detail-toc-label">(CONTENTS)</p>
+          <ul class="detail-toc">
+            <li><a href="#piece-1"><span>01</span>Title Screen</a></li>
+            <li><a href="#piece-2"><span>02</span>Play Screen</a></li>
+            <li><a href="#howto"><span>03</span>How to Play</a></li>
+          </ul>
+        </div>
+        <div class="detail__body" data-reveal>
+          <p class="work__index">(07) <span>— 2026</span></p>
+          <h2 class="work__title"><span class="work__title-sub">ゲーム</span><span class="work__title-main">Dreamy Cloud City</span></h2>
+          <p class="work__en">2D SIDE-SCROLLING ACTION GAME</p>
+          <span class="tagbox">GAME</span>
+          <p class="work__desc">2次元の自分を模したキャラクターが主人公の、ブラウザで遊べるゲームです。自身でリリースした楽曲「ラビアクト」をBGMに使い、その曲の世界観をドット絵の街と空で表現しました。</p>
+          <p class="work__desc">ジャンルは「2D横スクロールアクション(プラットフォーマー)」。足場を飛び移りながら右へ進み、ジェムを集め、敵を踏んで倒しながらゴールを目指します。</p>
+          <dl class="work__spec">
+            <div><dt>Role</dt><dd>Planning / Character / Music</dd></div>
+            <div><dt>Tool</dt><dd>HTML5 Canvas / JavaScript</dd></div>
+            <div><dt>Play</dt><dd>PC / スマートフォン(ブラウザ)</dd></div>
+          </dl>
+          <a class="btn btn--ink btn--flip game-play" href="https://yona-72.github.io/dream-cloudcity/" target="_blank" rel="noopener"><span class="btn__roll"><span>Play game ↗</span><span aria-hidden="true">Play game ↗</span></span></a>
+        </div>
+      </div>
+
+      <div class="pieces">
+        <!-- 01:タイトル画面 -->
+        <article class="piece" id="piece-1">
+          <figure class="piece__fig" data-reveal>
+            <div class="detail__frame detail__frame--game" data-label="IMAGE 01">
+              <img src="images/works/detail/10-game-1-title.jpg" alt="DREAMY CLOUD CITY タイトル画面" data-detail-img>
+            </div>
+            <figcaption class="detail__cap">(01) Title Screen</figcaption>
+          </figure>
+          <div class="piece__text" data-reveal>
+            <p class="piece__no">(01) <span>/ 02</span></p>
+            <h2 class="piece__title">Title Screen</h2>
+            <p class="piece__jp">タイトル画面</p>
+            <p class="piece__desc">夜のネオンの街を背景にしたタイトル画面です。ロゴや文字もドット絵で描き、操作方法をひと目で分かるように表示しています。</p>
+          </div>
+        </article>
+        <!-- 02:プレイ画面 -->
+        <article class="piece" id="piece-2">
+          <figure class="piece__fig" data-reveal>
+            <div class="detail__frame detail__frame--game" data-label="IMAGE 02">
+              <img src="images/works/detail/10-game-2-play.jpg" alt="DREAMY CLOUD CITY プレイ画面" data-detail-img>
+            </div>
+            <figcaption class="detail__cap">(02) Play Screen</figcaption>
+          </figure>
+          <div class="piece__text" data-reveal>
+            <p class="piece__no">(02) <span>/ 02</span></p>
+            <h2 class="piece__title">Play Screen</h2>
+            <p class="piece__jp">プレイ画面</p>
+            <p class="piece__desc">うさぎに乗った主人公が、雲の街をゴールに向かって進みます。ゴールの手前では大きなUFOが現れ、最後まで気が抜けない演出にしています。</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- 操作説明 -->
+      <section class="howto" id="howto" data-reveal>
+        <p class="detail-toc-label">(03) HOW TO PLAY</p>
+        <h2 class="howto__title">How to Play</h2>
+        <p class="howto__jp">操作方法</p>
+        <div class="howto__grid">
+          <div class="howto__col">
+            <p class="howto__label"><span class="tagbox">PC</span>キーボード</p>
+            <dl class="howto__list">
+              <div><dt>はじめる</dt><dd>画面をクリック、またはどれかのキー</dd></div>
+              <div><dt>左へ移動</dt><dd><kbd>←</kbd> または <kbd>A</kbd></dd></div>
+              <div><dt>右へ移動</dt><dd><kbd>→</kbd> または <kbd>D</kbd></dd></div>
+              <div><dt>ジャンプ</dt><dd><kbd>Space</kbd> / <kbd>↑</kbd> / <kbd>W</kbd></dd></div>
+              <div><dt>2段ジャンプ</dt><dd>空中でもう1回ジャンプのキー</dd></div>
+              <div><dt>やり直す</dt><dd><kbd>R</kbd></dd></div>
+              <div><dt>もう一度遊ぶ</dt><dd>クリア後に画面をクリック</dd></div>
+            </dl>
+          </div>
+          <div class="howto__col">
+            <p class="howto__label"><span class="tagbox">SP</span>スマートフォン</p>
+            <dl class="howto__list">
+              <div><dt>移動</dt><dd>画面の <kbd>◀</kbd> <kbd>▶</kbd> ボタン</dd></div>
+              <div><dt>ジャンプ</dt><dd>画面のジャンプボタン(空中でもう1回で2段ジャンプ)</dd></div>
+            </dl>
+            <p class="howto__label howto__label--tips"><span class="tagbox">TIPS</span>遊び方のポイント</p>
+            <ul class="howto__tips">
+              <li>ジェムを集めながら、右のゴールを目指します。</li>
+              <li>敵(ハートのキャラ)は上から踏むと倒せます。横から当たるとミスになります。</li>
+              <li>下に落ちてもミスになります。</li>
+              <li>ゴールが見えてくると、UFOのしかけが動き出します。</li>
+            </ul>
+          </div>
+        </div>
+        <a class="btn btn--ink btn--flip game-play" href="https://yona-72.github.io/dream-cloudcity/" target="_blank" rel="noopener"><span class="btn__roll"><span>Play game ↗</span><span aria-hidden="true">Play game ↗</span></span></a>
+      </section>
+
+      <!-- ほかの作品へ -->
+      <nav class="detail-pager" aria-label="ほかの作品" data-reveal>
+        <a href="work-08.html"><small>← PREV / No.06</small><b>Illustration</b></a>
+        <a href="work-02.html"><small>NEXT / No.01 →</small><b>Web Design</b></a>
+      </nav>
+      <div class="detail-back" data-reveal>
+        <a class="btn btn--ink btn--flip" href="index.html#work-10"><span class="btn__roll"><span>← Back to works</span><span aria-hidden="true">← Back to works</span></span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer__copy">© <span data-year></span> Yona</p>
+    <span class="site-footer__bars" aria-hidden="true"></span>
+    <p class="site-footer__thanks">THANK YOU FOR VISITING</p>
+    <a class="site-footer__top" href="#">BACK TO TOP <i>↑</i></a>
+  </footer>
+
+  <script src="js/work-detail.js"></script>
+</body>
+</html>

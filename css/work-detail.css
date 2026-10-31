@@ -322,3 +322,29 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 /* ポスター(縦長 2:3)用の枠。上下が少し切れても、押すと全体が拡大表示される */
 .detail__frame--poster { aspect-ratio: 2 / 3; }
 .piece__fig .detail__frame--poster { --w: calc(var(--a) * .82); }
+
+/* ゲームの画面写真(横長 4:3 前後)用の枠。ドット絵がぼやけないように */
+.detail__frame--game { aspect-ratio: 4 / 3; }
+.piece__fig .detail__frame--game { --w: calc(var(--a) * 1.16); }
+.detail__frame--game img { image-rendering: pixelated; }
+.game-play { justify-self: start; margin-top: 14px; min-height: 46px; padding-inline: 2.2em; }
+
+/* ゲームの操作説明 */
+.howto { margin-top: clamp(90px, 12vw, 170px); display: grid; gap: 10px; scroll-margin-top: 120px; }
+.howto__title { font: 400 clamp(2.4rem, 4.6vw, 3.8rem) / 1 var(--f-display); letter-spacing: .02em; }
+.howto__jp { font: 400 12.5px / 1.6 var(--f-serif); letter-spacing: .12em; color: var(--c-ink-soft); }
+.howto__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); margin-top: 24px; }
+.howto__col { padding: clamp(22px, 3vw, 36px); border-radius: 22px; background: rgba(255, 255, 255, .55); border: 1px solid rgba(255, 255, 255, .9); box-shadow: 0 24px 60px -40px rgba(110, 80, 160, .55); }
+.howto__label { display: flex; align-items: center; gap: 12px; font: 400 13px / 1.4 var(--f-serif); letter-spacing: .1em; margin-bottom: 14px; }
+.howto__label--tips { margin-top: 28px; }
+.howto__list { margin: 0; border-top: 1px solid var(--c-line); }
+.howto__list div { display: grid; grid-template-columns: 8.5em 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--c-line); align-items: baseline; }
+.howto__list dt { font: 400 12px / 1.6 var(--f-serif); letter-spacing: .08em; color: var(--c-ink-soft); }
+.howto__list dd { margin: 0; font: 400 13px / 1.8 var(--f-serif); letter-spacing: .04em; }
+.howto kbd { display: inline-block; min-width: 1.9em; padding: .15em .55em; border-radius: 6px; text-align: center;
+  font: 500 11px / 1.4 var(--f-mono); letter-spacing: .04em; color: var(--c-ink);
+  background: linear-gradient(180deg, #fff, #f1eaf5); border: 1px solid rgba(70, 50, 80, .18); box-shadow: 0 2px 0 rgba(70, 50, 80, .15); }
+.howto__tips { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font: 400 13px / 1.9 var(--f-serif); letter-spacing: .04em; }
+.howto .game-play { margin-top: 30px; justify-self: center; }
+@media (max-width: 900px) { .howto__grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .howto__list div { grid-template-columns: 6.5em 1fr; } }
