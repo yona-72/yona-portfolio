@@ -301,3 +301,20 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 .lightbox__stage.is-long .lightbox__nav--prev { left: clamp(8px, 2vw, 32px); }
 .lightbox__stage.is-long .lightbox__nav--next { right: clamp(8px, 2vw, 32px); }
 .lightbox__scrollhint { font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink-soft); }
+
+/* 正方形に近い画像(トップの Works と同じ 872×818 の画像)用の枠 */
+.detail__frame--card { aspect-ratio: 872 / 818; }
+.piece__fig .detail__frame--card { --w: calc(var(--a) * 1.03); }
+/* ホバーすると2枚目の画像にふわっと切り替わる(トップの Works と同じ動き) */
+.detail__frame--swap .detail__swap { opacity: 0; transition: opacity .7s var(--ease), transform 1.4s var(--ease); }
+.detail__frame--swap:hover .detail__swap,
+.detail__frame--swap:focus-visible .detail__swap { opacity: 1; }
+/* 作品の注釈と、外部サイトへのリンク */
+.piece__note { font: 400 11px / 1.8 var(--f-serif); letter-spacing: .05em; color: var(--c-ink-soft); }
+.piece__link {
+  margin-top: 6px; padding-bottom: 6px; text-decoration: none; color: var(--c-ink);
+  font: 500 10.5px / 1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+}
+.piece__link i { display: inline-block; font-style: normal; margin-left: .6em; transition: transform .5s var(--ease); }
+.piece__link:hover i { transform: translate(3px, -3px); }
