@@ -200,36 +200,57 @@
              左右交互に、少しずつずらして並ぶ。枠の形は4種類が順番に付く。
              クリックできるのは「画像(.work__thumb)」と「View project(.work__more)」の2か所だけ。
              リンク先を変えるときは、この2つの href を両方そろえて書き換える。リンク先はすべて新しいタブで開く(target="_blank")。
-               表示の番号(No.)とファイルの番号はずれている。表示 01=data-work 02(work-02.html) / 02=03 / 03=04(動画) / 04=05 / 05=06(外部サイト) / 06=08(work-08.html)
+               表示の番号(No.)とファイルの番号はずれている。表示 01=data-work 02(work-02.html Webデザイン) / 02=09(work-09.html デジタルデザイン) / 03=03 / 04=04(動画) / 05=05 / 06=08(work-08.html)
              見出し:.work__title-sub が小見出し(上の小さい文字)、.work__title-main が大見出し。小見出しが不要なら、その span ごと消す。
              画像:images/works/ に、作品ごとの名前で置く(ふだん/ホバー中だけ)。同じ名前で上書きすれば差し替わる。
-               02 → 02-banner-web.png / -hover.png(バナー・Web)
+               01 → 02-banner-web.png / 02-web-hover.jpg(Webデザイン)
+               02 → 09-digital.jpg / 09-digital-hover.jpg(デジタルデザイン)
                03 → 03-print-booth.png / -hover.png(パンフレット・チラシ・ブース)
                04 → 04-profile-movie.png / -hover.png(プロフィールムービー)
                05 → 05-3d-objects.png / -hover.png(Blender)
-               06 → 06-wedding-invitation.png / -hover.png(結婚式 招待状)
                07 → 08-illustration.jpg / -hover.jpg(イラスト。ファイル名は 08 のまま)
              (正方形がおすすめ。ほかの名前にしたいときは src を書き換える) -->
         <!-- 船舶用品サイト(OCEANIC GLOBAL TRADE)の項目は、Banner & Web の作品ページ(work-02.html)の中に移した -->
         <article class="work" data-work="02">
           <div class="work__media">
             <a class="work__thumb" href="work-02.html" target="_blank" rel="noopener">
-              <img class="work__img" src="images/works/02-banner-web.png" alt="BANNER &amp; WEB" data-work-img>
-              <img class="work__img work__img--hover" src="images/works/02-banner-web-hover.png" alt="" aria-hidden="true" data-work-img>
+              <img class="work__img" src="images/works/02-banner-web.png" alt="WEB DESIGN" data-work-img>
+              <img class="work__img work__img--hover" src="images/works/02-web-hover.jpg" alt="" aria-hidden="true" data-work-img>
             </a>
             <span class="work__no">No.01</span>
           </div>
           <div class="work__body">
             <p class="work__index">(01) <span>— 2026</span></p>
-            <h3 class="work__title"><span class="work__title-sub">バナー・その他Webデザイン</span><span class="work__title-main">BANNER &amp; WEB</span></h3>
-            <p class="work__en">BANNER / WEB DESIGN</p>
+            <h3 class="work__title"><span class="work__title-sub">Webデザイン</span><span class="work__title-main">WEB DESIGN</span></h3>
+            <p class="work__en">WEBSITE DESIGN / CODING</p>
             <span class="tagbox">WEB</span>
-            <p class="work__desc">バナー・Webデザイン・動画用素材のまとめになります。視線の流れ、情報の見やすさを考えながら、デザインで伝える、魅せることも考え制作しております。</p>
+            <p class="work__desc">Webデザインのまとめになります。ワードプレスとphpを使用してのサイトデザイン、ページ追加のコーディング作業・studioを使用してのデザイン・コーディングまで幅広く行っておりました。</p>
             <dl class="work__spec">
-              <div><dt>Role</dt><dd>Design</dd></div>
-              <div><dt>Tool</dt><dd>Photoshop / Illustrator</dd></div>
+              <div><dt>Role</dt><dd>Design / Coding</dd></div>
+              <div><dt>Tool</dt><dd>WordPress・PHP / STUDIO</dd></div>
             </dl>
             <a class="work__more" href="work-02.html" target="_blank" rel="noopener">View project <i>↗</i></a>
+          </div>
+        </article>
+        <article class="work" data-work="09">
+          <div class="work__media">
+            <a class="work__thumb" href="work-09.html" target="_blank" rel="noopener">
+              <img class="work__img" src="images/works/09-digital.jpg" alt="DIGITAL DESIGN" data-work-img>
+              <img class="work__img work__img--hover" src="images/works/09-digital-hover.jpg" alt="" aria-hidden="true" data-work-img>
+            </a>
+            <span class="work__no">No.02</span>
+          </div>
+          <div class="work__body">
+            <p class="work__index">(02) <span>— 2026</span></p>
+            <h3 class="work__title"><span class="work__title-sub">その他デジタルデザイン</span><span class="work__title-main">DIGITAL DESIGN</span></h3>
+            <p class="work__en">BANNER / ILLUSTRATION / POSTER</p>
+            <span class="tagbox">GRAPHIC</span>
+            <p class="work__desc">バナー、動画用イラスト、ポスターなど、Web以外のデジタルデザインのまとめになります。視線の流れ、情報の見やすさを考えながら、デザインで伝える、魅せることも考え制作しております。</p>
+            <dl class="work__spec">
+              <div><dt>Role</dt><dd>Design / Illustration</dd></div>
+              <div><dt>Tool</dt><dd>Photoshop / Illustrator</dd></div>
+            </dl>
+            <a class="work__more" href="work-09.html" target="_blank" rel="noopener">View project <i>↗</i></a>
           </div>
         </article>
         <article class="work" data-work="03">
@@ -238,10 +259,10 @@
               <img class="work__img" src="images/works/03-print-booth.png" alt="PRINT &amp; BOOTH" data-work-img>
               <img class="work__img work__img--hover" src="images/works/03-print-booth-hover.png" alt="" aria-hidden="true" data-work-img>
             </a>
-            <span class="work__no">No.02</span>
+            <span class="work__no">No.03</span>
           </div>
           <div class="work__body">
-            <p class="work__index">(02) <span>— 2026</span></p>
+            <p class="work__index">(03) <span>— 2026</span></p>
             <h3 class="work__title"><span class="work__title-sub">パンフレット・チラシ・ブースデザイン等</span><span class="work__title-main">PRINT &amp; BOOTH</span></h3>
             <p class="work__en">PRINT / BOOTH DESIGN</p>
             <span class="tagbox">PRINT</span>
@@ -259,10 +280,10 @@
               <img class="work__img" src="images/works/04-profile-movie.png" alt="PROFILE MOVIE" data-work-img>
               <img class="work__img work__img--hover" src="images/works/04-profile-movie-hover.png" alt="" aria-hidden="true" data-work-img>
             </a>
-            <span class="work__no">No.03</span>
+            <span class="work__no">No.04</span>
           </div>
           <div class="work__body">
-            <p class="work__index">(03) <span>— 2026.09</span></p>
+            <p class="work__index">(04) <span>— 2026.09</span></p>
             <h3 class="work__title"><span class="work__title-sub">結婚式 プロフィールムービー</span><span class="work__title-main">PROFILE MOVIE</span></h3>
             <p class="work__en">WEDDING PROFILE MOVIE</p>
             <span class="tagbox">VIDEO</span>
@@ -280,10 +301,10 @@
               <img class="work__img" src="images/works/05-3d-objects.png" alt="3D OBJECTS" data-work-img>
               <img class="work__img work__img--hover" src="images/works/05-3d-objects-hover.png" alt="" aria-hidden="true" data-work-img>
             </a>
-            <span class="work__no">No.04</span>
+            <span class="work__no">No.05</span>
           </div>
           <div class="work__body">
-            <p class="work__index">(04) <span>— 2026</span></p>
+            <p class="work__index">(05) <span>— 2026</span></p>
             <h3 class="work__title"><span class="work__title-sub">Blender 3Dオブジェクト</span><span class="work__title-main">3D OBJECTS</span></h3>
             <p class="work__en">3D MODELING</p>
             <span class="tagbox">3D</span>
@@ -295,27 +316,7 @@
             <a class="work__more" href="work-05.html" target="_blank" rel="noopener">View project <i>↗</i></a>
           </div>
         </article>
-        <article class="work" data-work="06">
-          <div class="work__media">
-            <a class="work__thumb" href="https://ivory746433.studio.site/" target="_blank" rel="noopener">
-              <img class="work__img" src="images/works/06-wedding-invitation.png" alt="ONE PRISM SESSION" data-work-img>
-              <img class="work__img work__img--hover" src="images/works/06-wedding-invitation-hover.png" alt="" aria-hidden="true" data-work-img>
-            </a>
-            <span class="work__no">No.05</span>
-          </div>
-          <div class="work__body">
-            <p class="work__index">(05) <span>— 2026.07</span></p>
-            <h3 class="work__title"><span class="work__title-sub">結婚式 Web招待状</span><span class="work__title-main">ONE PRISM SESSION</span></h3>
-            <p class="work__en">WEDDING INVITATION</p>
-            <span class="tagbox">WEB</span>
-            <p class="work__desc">自身の結婚式のWeb招待状になります。印象的なタイポグラフィを作成し、パララックス表現なども取り入れ積極的にスクロールを促すデザインに。しかし重要な情報にはスムーズに視線がいくように設計いたしました。</p>
-            <dl class="work__spec">
-              <div><dt>Role</dt><dd>Web Design</dd></div>
-              <div><dt>Tool</dt><dd>STUDIO</dd></div>
-            </dl>
-            <a class="work__more" href="https://ivory746433.studio.site/" target="_blank" rel="noopener">View project <i>↗</i></a>
-          </div>
-        </article>
+        <!-- 結婚式 Web招待状(ONE PRISM SESSION)は、Web Design の作品ページ(work-02.html)の中に移した -->
         <!-- 07 だったポートフォリオサイトの項目は外した(画像 07-portfolio.png は images/works に残してある) -->
         <article class="work" data-work="08">
           <div class="work__media">
@@ -342,11 +343,11 @@
           <nav class="works-bar" aria-label="作品の切り替え">
             <p class="works-bar__count"><b data-works-now>01</b><span>/ 06</span></p>
             <ol class="works-bar__list">
-              <li><button type="button" data-works-go="0"><span class="works-bar__fill"></span><em>01 — Banner / Web</em></button></li>
-              <li><button type="button" data-works-go="1"><span class="works-bar__fill"></span><em>02 — Print / Booth</em></button></li>
-              <li><button type="button" data-works-go="2"><span class="works-bar__fill"></span><em>03 — Video</em></button></li>
-              <li><button type="button" data-works-go="3"><span class="works-bar__fill"></span><em>04 — 3D</em></button></li>
-              <li><button type="button" data-works-go="4"><span class="works-bar__fill"></span><em>05 — Web</em></button></li>
+              <li><button type="button" data-works-go="0"><span class="works-bar__fill"></span><em>01 — Web</em></button></li>
+              <li><button type="button" data-works-go="1"><span class="works-bar__fill"></span><em>02 — Digital</em></button></li>
+              <li><button type="button" data-works-go="2"><span class="works-bar__fill"></span><em>03 — Print / Booth</em></button></li>
+              <li><button type="button" data-works-go="3"><span class="works-bar__fill"></span><em>04 — Video</em></button></li>
+              <li><button type="button" data-works-go="4"><span class="works-bar__fill"></span><em>05 — 3D</em></button></li>
               <li><button type="button" data-works-go="5"><span class="works-bar__fill"></span><em>06 — Illust</em></button></li>
             </ol>
             <p class="works-bar__pct"><span data-works-pct>000</span>%</p>

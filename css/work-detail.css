@@ -318,3 +318,7 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 }
 .piece__link i { display: inline-block; font-style: normal; margin-left: .6em; transition: transform .5s var(--ease); }
 .piece__link:hover i { transform: translate(3px, -3px); }
+
+/* ポスター(縦長 2:3)用の枠。上下が少し切れても、押すと全体が拡大表示される */
+.detail__frame--poster { aspect-ratio: 2 / 3; }
+.piece__fig .detail__frame--poster { --w: calc(var(--a) * .82); }
