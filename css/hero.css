@@ -91,7 +91,7 @@ html.is-intro .hero__logo:not(.is-drawing):not(.is-drawn) { opacity: 0; }
   opacity:0.7;
 }
 
-.hero__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.hero__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px clamp(26px, 3vw, 40px); }
 
 /* スクロール案内 */
 .hero__scroll {

@@ -61,60 +61,53 @@ p { margin: 0; }
   clip: rect(0 0 0 0); white-space: nowrap;
 }
 
-/* ---- 共通ボタン:グラスモーフィズム ---- */
+/* ---- 共通ボタン:枠のないテキストリンク ----
+   小さな英字+下に細い線。ホバーすると線が右へ抜けて左から引き直され、文字が上下にくるっと回る。
+   .btn--ink(いちばん大事なボタン)は、頭に小さなひし形の印が付く */
 .btn {
+  position: relative;
   display: inline-flex; align-items: center; justify-content: center; gap: .75em;
-  min-height: 40px;
-  padding: .6em 1.9em;          /* 縦を気持ち詰め、横を少し広げた */
-  border: 1px solid rgba(255, 255, 255, .78);
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, .22));
-  -webkit-backdrop-filter: blur(12px) saturate(1.4);
-  backdrop-filter: blur(12px) saturate(1.4);
-  box-shadow: 0 8px 28px -12px rgba(110, 80, 160, .45), inset 0 1px 0 rgba(255, 255, 255, .95);
+  padding: .7em 0 .8em;
+  border: 0; border-radius: 0; background: none; box-shadow: none;
+  -webkit-backdrop-filter: none; backdrop-filter: none;
   color: var(--c-ink);
-  font-family: var(--f-mono);
-  font-size: var(--fs-small);
-  font-weight: 500;
-  letter-spacing: .16em;
+  font: 500 11px / 1.2 var(--f-mono);
+  letter-spacing: .26em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: transform .45s var(--ease), background .45s var(--ease), box-shadow .45s var(--ease);
+  cursor: pointer;
+  transition: color .45s var(--ease);
 }
-.btn:hover { transform: translateY(-2px); background: linear-gradient(135deg, rgba(255, 255, 255, .72), rgba(255, 255, 255, .34)); }
-
-/* 中央ロゴと同じ色のボタン */
-.btn--ink {
-  border-color: rgba(255, 255, 255, .14);
-  background: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn));
-  -webkit-backdrop-filter: none; backdrop-filter: none;
-  box-shadow: 0 10px 30px -14px rgba(55, 35, 65, .7), inset 0 1px 0 rgba(255, 255, 255, .14);
-  color: #f3f4fa;
-}
-.btn--ink:hover { background: linear-gradient(180deg, var(--c-btn), var(--c-btn-deep)); }
-
-/* ---- くるっと回るボタン(.btn--flip) ----
-   ホバーすると文字が上下方向に箱のように回って次の面に替わり、
-   同時に下から色が満ちてボタンの色が反転する。
-   HTML: <a class="btn btn--flip"><span class="btn__roll"><span>Works</span><span aria-hidden="true">Works</span></span></a> */
-.btn--flip {
-  --flip-bg: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn));   /* ホバー後の面の色 */
-  --flip-fg: #f3f4fa;                                                    /* ホバー後の文字色 */
-  --flip-dur: .6s;                                                       /* 回る速さ */
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-}
-/* 下から満ちる色の面。上辺を丸めて、波が上がってくるように */
-.btn--flip::before {
+/* 下の細い線 */
+.btn::after {
   content: "";
-  position: absolute; inset: -1px; z-index: -1;
-  background: var(--flip-bg);
-  border-radius: 50% 50% 0 0 / 60% 60% 0 0;
-  transform: translateY(105%);
-  transition: transform var(--flip-dur) var(--ease), border-radius var(--flip-dur) var(--ease);
+  position: absolute; left: 0; right: .26em; bottom: 0;   /* 字間の分だけ右を詰める */
+  height: 1px; background: currentColor;
+  transform-origin: right center;
 }
-/* 文字の箱:手前の面と、下に隠れている面を同じ場所に重ねる */
+@media (hover: hover) {
+  .btn:hover::after { animation: btn-line .9s var(--ease) both; }
+}
+.btn:focus-visible::after { animation: btn-line .9s var(--ease) both; }
+@keyframes btn-line {
+  0%    { transform: scaleX(1); transform-origin: right center; }
+  45%   { transform: scaleX(0); transform-origin: right center; }
+  45.1% { transform: scaleX(0); transform-origin: left center; }
+  100%  { transform: scaleX(1); transform-origin: left center; }
+}
+/* 大事なボタンの印(ひし形) */
+.btn--ink::before {
+  content: ""; flex: none;
+  width: 5px; height: 5px; margin-right: .2em;
+  background: currentColor; transform: rotate(45deg);
+  transition: transform .6s var(--ease);
+}
+@media (hover: hover) { .btn--ink:hover::before { transform: rotate(225deg); } }
+
+/* ---- くるっと回る文字(.btn--flip) ----
+   ホバーすると文字が上下方向に箱のように回って、下に隠れていた面に替わる。
+   HTML: <a class="btn btn--flip"><span class="btn__roll"><span>Works</span><span aria-hidden="true">Works</span></span></a> */
+.btn--flip { --flip-dur: .6s; }
 .btn__roll { display: inline-grid; perspective: 300px; line-height: 1.2; }
 .btn__roll > span {
   grid-area: 1 / 1;
@@ -122,22 +115,14 @@ p { margin: 0; }
   transform-origin: 50% 50% -.6em;   /* 奥に軸を置くと、箱が回るように見える */
   transition: transform var(--flip-dur) var(--ease), opacity var(--flip-dur) var(--ease);
 }
-.btn__roll > span:last-child { color: var(--flip-fg); transform: rotateX(-90deg); opacity: 0; }
-
+.btn__roll > span:last-child { color: var(--c-lilac); transform: rotateX(-90deg); opacity: 0; }
 @media (hover: hover) {
-  .btn--flip:hover::before { transform: translateY(0); border-radius: 0; }
   .btn--flip:hover .btn__roll > span:first-child { transform: rotateX(90deg); opacity: 0; }
   .btn--flip:hover .btn__roll > span:last-child { transform: rotateX(0); opacity: 1; }
 }
-.btn--flip:focus-visible::before { transform: translateY(0); border-radius: 0; }
 .btn--flip:focus-visible .btn__roll > span:first-child { transform: rotateX(90deg); opacity: 0; }
 .btn--flip:focus-visible .btn__roll > span:last-child { transform: rotateX(0); opacity: 1; }
-
-/* 濃い色のボタン(Works)は逆に、明るい色+プラムの文字に反転する */
-.btn--ink.btn--flip { --flip-bg: linear-gradient(180deg, #ffffff, #efe6f6); --flip-fg: var(--c-ink); }
-@media (hover: hover) {
-  .btn--ink.btn--flip:hover { background: #f6f0fa; border-color: rgba(255, 255, 255, .9); }
-}
+.btn:focus-visible { outline: none; }
 
 .btn__arrow {
   width: 20px; height: 10px; flex: none;

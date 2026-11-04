@@ -220,8 +220,8 @@ html[data-tone="sns"] body { background-color: #e8d2e8; }   /* 下へのオー�
   font: 500 10px / 1.2 var(--f-mono); letter-spacing: .16em; text-transform: uppercase;
 }
 .pill {
-  display: inline-block; padding: .3em 1.1em;
-  border: 1px solid currentColor; border-radius: 999px;
+  display: inline-block; padding: .3em 0;
+  border-bottom: 1px solid currentColor;
   font: 400 10px / 1.2 var(--f-mono); letter-spacing: .16em;
 }
 .jp { font-family: var(--f-serif); font-size: 14px; line-height: 2.1; letter-spacing: .06em; }
@@ -749,7 +749,7 @@ html.has-reveal [data-reveal].is-inview { opacity: 1; transform: none; filter: n
 }
 .works-more__note { font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
 .works-more__note span { margin-left: 1.4em; font: 400 12px / 1 var(--f-serif); letter-spacing: .12em; color: var(--c-ink-soft); }
-.works-more__btn { min-height: 48px; padding-inline: 2.4em; }
+.works-more__btn { font-size: 11.5px; }
 
 /* =============================================================
    作品一覧ページ(works.html)
@@ -762,13 +762,12 @@ html.has-reveal [data-reveal].is-inview { opacity: 1; transform: none; filter: n
 .arc-filter { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 0 0 clamp(48px, 7vw, 88px) calc(100% / 12 * 5); }
 .arc-filter button {
   all: unset; cursor: pointer;
-  padding: .55em 1.4em .5em;
-  border: 1px solid var(--c-line); border-radius: 999px;
+  padding: .55em 0 .5em; margin-right: 1.4em;
   font: 400 10px / 1 var(--f-mono); letter-spacing: .18em; text-transform: uppercase;
   transition: background .4s var(--ease), color .4s var(--ease), border-color .4s var(--ease);
 }
-.arc-filter button:hover { border-color: var(--c-ink); }
-.arc-filter button.is-current { background: var(--c-ink); color: #f6f1f7; border-color: var(--c-ink); }
+.arc-filter button:hover { color: var(--c-lilac); }
+.arc-filter button.is-current { text-decoration: line-through; }   /* ナビと同じ「いま見ている」印 */
 .arc-filter button:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 3px; }
 
 .arc-list {
@@ -853,27 +852,23 @@ html.has-reveal [data-reveal].is-inview { opacity: 1; transform: none; filter: n
   position: fixed; z-index: 11;
   right: var(--gutter);
   bottom: calc(100px + env(safe-area-inset-bottom, 0px));   /* フッターの少し上(SNS の一覧との間の余白に浮かぶ) */
-  width: 64px; height: 64px; border-radius: 50%;
-  display: grid; place-content: center; justify-items: center; gap: 2px;
+  padding: 6px 4px;
+  display: grid; justify-items: center; gap: 8px;
   text-decoration: none; color: var(--c-ink);
-  border: 1px solid rgba(255, 255, 255, .78);
-  background: linear-gradient(135deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, .25));
-  -webkit-backdrop-filter: blur(12px) saturate(1.4);
-  backdrop-filter: blur(12px) saturate(1.4);
-  box-shadow: 0 10px 30px -12px rgba(110, 80, 160, .5), inset 0 1px 0 rgba(255, 255, 255, .95);
   opacity: 0; visibility: hidden; transform: translateY(16px);
   transition: opacity .6s var(--ease), transform .6s var(--ease), visibility .6s, background .4s var(--ease), color .4s var(--ease);
 }
 html.is-end .to-top { opacity: 1; visibility: visible; transform: none; }
 .to-top__arrow { font: 400 16px / 1 var(--f-mono); transition: transform .5s var(--ease); }
-.to-top__label { font: 500 9px / 1 var(--f-mono); letter-spacing: .2em; margin-right: -.2em; }
+.to-top__label { font: 500 9.5px / 1 var(--f-mono); letter-spacing: .26em; margin-bottom: -.26em; writing-mode: vertical-rl; }   /* 縦書きの TOP */
+.to-top::after { content: ""; justify-self: center; width: 1px; height: 26px; background: currentColor; opacity: .5; }
 @media (hover: hover) {
-  .to-top:hover { background: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn)); color: #f3f4fa; border-color: rgba(255, 255, 255, .2); }
+  .to-top:hover { color: var(--c-lilac); }
   .to-top:hover .to-top__arrow { transform: translateY(-3px); }
 }
 .to-top:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 3px; }
 @media (max-width: 560px) {
-  .to-top { width: 54px; height: 54px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .to-top { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* メインページのフッター:BACK TO TOP は右下の丸いボタンに任せて外したので、3つを両端と真ん中にそろえる
@@ -971,15 +966,18 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
 .contact__status.is-error { color: #a04a6e; }
 .contact__send {
   flex: none; display: inline-flex; align-items: center; gap: .9em;
-  padding: 14px 30px; border: 0; border-radius: 999px; cursor: pointer;
-  font: 500 11px / 1 var(--f-mono); letter-spacing: .24em; text-transform: uppercase; color: #f3f4fa;
-  background: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn));
-  box-shadow: 0 12px 28px -14px rgba(56, 40, 65, .7), inset 0 1px 0 rgba(255, 255, 255, .18);
-  transition: background .4s var(--ease), transform .4s var(--ease);
+  position: relative;
+  padding: 10px 0 12px; border: 0; border-radius: 0; cursor: pointer; background: none;
+  font: 500 12px / 1 var(--f-mono); letter-spacing: .3em; text-transform: uppercase; color: var(--c-ink);
+  transition: color .4s var(--ease);
 }
 .contact__send i { font-style: normal; transition: transform .5s var(--ease); }
-.contact__send:hover { background: var(--c-btn-deep); }
-.contact__send:hover i { transform: translateX(4px); }
+.contact__send::before { content: ""; width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); transition: transform .6s var(--ease); }
+.contact__send::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform-origin: right center; }
+.contact__send:hover { color: var(--c-lilac); }
+.contact__send:hover::before { transform: rotate(225deg); }
+.contact__send:hover::after { animation: btn-line .9s var(--ease) both; }
+.contact__send:hover i { transform: translateX(6px); }
 .contact__send:disabled { opacity: .6; cursor: progress; }
 
 .about__contact { text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 2px; }

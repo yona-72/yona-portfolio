@@ -101,7 +101,7 @@
 .detail-pager small { font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; color: var(--c-ink-soft); }
 .detail-pager b { font: 400 clamp(1.5rem, 3vw, 2.4rem) / 1.05 var(--f-display); letter-spacing: .03em; }
 .detail-back { display: flex; justify-content: flex-end; margin-top: clamp(32px, 4vw, 48px); padding-right: 8%; }
-.detail-back .btn { min-height: 48px; padding-inline: 2.4em; }
+.detail-back .btn { font-size: 11.5px; }
 
 /* ---- タブレット・スマホ ---- */
 @media (max-width: 900px) {
@@ -247,15 +247,12 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
   all: unset; box-sizing: border-box; cursor: pointer;
   width: 48px; height: 48px; border-radius: 50%;
   display: grid; place-items: center;
-  font: 300 18px / 1 var(--f-mono); color: var(--c-ink);
-  border: 1px solid rgba(255, 255, 255, .8);
-  background: linear-gradient(135deg, rgba(255, 255, 255, .7), rgba(255, 255, 255, .3));
-  box-shadow: 0 10px 26px -12px rgba(110, 80, 160, .55), inset 0 1px 0 rgba(255, 255, 255, .95);
+  font: 300 22px / 1 var(--f-mono); color: var(--c-ink);
   transition: background .4s var(--ease), color .4s var(--ease), transform .4s var(--ease);
 }
 .lightbox__btn:focus-visible { outline: 2px solid var(--c-lilac); outline-offset: 3px; }
 @media (hover: hover) {
-  .lightbox__btn:hover { background: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn)); color: #f3f4fa; }
+  .lightbox__btn:hover { color: var(--c-lilac); transform: scale(1.12); }
 }
 .lightbox__nav { position: absolute; top: 50%; translate: 0 -50%; }
 .lightbox__nav--prev { left: clamp(-64px, -4vw, -8px); }
@@ -327,7 +324,7 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 .detail__frame--game { aspect-ratio: 4 / 3; }
 .piece__fig .detail__frame--game { --w: calc(var(--a) * 1.16); }
 .detail__frame--game img { image-rendering: pixelated; }
-.game-play { justify-self: start; margin-top: 14px; min-height: 46px; padding-inline: 2.2em; }
+.game-play { justify-self: start; margin-top: 14px; font-size: 12px; }
 
 /* ゲームの操作説明 */
 .howto { margin-top: clamp(90px, 12vw, 170px); display: grid; gap: 10px; scroll-margin-top: 120px; }
