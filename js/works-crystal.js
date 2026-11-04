@@ -51,7 +51,7 @@ export function initWorksCrystals() {
     envMap: envTex, envMapIntensity: 1.3,
     flatShading: true,
   });
-  fresnel(shell, 0.0, 0.5);
+  fresnel(shell, 0.0, 0.68);
 
   // 光源:右上から白、左下からピンク、右下から水色(虹色の映り込みを出す)
   const lights = () => {
@@ -63,6 +63,7 @@ export function initWorksCrystals() {
     return g;
   };
 
+  const v_bodies = [];
   const views = thumbs.map((thumb, i) => {
     const imgs = thumb.querySelectorAll('img');
     const scene = new THREE.Scene();
@@ -74,6 +75,7 @@ export function initWorksCrystals() {
     // クリスタル本体:表側の面には ふだんの画像、裏側の面には ホバー画像が、中に閉じこめられたように映る
     const body = makeCrystalMaterial(envTex, imgMin, imgSize, imgs[0], imgs[1] || imgs[0]);
     const crystal = new THREE.Mesh(crystalGeo, body); crystal.renderOrder = 1;
+    v_bodies.push(body);
     const skin = new THREE.Mesh(crystalGeo, shell); skin.scale.setScalar(1.006); skin.renderOrder = 2;
     rig.add(crystal, skin);
 
@@ -133,6 +135,7 @@ export function initWorksCrystals() {
       v.rig.rotation.x = s * Math.sin(tt * 0.33) * 0.05 + v.tilt.x;
       v.rig.rotation.z = s * Math.sin(tt * 0.27) * 0.035;
       v.rig.position.y = s * Math.sin(tt * 0.8) * 0.06;
+      v_bodies.forEach(m => { m.userData.u.uTime.value = t; });
       renderer.render(v.scene, camera);
       v.ctx.clearRect(0, 0, v.canvas.width, v.canvas.height);
       v.ctx.drawImage(renderer.domElement, 0, 0, v.canvas.width, v.canvas.height);
@@ -156,8 +159,8 @@ function fresnel(mat, min, max) {
 // クリスタルの形:記念の盾のような、厚みのある板。
 // 正面と背面は平らな面(ここに画像が映る)、まわりは何段にもカットされた面取りで、光がきらきら反射する
 const OUTLINE = [
-  [0.10, 1.26], [0.42, 1.06], [0.66, 0.76], [0.84, 0.40], [0.93, 0.02], [0.90, -0.50], [0.83, -0.98], [0.72, -1.20],
-  [-0.72, -1.20], [-0.85, -0.98], [-0.92, -0.48], [-0.95, 0.06], [-0.83, 0.48], [-0.58, 0.88], [-0.26, 1.14],
+  [0.10, 1.26], [0.62, 0.84], [0.93, 0.12], [0.86, -0.82], [0.70, -1.20],
+  [-0.70, -1.20], [-0.90, -0.74], [-0.95, 0.12], [-0.52, 0.88],
 ];
 // 輪郭を内側へ k だけ縮めた形(角の二等分線の向きにずらす)
 function inset(pts, k) {
@@ -182,8 +185,8 @@ function makeCrystalGeometry() {
   // [内側へのずれ, 奥行き] 正面 → 面取り(2段) → 側面 → 面取り(2段) → 背面
   const D = 0.17;
   const loops = [
-    [0.17, D], [0.10, D * 0.84], [0.045, D * 0.52], [0.01, D * 0.2],
-    [0.01, -D * 0.2], [0.045, -D * 0.52], [0.10, -D * 0.84], [0.17, -D],
+    [0.16, D], [0.02, D * 0.38],
+    [0.02, -D * 0.38], [0.16, -D],
   ].map(([k, z]) => inset(O, k).map(([x, y]) => new THREE.Vector3(x, y, z)));
   const pos = [];
   const tri = (a, b, c) => pos.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
@@ -227,16 +230,19 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
     uFitA: { value: new THREE.Vector4(1, 1, 0, 0) }, uFitB: { value: new THREE.Vector4(1, 1, 0, 0) },
     uMin: { value: imgMin }, uSize: { value: imgSize },
     uRefr: { value: 0.22 },       // 面ごとのずれ(屈折)の大きさ
-    uEmis: { value: 0.12 },       // 画像の明るさ(内側から光っているように)
+    uEmis: { value: 0.16 },       // 画像の明るさ(内側から光っているように)
+    uTime: { value: 0 },
   };
   const mat = new THREE.MeshPhysicalMaterial({
     color: 0xffffff, metalness: 0, roughness: 0.12,
     iridescence: 0.7, iridescenceIOR: 1.3, iridescenceThicknessRange: [260, 600],
     clearcoat: 1, clearcoatRoughness: 0.03,
     sheen: 0.25, sheenColor: new THREE.Color(0xe7d6ff), sheenRoughness: 0.4,
-    envMap: envTex, envMapIntensity: 0.55,
+    envMap: envTex, envMapIntensity: 0.6,
+    transparent: true,
     flatShading: true,
   });
+  mat.userData.u = u;
   mat.onBeforeCompile = sh => {
     Object.assign(sh.uniforms, u);
     sh.vertexShader = sh.vertexShader
@@ -248,8 +254,8 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
         uniform sampler2D uImgA; uniform sampler2D uImgB;
         uniform vec4 uFitA; uniform vec4 uFitB;
         uniform vec2 uMin; uniform vec2 uSize;
-        uniform float uRefr; uniform float uEmis;
-        vec3 crystalImg = vec3(0.);`)
+        uniform float uRefr; uniform float uEmis; uniform float uTime;
+        vec3 crystalImg = vec3(0.); float crystalFlat = 1.0;`)
       .replace('#include <map_fragment>', `#include <map_fragment>
         {
           vec3 on = normalize(vON);
@@ -263,23 +269,26 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
           vec3 img = front ? texture2D(uImgA, p * uFitA.xy + uFitA.zw).rgb
                            : texture2D(uImgB, p * uFitB.xy + uFitB.zw).rgb;
           float flatW = smoothstep(0.985, 0.999, abs(on.z));    // 正面・背面の平らな面
-          vec3 glassTint = vec3(0.90, 0.88, 0.98);
-          // 面取りの面:カットされたガラスのように、面ごとに白・青みのグレー・虹色が入れかわる。
-          // 見る向き(画面に対する面の向き)で決めるので、回ると、きらきら移り変わる
+          crystalFlat = flatW;
+          // 光がガラスを通って分かれたときの、やわらかな虹色(トップのガラスの置物と同じ質感)。
+          // 面の向きと位置でなめらかに色が流れ、回ったり揺れたりすると、色がゆっくり移り変わる
           vec3 vn = normalize(cross(dFdx(vViewPosition), dFdy(vViewPosition)));
-          float ang = atan(vn.y, vn.x);
-          float hh = 0.5 + 0.5 * sin(ang * 5.0 + vn.z * 14.0);
-          vec3 bevel = mix(vec3(0.47, 0.48, 0.64), vec3(1.0), smoothstep(0.30, 0.80, hh));
-          vec3 rainbow = 0.55 + 0.45 * cos(6.2831 * (ang * 0.32 + vn.z * 1.7 + vec3(0.0, 0.33, 0.67)));
-          bevel = mix(bevel, rainbow, smoothstep(0.55, 0.95, sin(ang * 3.0 + vn.z * 9.0)) * 0.45);
-          bevel = mix(bevel, img, 0.10);                        // 中の画像がゆがんでうっすら映る
-          vec3 bevelGlow = bevel;
-          diffuseColor.rgb = mix(bevel, img, flatW);
-          // 平らな面に、ガラスの表面のやわらかな光の筋
-          float streak = smoothstep(0.30, 0.0, abs((p.x - p.y * 0.55) - 0.08)) * 0.10 + smoothstep(0.12, 0.0, abs((p.x - p.y * 0.55) + 0.32)) * 0.05;
-          crystalImg = img * flatW + vec3(streak) * flatW + bevelGlow * (1.0 - flatW) * 0.75;
+          float t = vOP.x * 0.42 - vOP.y * 0.30 + vn.x * 0.55 + vn.y * 0.35 + uTime * 0.025;
+          vec3 holo = 0.68 + 0.32 * cos(6.2831 * (t + vec3(0.0, 0.33, 0.67)));
+          vec3 clear = vec3(0.95, 0.94, 1.0);
+          float shade = 0.86 + 0.14 * vn.z + 0.08 * vn.y;            // 面ごとのわずかな明暗(角ばった見え方)
+          vec3 bevel = mix(clear, holo, 0.75) * shade;
+          bevel = mix(bevel, img, 0.12);                            // 中の画像がゆがんでうっすら映る
+          // 平らな面:画像の上に、ガラスの表面の虹色の反射と、やわらかな光の筋をうっすら重ねる
+          float d = p.x - p.y * 0.55;
+          float streak = smoothstep(0.34, 0.0, abs(d - 0.10)) * 0.09 + smoothstep(0.10, 0.0, abs(d + 0.30)) * 0.05;
+          vec3 face = img + (holo - 0.68) * 0.07 + streak * 0.8;
+          diffuseColor.rgb = mix(bevel, face, flatW);
+          crystalImg = mix(bevel * 0.8, face, flatW);
         }`)
-      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += crystalImg * uEmis;');
+      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += crystalImg * uEmis;')
+      // 面取りの面は透けて、うしろ(ページの背景)が見える
+      .replace('#include <opaque_fragment>', '#include <opaque_fragment>\ngl_FragColor.a = mix(0.62, 1.0, crystalFlat);');
   };
   const load = (img, key, fitKey) => {
     if (!img) return;
