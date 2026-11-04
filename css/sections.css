@@ -994,3 +994,96 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
   .contact-sec .contact__form { margin-right: 0; }
   .contact-sec { padding-bottom: 100px; }   /* TOPボタンぶん */
 }
+
+/* =============================================================
+   Works の画像枠:宙に浮かぶクリスタル
+   index.html の <a class="work__thumb crystal"> の中に、表(ふだんの画像)と裏(ホバー画像)の2面がある。
+   ホバーすると、クリスタルがくるっと半回転して裏の面(ホバー画像)に切り替わる。
+   面のカットの模様(--crystal-facets)は、トップのラベンダー・ピンク・水色の光の映り込みに合わせた色。
+   裏の面は左右反転した形にしてあるので、回転したあとも同じシルエットに見える
+   ============================================================= */
+.work .work__thumb.crystal {
+  --crystal-shape: polygon(54% 0.00%, 79% 16.13%, 97% 46.77%, 94% 88.71%, 87% 100.00%, 11% 100.00%, 3% 85.48%, 5% 43.55%, 24% 17.74%);
+  --crystal-shape-back: polygon(46% 0.00%, 21% 16.13%, 3% 46.77%, 6% 88.71%, 13% 100.00%, 89% 100.00%, 97% 85.48%, 95% 43.55%, 76% 17.74%);
+  --crystal-facets: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 124' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='w' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fdf6ff'/%3E%3Cstop offset='1' stop-color='%23e2d4fb'/%3E%3C/linearGradient%3E%3ClinearGradient id='ir' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd3ea'/%3E%3Cstop offset='.35' stop-color='%23d6c8ff'/%3E%3Cstop offset='.7' stop-color='%23c2e9f7'/%3E%3Cstop offset='1' stop-color='%23ffeed6'/%3E%3C/linearGradient%3E%3ClinearGradient id='lv' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23e8dcfa'/%3E%3Cstop offset='1' stop-color='%23b8a2e2'/%3E%3C/linearGradient%3E%3ClinearGradient id='pk' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23f6cbe4'/%3E%3Cstop offset='.5' stop-color='%23dfd0fb'/%3E%3Cstop offset='1' stop-color='%23cbe7f6'/%3E%3C/linearGradient%3E%3ClinearGradient id='fc' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='.34'/%3E%3Cstop offset='.38' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.8' stop-color='%23d8c8f4' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23cdb8ee' stop-opacity='.26'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='54,0 79,20 71,31 53,15' fill='url%28%23w%29' fill-opacity='0.5'/%3E%3Cpolygon points='79,20 97,58 84,60 71,31' fill='url%28%23ir%29' fill-opacity='0.4'/%3E%3Cpolygon points='97,58 94,110 82,103 84,60' fill='url%28%23lv%29' fill-opacity='0.36'/%3E%3Cpolygon points='94,110 87,124 77,112 82,103' fill='url%28%23lv%29' fill-opacity='0.3'/%3E%3Cpolygon points='87,124 11,124 22,112 77,112' fill='url%28%23pk%29' fill-opacity='0.42'/%3E%3Cpolygon points='11,124 3,106 16,100 22,112' fill='url%28%23lv%29' fill-opacity='0.28'/%3E%3Cpolygon points='3,106 5,54 17,56 16,100' fill='url%28%23ir%29' fill-opacity='0.38'/%3E%3Cpolygon points='5,54 24,22 32,33 17,56' fill='url%28%23w%29' fill-opacity='0.46'/%3E%3Cpolygon points='24,22 54,0 53,15 32,33' fill='url%28%23w%29' fill-opacity='0.56'/%3E%3Cpolygon points='53,15 71,31 84,60 82,103 77,112 22,112 16,100 17,56 32,33' fill='url%28%23fc%29'/%3E%3Cpolygon points='54,0 79,20 97,58 94,110 87,124 11,124 3,106 5,54 24,22' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.95'/%3E%3Cpolygon points='53,15 71,31 84,60 82,103 77,112 22,112 16,100 17,56 32,33' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.65'/%3E%3Cline x1='54' y1='0' x2='53' y2='15' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='79' y1='20' x2='71' y2='31' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='97' y1='58' x2='84' y2='60' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='94' y1='110' x2='82' y2='103' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='87' y1='124' x2='77' y2='112' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='11' y1='124' x2='22' y2='112' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='3' y1='106' x2='16' y2='100' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='5' y1='54' x2='17' y2='56' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='24' y1='22' x2='32' y2='33' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='53' y1='15' x2='50' y2='70' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.28'/%3E%3C/svg%3E");
+  --crystal-facets-back: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 124' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='w' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fdf6ff'/%3E%3Cstop offset='1' stop-color='%23e2d4fb'/%3E%3C/linearGradient%3E%3ClinearGradient id='ir' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd3ea'/%3E%3Cstop offset='.35' stop-color='%23d6c8ff'/%3E%3Cstop offset='.7' stop-color='%23c2e9f7'/%3E%3Cstop offset='1' stop-color='%23ffeed6'/%3E%3C/linearGradient%3E%3ClinearGradient id='lv' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23e8dcfa'/%3E%3Cstop offset='1' stop-color='%23b8a2e2'/%3E%3C/linearGradient%3E%3ClinearGradient id='pk' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23f6cbe4'/%3E%3Cstop offset='.5' stop-color='%23dfd0fb'/%3E%3Cstop offset='1' stop-color='%23cbe7f6'/%3E%3C/linearGradient%3E%3ClinearGradient id='fc' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='.34'/%3E%3Cstop offset='.38' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.8' stop-color='%23d8c8f4' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23cdb8ee' stop-opacity='.26'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='46,0 21,20 29,31 47,15' fill='url%28%23w%29' fill-opacity='0.5'/%3E%3Cpolygon points='21,20 3,58 16,60 29,31' fill='url%28%23ir%29' fill-opacity='0.4'/%3E%3Cpolygon points='3,58 6,110 18,103 16,60' fill='url%28%23lv%29' fill-opacity='0.36'/%3E%3Cpolygon points='6,110 13,124 23,112 18,103' fill='url%28%23lv%29' fill-opacity='0.3'/%3E%3Cpolygon points='13,124 89,124 78,112 23,112' fill='url%28%23pk%29' fill-opacity='0.42'/%3E%3Cpolygon points='89,124 97,106 84,100 78,112' fill='url%28%23lv%29' fill-opacity='0.28'/%3E%3Cpolygon points='97,106 95,54 83,56 84,100' fill='url%28%23ir%29' fill-opacity='0.38'/%3E%3Cpolygon points='95,54 76,22 68,33 83,56' fill='url%28%23w%29' fill-opacity='0.46'/%3E%3Cpolygon points='76,22 46,0 47,15 68,33' fill='url%28%23w%29' fill-opacity='0.56'/%3E%3Cpolygon points='47,15 29,31 16,60 18,103 23,112 78,112 84,100 83,56 68,33' fill='url%28%23fc%29'/%3E%3Cpolygon points='46,0 21,20 3,58 6,110 13,124 89,124 97,106 95,54 76,22' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.95'/%3E%3Cpolygon points='47,15 29,31 16,60 18,103 23,112 78,112 84,100 83,56 68,33' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.65'/%3E%3Cline x1='46' y1='0' x2='47' y2='15' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='21' y1='20' x2='29' y2='31' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='3' y1='58' x2='16' y2='60' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='6' y1='110' x2='18' y2='103' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='13' y1='124' x2='23' y2='112' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='89' y1='124' x2='78' y2='112' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='97' y1='106' x2='84' y2='100' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='95' y1='54' x2='83' y2='56' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='76' y1='22' x2='68' y2='33' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.55'/%3E%3Cline x1='47' y1='15' x2='50' y2='70' fill='none' stroke='%23fff' stroke-width='.9' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-opacity='.28'/%3E%3C/svg%3E");
+  width: 82%; margin-inline: auto;
+  aspect-ratio: 100 / 124;
+  border-radius: 0; overflow: visible; clip-path: none; background: none;
+  perspective: 1400px;
+  -webkit-tap-highlight-color: transparent;
+}
+/* クリスタルのまわりの、やわらかな光のにじみ */
+.work .work__thumb.crystal::before {
+  content: ""; position: absolute; inset: 8% -10% 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(38% 32% at 34% 42%, rgba(255, 214, 236, .6), transparent 70%),
+    radial-gradient(40% 34% at 68% 60%, rgba(198, 232, 247, .55), transparent 70%),
+    radial-gradient(50% 44% at 50% 50%, rgba(217, 204, 255, .6), transparent 72%);
+  filter: blur(20px);
+}
+.work .work__thumb.crystal::after { display: none; }
+.crystal__spin {
+  position: absolute; inset: 0; display: block;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(.5, .1, .2, 1);
+}
+.crystal__face {
+  position: absolute; inset: 0; display: block; overflow: hidden;
+  clip-path: var(--crystal-shape);
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  /* 画像が無いときのガラスの面 */
+  background:
+    radial-gradient(60% 40% at 40% 30%, rgba(255, 255, 255, .7), transparent 70%),
+    linear-gradient(160deg, #f6eefc, #e3d6f6 45%, #d4e6f6 75%, #f3dcec);
+}
+.crystal__face--back { clip-path: var(--crystal-shape-back); transform: rotateY(180deg); }
+.work .crystal__face img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 1; transform: scale(1.04);
+  transition: transform 1.2s var(--ease);
+}
+/* カット面・ふちの光(SVG)と、すべるように動く光の帯 */
+.crystal__face::before, .crystal__face::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.crystal__face::before { z-index: 2; background: var(--crystal-facets) center / 100% 100% no-repeat; }
+.crystal__face--back::before { background-image: var(--crystal-facets-back); }
+.crystal__face::after {
+  z-index: 3;
+  background:
+    linear-gradient(115deg, transparent 34%, rgba(255, 255, 255, .55) 44%, rgba(255, 228, 244, .35) 47%, rgba(210, 236, 250, .3) 50%, transparent 58%) 0 0 / 300% 100% no-repeat,
+    radial-gradient(28% 14% at 38% 16%, rgba(255, 255, 255, .5), transparent 70%),
+    linear-gradient(180deg, rgba(232, 220, 250, .16), rgba(214, 198, 240, .22));
+  mix-blend-mode: screen;
+  background-position: 110% 0, 0 0, 0 0;
+  animation: crystal-glint 7s ease-in-out infinite;
+}
+.crystal__face--back::after { animation-delay: -3.5s; }
+@keyframes crystal-glint {
+  0%, 55%   { background-position: 110% 0, 0 0, 0 0; }
+  85%, 100% { background-position: -10% 0, 0 0, 0 0; }
+}
+/* もとの「2枚目をふわっと出す」動きは使わない(裏の面に回転して切り替える) */
+.work .crystal .work__img--hover { opacity: 1; }
+.work .work__thumb.crystal:hover img { transform: scale(1.04); }
+@media (hover: hover) {
+  .work .work__thumb.crystal:hover .crystal__spin { transform: rotateY(180deg); }
+  .work .work__thumb.crystal:hover .crystal__face img { transform: scale(1.09); }
+}
+.work .work__thumb.crystal:focus-visible .crystal__spin { transform: rotateY(180deg); }
+/* 宙に浮かんでいるように、ゆっくり上下する */
+.works.is-pinned .work.is-active .work__thumb.crystal { animation: crystal-float 7s ease-in-out 1.6s infinite alternate; }
+@keyframes crystal-float {
+  0%   { transform: translateY(0)     rotate(-1deg); }
+  50%  { transform: translateY(-2.6%) rotate(.4deg); }
+  100% { transform: translateY(-1%)   rotate(1.2deg); }
+}
+/* 水面の波紋は、クリスタルには使わない */
+.work .work__media::before { display: none; }
+/* 下に落ちる影:クリスタルの底の幅に合わせ、浮かぶのに合わせて少し離れて見える位置に */
+.works.is-pinned .work__media::after { left: 24%; right: 24%; height: 5%; top: 101%; }
+@media (max-width: 560px) { .work .work__thumb.crystal { width: 70%; } }
+@media (prefers-reduced-motion: reduce) {
+  .crystal__face::after { animation: none; }
+  .crystal__spin { transition-duration: .01ms; }
+  .works.is-pinned .work.is-active .work__thumb.crystal { animation: none; }
+}
