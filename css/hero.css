@@ -91,7 +91,16 @@ html.is-intro .hero__logo:not(.is-drawing):not(.is-drawn) { opacity: 0; }
   opacity:0.7;
 }
 
-.hero__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px clamp(26px, 3vw, 40px); }
+.hero__actions { display: flex; flex-wrap: wrap; justify-content: center; --ha-gap: clamp(40px, 4.4vw, 60px); gap: 10px var(--ha-gap); }
+/* トップの Works / About / SNS:下線なしの文字だけ。間をメニューボタンと同じ向きの斜線(/)で区切る */
+.hero__actions .btn::after { display: none; }
+.hero__actions .btn + .btn::before {
+  content: ""; position: absolute; top: 50%;
+  left: calc(var(--ha-gap) / -2 - .13em);   /* 文字の後ろの字間ぶん、少し左へ */
+  width: 16px; height: 1px; background: var(--c-ink); opacity: .7;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  pointer-events: none;
+}
 
 /* スクロール案内 */
 .hero__scroll {
@@ -255,6 +264,6 @@ html.is-intro .site-header { pointer-events: none; }
   .hero__stage { --space-label: 14px; --space-actions: 30px; padding: 8px 0; }
   .hero__logo { width: min(44vw, 176px); }
   .hero__lead { font-size: 10px; letter-spacing: .42em; margin-right: -.42em; }
-  .hero__actions { gap: 8px; }
-  .hero__actions .btn { min-height: 36px; padding: .5em 1.3em; letter-spacing: .12em; }
+  .hero__actions { --ha-gap: 34px; }
+  .hero__actions .btn { padding: .5em 0; letter-spacing: .2em; }
 }
