@@ -26,8 +26,8 @@ export function initWorksCrystals() {
   renderer.toneMapping = THREE.NoToneMapping;   // 画像の色をそのまま出す
 
   const camera = new THREE.PerspectiveCamera(26, ASPECT, 0.1, 50);
-  camera.position.set(0, 0.08, 6.4);
-  camera.lookAt(0, 0.08, 0);
+  camera.position.set(0, 0.04, 6.3);
+  camera.lookAt(0, 0.04, 0);
 
   // ---- 映り込みの環境:トップの部屋の光(白い窓・ピンク・水色・ラベンダー)を、ぼかした光の箱で作る ----
   const envTex = makeEnvironment(renderer);
@@ -37,8 +37,10 @@ export function initWorksCrystals() {
   crystalGeo.computeBoundingBox();
   const cb = crystalGeo.boundingBox;
   // 画像を映す範囲(クリスタルの正面いっぱい。少しだけ内側に寄せる)
-  const imgMin = new THREE.Vector2(cb.min.x + 0.06, cb.min.y + 0.04);
-  const imgSize = new THREE.Vector2(cb.max.x - cb.min.x - 0.12, cb.max.y - cb.min.y - 0.12);
+  const face = crystalGeo.userData.face;
+  const fx = face.map(p => p[0]), fy = face.map(p => p[1]);
+  const imgMin = new THREE.Vector2(Math.min(...fx), Math.min(...fy));
+  const imgSize = new THREE.Vector2(Math.max(...fx) - imgMin.x, Math.max(...fy) - imgMin.y);
 
   // 表面をおおう、うすいガラスの膜:正面を向いた面は透け、斜めの面・ふちほど光を映して白く光る(フレネル)
   const shell = new THREE.MeshPhysicalMaterial({
@@ -52,7 +54,7 @@ export function initWorksCrystals() {
   fresnel(shell, 0.0, 0.5);
   // カットの稜線(白く光る細い線)
   const edgeGeo = new THREE.EdgesGeometry(crystalGeo, 12);
-  const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+  const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.7 });
 
   // 光源:右上から白、左下からピンク、右下から水色(虹色の映り込みを出す)
   const lights = () => {
@@ -155,50 +157,60 @@ function fresnel(mat, min, max) {
 }
 
 // ---------------------------------------------------------------
-// クリスタルの形:横に何段かの「輪」を重ね、上は尖らせ、底は平らに切る。
-// 輪の角の位置を不揃いにして、手で削ったような面にしている
+// クリスタルの形:記念の盾のような、厚みのある板。
+// 正面と背面は平らな面(ここに画像が映る)、まわりは何段にもカットされた面取りで、光がきらきら反射する
+const OUTLINE = [
+  [0.10, 1.30], [0.36, 1.06], [0.58, 0.74], [0.78, 0.40], [0.90, 0.02], [0.86, -0.50], [0.78, -0.96], [0.66, -1.20],
+  [-0.66, -1.20], [-0.80, -0.98], [-0.88, -0.48], [-0.92, 0.06], [-0.76, 0.46], [-0.50, 0.86], [-0.22, 1.14],
+];
+// 輪郭を内側へ k だけ縮めた形(角の二等分線の向きにずらす)
+function inset(pts, k) {
+  const n = pts.length;
+  return pts.map((p, i) => {
+    const a = pts[(i - 1 + n) % n], b = pts[(i + 1) % n];
+    const e1 = [p[0] - a[0], p[1] - a[1]], e2 = [b[0] - p[0], b[1] - p[1]];
+    const n1 = norm([e1[1], -e1[0]]), n2 = norm([e2[1], -e2[0]]);   // 外向き(反時計回りの輪郭)
+    const m = norm([n1[0] + n2[0], n1[1] + n2[1]]);
+    const c = Math.max(0.35, m[0] * n1[0] + m[1] * n1[1]);
+    return [p[0] - m[0] * k / c, p[1] - m[1] * k / c];
+  });
+}
+function norm(v) { const l = Math.hypot(v[0], v[1]) || 1; return [v[0] / l, v[1] / l]; }
+// 点の並びを反時計回りにそろえる
+function clockwise(pts) {
+  let s = 0; pts.forEach((p, i) => { const q = pts[(i + 1) % pts.length]; s += (q[0] - p[0]) * (q[1] + p[1]); });
+  return s > 0 ? pts.slice().reverse() : pts;   // 反時計回り(外向きの法線が [e.y, -e.x] になる向き)
+}
 function makeCrystalGeometry() {
-  const N = 8;
-  const ang = [0, 0.72, 1.5, 2.25, 3.14, 3.95, 4.72, 5.5];      // 角の向き(不揃い)
-  const jit = [1.0, 0.93, 1.05, 0.96, 1.0, 0.94, 1.04, 0.97];   // 角ごとのふくらみ
-  // [高さ, 横の半径, 奥行きの半径, 中心のずれx]
-  const rings = [
-    [-1.22, 0.60, 0.30, 0.00],   // 底(平ら)
-    [-1.10, 0.74, 0.37, 0.00],   // 底の面取り
-    [ 0.20, 0.80, 0.40, 0.03],   // 胴
-    [ 0.78, 0.52, 0.27, 0.07],   // 肩
-  ];
-  const apex = new THREE.Vector3(0.12, 1.42, 0.0);
-  const ringPts = rings.map(([y, rx, rz, ox], ri) => ang.map((a, k) => {
-    const j = jit[(k + ri) % N];
-    return new THREE.Vector3(ox + Math.cos(a) * rx * j, y + (ri === 3 ? Math.sin(a * 2) * 0.07 : 0), Math.sin(a) * rz * j);
-  }));
+  const O = clockwise(OUTLINE);
+  // [内側へのずれ, 奥行き] 正面 → 面取り(2段) → 側面 → 面取り(2段) → 背面
+  const D = 0.17;
+  const loops = [
+    [0.27, D], [0.17, D * 0.86], [0.08, D * 0.56], [0.02, D * 0.22],
+    [0.02, -D * 0.22], [0.08, -D * 0.56], [0.17, -D * 0.86], [0.27, -D],
+  ].map(([k, z]) => inset(O, k).map(([x, y]) => new THREE.Vector3(x, y, z)));
   const pos = [];
   const tri = (a, b, c) => pos.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
-  // 側面
-  for (let r = 0; r < rings.length - 1; r++) {
-    for (let k = 0; k < N; k++) {
-      const a = ringPts[r][k], b = ringPts[r][(k + 1) % N], c = ringPts[r + 1][(k + 1) % N], d = ringPts[r + 1][k];
+  const n = O.length;
+  for (let r = 0; r < loops.length - 1; r++) {
+    for (let i = 0; i < n; i++) {
+      const a = loops[r][i], b = loops[r][(i + 1) % n], c = loops[r + 1][(i + 1) % n], d = loops[r + 1][i];
       tri(a, b, c); tri(a, c, d);
     }
   }
-  // 上の尖り
-  const top = ringPts[rings.length - 1];
-  for (let k = 0; k < N; k++) tri(top[k], top[(k + 1) % N], apex);
-  // 底
-  const bc = new THREE.Vector3(0, rings[0][0], 0);
-  for (let k = 0; k < N; k++) tri(ringPts[0][(k + 1) % N], ringPts[0][k], bc);
+  // 正面・背面(平らな面)
+  const cap = (loop, flip) => {
+    const c = loop.reduce((m, p) => m.add(p), new THREE.Vector3()).multiplyScalar(1 / loop.length);
+    for (let i = 0; i < n; i++) flip ? tri(c, loop[(i + 1) % n], loop[i]) : tri(c, loop[i], loop[(i + 1) % n]);
+  };
+  cap(loops[0], false); cap(loops[loops.length - 1], true);
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  // 面の向きを外側にそろえる(輪の向きに合わせて、内向きなら反転)
   g.computeVertexNormals();
-  const n = g.attributes.normal, p = g.attributes.position;
-  let inward = 0;
-  for (let i = 0; i < p.count; i += 3) {
-    const cx = (p.getX(i) + p.getX(i + 1) + p.getX(i + 2)) / 3, cz = (p.getZ(i) + p.getZ(i + 1) + p.getZ(i + 2)) / 3;
-    if (cx * n.getX(i) + cz * n.getZ(i) < 0) inward++;
-  }
-  if (inward > p.count / 6) {
+  // 面が内向きになっていたら反転する(正面の面の向きで判定)
+  const p = g.attributes.position;
+  const frontNz = (() => { const i = (loops.length - 1) * n * 6; return g.attributes.normal.getZ(i); })();
+  if (frontNz < 0) {
     for (let i = 0; i < p.count; i += 3) {
       const x = p.getX(i + 1), y = p.getY(i + 1), z = p.getZ(i + 1);
       p.setXYZ(i + 1, p.getX(i + 2), p.getY(i + 2), p.getZ(i + 2));
@@ -206,6 +218,7 @@ function makeCrystalGeometry() {
     }
     g.computeVertexNormals();
   }
+  g.userData.face = inset(O, 0.27);   // 画像を映す平らな面の形
   return g;
 }
 
@@ -217,8 +230,8 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
     uImgA: { value: blank }, uImgB: { value: blank },
     uFitA: { value: new THREE.Vector4(1, 1, 0, 0) }, uFitB: { value: new THREE.Vector4(1, 1, 0, 0) },
     uMin: { value: imgMin }, uSize: { value: imgSize },
-    uRefr: { value: 0.07 },       // 面ごとのずれ(屈折)の大きさ
-    uEmis: { value: 0.30 },       // 画像の明るさ(内側から光っているように)
+    uRefr: { value: 0.22 },       // 面ごとのずれ(屈折)の大きさ
+    uEmis: { value: 0.12 },       // 画像の明るさ(内側から光っているように)
   };
   const mat = new THREE.MeshPhysicalMaterial({
     color: 0xffffff, metalness: 0, roughness: 0.12,
@@ -253,10 +266,22 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
           p = clamp(p, 0.0, 1.0);
           vec3 img = front ? texture2D(uImgA, p * uFitA.xy + uFitA.zw).rgb
                            : texture2D(uImgB, p * uFitB.xy + uFitB.zw).rgb;
-          float w = smoothstep(0.12, 0.62, abs(on.z));          // 横を向いた面は画像が薄く、ガラスの色に
-          vec3 glassTint = vec3(0.80, 0.74, 0.93);
-          diffuseColor.rgb = mix(glassTint, img, w);
-          crystalImg = img * w;
+          float flatW = smoothstep(0.985, 0.999, abs(on.z));    // 正面・背面の平らな面
+          vec3 glassTint = vec3(0.90, 0.88, 0.98);
+          // 面取りの面:カットされたガラスのように、面ごとに白・青みのグレー・虹色が入れかわる。
+          // 見る向き(画面に対する面の向き)で決めるので、回ると、きらきら移り変わる
+          vec3 vn = normalize(cross(dFdx(vViewPosition), dFdy(vViewPosition)));
+          float ang = atan(vn.y, vn.x);
+          float hh = 0.5 + 0.5 * sin(ang * 5.0 + vn.z * 14.0);
+          vec3 bevel = mix(vec3(0.47, 0.48, 0.64), vec3(1.0), smoothstep(0.30, 0.80, hh));
+          vec3 rainbow = 0.55 + 0.45 * cos(6.2831 * (ang * 0.32 + vn.z * 1.7 + vec3(0.0, 0.33, 0.67)));
+          bevel = mix(bevel, rainbow, smoothstep(0.55, 0.95, sin(ang * 3.0 + vn.z * 9.0)) * 0.45);
+          bevel = mix(bevel, img, 0.10);                        // 中の画像がゆがんでうっすら映る
+          vec3 bevelGlow = bevel;
+          diffuseColor.rgb = mix(bevel, img, flatW);
+          // 平らな面に、ガラスの表面のやわらかな光の筋
+          float streak = smoothstep(0.30, 0.0, abs((p.x - p.y * 0.55) - 0.08)) * 0.10 + smoothstep(0.12, 0.0, abs((p.x - p.y * 0.55) + 0.32)) * 0.05;
+          crystalImg = img * flatW + vec3(streak) * flatW + bevelGlow * (1.0 - flatW) * 0.75;
         }`)
       .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += crystalImg * uEmis;');
   };
