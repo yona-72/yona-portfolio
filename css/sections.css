@@ -1087,3 +1087,8 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
   .crystal__spin { transition-duration: .01ms; }
   .works.is-pinned .work.is-active .work__thumb.crystal { animation: none; }
 }
+/* 立体のクリスタル(js/works-crystal.js)が描けたら、平面のクリスタルと入れ替える */
+.crystal__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity 1s var(--ease); pointer-events: none; }
+.work__thumb.crystal.is-3d .crystal__canvas { opacity: 1; }
+.work__thumb.crystal.is-3d .crystal__spin { opacity: 0; transition: opacity .8s var(--ease); }
+.works.is-pinned .work.is-active .work__thumb.crystal.is-3d { animation: none; }   /* 浮かぶ動きは3Dの方でつける */

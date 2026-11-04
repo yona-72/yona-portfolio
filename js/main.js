@@ -316,3 +316,8 @@ if (contactForm) {
     } finally { send.disabled = false; }
   });
 }
+
+// ---- Works:画像枠を立体のクリスタルにする(three.js)。読み込みはページの表示が落ち着いてから ----
+// 失敗したとき(WebGL が使えないなど)は、CSS の平面のクリスタルのまま
+const loadCrystals = () => import('./works-crystal.js').then(m => m.initWorksCrystals()).catch(err => console.warn('crystal:', err));
+if ('requestIdleCallback' in window) requestIdleCallback(loadCrystals, { timeout: 1500 }); else setTimeout(loadCrystals, 600);
