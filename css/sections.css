@@ -885,8 +885,7 @@ html.is-end .to-top { opacity: 1; visibility: visible; transform: none; }
   .site-footer--no-top .site-footer__thanks { display: block; }   /* スマホでは © とあいさつを左右に */
 }
 /* 一番下(SNS)の下に、TOPボタンが浮かぶ分の余白をとる */
-.sns-sec { padding-bottom: calc(clamp(40px, 5vw, 72px) + 72px); }
-@media (max-width: 560px) { .sns-sec { padding-bottom: 104px; } }
+/* (Contact を一番下に足したので、TOPボタンぶんの余白は Contact 側でとる) */
 
 /* SNS:準備中の行(リンクなし)。少し薄くして、ホバーしても動かさない */
 .sns__item--soon { cursor: default; }
@@ -899,3 +898,103 @@ html.is-end .to-top { opacity: 1; visibility: visible; transform: none; }
 
 /* 作品の注釈(「※ トップページのみ制作」など)。説明文の下に小さく添える */
 .work__note { font: 400 11px / 1.8 var(--f-serif); letter-spacing: .05em; color: var(--c-ink-soft); margin-top: -4px; }
+
+/* =============================================================
+   Contact(トップページの一番下)
+   背景は .content__tone の「contact」の色(紫寄りのグラデーション)。main.js が data-tone="contact" を付ける。
+   見出し〜送信ボタンまでを、だいたい1画面(100vh)に収める
+   ============================================================= */
+.content__tone-layer--contact {
+  background:
+    radial-gradient(circle 34vw at 84% 20%, rgba(204, 186, 240, .85), transparent),
+    radial-gradient(circle 30vw at 6% 70%,  rgba(226, 196, 236, .75), transparent),
+    radial-gradient(circle 20vw at 30% 28%, rgba(220, 210, 248, .80), transparent),
+    radial-gradient(circle 18vw at 72% 82%, rgba(236, 204, 230, .70), transparent),
+    radial-gradient(circle 9vw  at 56% 12%, rgba(255, 255, 255, .75), transparent),
+    radial-gradient(120% 55% at 50% 0%, rgba(255, 255, 255, .50), transparent 65%),
+    linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, .30) 40%, transparent 52%),
+    radial-gradient(140% 90% at 50% 38%, transparent 52%, rgba(110, 80, 160, .16) 100%),
+    linear-gradient(170deg, #f1ecfb 0%, #e3d8f5 38%, #d6c6ee 70%, #d3c2e6 100%);
+}
+html[data-tone="contact"] .content__tone-layer--contact { opacity: 1; }
+html[data-tone="contact"] .site-header { --c-halo: 240, 234, 251; }
+html[data-tone="contact"] .site-footer,
+html[data-tone="contact"] body { background-color: #d3c2e6; }
+
+.contact-sec {
+  /* 一番下までスクロールしたとき、フッターと合わせてちょうど1画面になる高さ */
+  min-height: calc(100vh - 78px); min-height: calc(100svh - 78px);
+  display: flex; flex-direction: column; justify-content: center;
+  padding-top: clamp(92px, 13vh, 130px);   /* 上のヘッダーと重ならないように */
+  padding-bottom: clamp(28px, 6vh, 64px);
+}
+.sec-head--contact { margin-bottom: clamp(28px, 5vh, 56px); }
+.sec-head--contact .sec-head__title { grid-column: 1 / 10; font-size: clamp(3.2rem, min(9vw, 13vh), 8rem); }
+.contact-sec .contact__form { margin-right: clamp(0px, 5vw, 72px); }   /* 右下のTOPボタンと送信ボタンが重ならないように */
+.sec-head--contact .sec-head__label { padding-left: calc(100% / 12); }
+
+.contact {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 16px; row-gap: 28px;
+  align-items: start;
+}
+.contact__lead { grid-column: 1 / 5; display: grid; gap: 1.2em; padding-top: 6px; }
+.contact__lead .jp { font-size: 13px; }
+.contact__form {
+  grid-column: 6 / 13;
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px, 2.4vh, 22px) 24px;
+  padding: clamp(22px, 3.4vh, 36px) clamp(22px, 3vw, 40px);
+  background: rgba(255, 255, 255, .38);
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 22px;
+  box-shadow: 0 24px 60px -30px rgba(70, 50, 110, .35), inset 0 1px 0 rgba(255, 255, 255, .8);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.contact__honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.field { display: grid; gap: 8px; }
+.field--msg { grid-column: 1 / -1; }
+.field__label { font: 400 10px / 1 var(--f-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--c-ink); }
+.field__label b { font-weight: 400; color: var(--c-ink-soft); margin-right: .6em; }
+.field__label i { font: 400 10.5px / 1 var(--f-serif); font-style: normal; letter-spacing: .12em; text-transform: none; color: var(--c-ink-soft); margin-left: .8em; }
+.field__input {
+  width: 100%; padding: 12px 14px;
+  font: 400 14px / 1.6 var(--f-body); color: var(--c-ink);
+  background: rgba(255, 255, 255, .55);
+  border: 1px solid rgba(70, 50, 80, .16); border-radius: 12px;
+  transition: border-color .4s var(--ease), background-color .4s var(--ease), box-shadow .4s var(--ease);
+}
+textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-height: 5em; max-height: 40vh; }
+.field__input:hover { background: rgba(255, 255, 255, .7); }
+.field__input:focus { outline: none; border-color: var(--c-lilac); background: rgba(255, 255, 255, .85); box-shadow: 0 0 0 4px rgba(169, 143, 214, .2); }
+.contact__foot { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.contact__status { font: 400 12px / 1.7 var(--f-serif); letter-spacing: .06em; color: var(--c-ink-soft); }
+.contact__status.is-ok { color: var(--c-ink); }
+.contact__status.is-error { color: #a04a6e; }
+.contact__send {
+  flex: none; display: inline-flex; align-items: center; gap: .9em;
+  padding: 14px 30px; border: 0; border-radius: 999px; cursor: pointer;
+  font: 500 11px / 1 var(--f-mono); letter-spacing: .24em; text-transform: uppercase; color: #f3f4fa;
+  background: linear-gradient(180deg, var(--c-btn-hi), var(--c-btn));
+  box-shadow: 0 12px 28px -14px rgba(56, 40, 65, .7), inset 0 1px 0 rgba(255, 255, 255, .18);
+  transition: background .4s var(--ease), transform .4s var(--ease);
+}
+.contact__send i { font-style: normal; transition: transform .5s var(--ease); }
+.contact__send:hover { background: var(--c-btn-deep); }
+.contact__send:hover i { transform: translateX(4px); }
+.contact__send:disabled { opacity: .6; cursor: progress; }
+
+.about__contact { text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; padding-bottom: 2px; }
+.about__contact i { font-style: normal; display: inline-block; margin-left: .3em; transition: transform .5s var(--ease); }
+.about__contact:hover i { transform: translateY(3px); }
+
+@media (max-width: 900px) {
+  .contact__lead, .contact__form { grid-column: 1 / -1; }
+  .contact__lead { padding-left: 8%; }
+}
+@media (max-width: 560px) {
+  .contact__form { grid-template-columns: 1fr; padding: 20px 18px; }
+  .contact__foot { flex-direction: column-reverse; align-items: stretch; }
+  .contact__send { justify-content: center; }
+  .contact__lead { padding-left: 0; }
+  .contact-sec .contact__form { margin-right: 0; }
+  .contact-sec { padding-bottom: 100px; }   /* TOPボタンぶん */
+}

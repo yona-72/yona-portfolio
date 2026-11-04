@@ -64,6 +64,7 @@
       <a href="#works" data-nav="works">Works</a>
       <a href="#about" data-nav="about">About</a>
       <a href="#sns" data-nav="sns">SNS</a>
+      <a href="#contact" data-nav="contact">Contact</a>
     </nav>
     <!-- ファーストビューの間だけ出るメニューボタン(左下から右上へ伸びる3本の斜め線)。押すと下の .menu が開く -->
     <button class="menu-btn" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="menu" data-menu-btn>
@@ -79,6 +80,7 @@
       <a href="#works" data-menu-link><sup>02</sup>Works</a>
       <a href="#about" data-menu-link><sup>03</sup>About</a>
       <a href="#sns" data-menu-link><sup>04</sup>SNS</a>
+      <a href="#contact" data-menu-link><sup>05</sup>Contact</a>
     </nav>
     <p class="menu__v" aria-hidden="true">ひかりのへやへ、ようこそ</p>
     <p class="menu__note">WEB / DTP / MOVIE<br>3D / ILLUSTRATION<br><span>— BASED IN JAPAN</span></p>
@@ -181,6 +183,7 @@
       <div class="content__tone-in">
         <span class="content__tone-layer content__tone-layer--about"></span>
         <span class="content__tone-layer content__tone-layer--sns"></span>
+        <span class="content__tone-layer content__tone-layer--contact"></span>
       </div>
     </div>
 
@@ -428,7 +431,7 @@
           <div><dt>(01) Focus</dt><dd>Web / DTP / Movie / 3D / Illustration</dd></div>
           <div><dt>(02) Tools</dt><dd>Illustrator / Photoshop / After Effects / Blender / STUDIO / HTML・CSS・JS</dd></div>
           <div><dt>(03) Based in</dt><dd>Japan</dd></div>
-          <div><dt>(04) Contact</dt><dd>Instagram の DM から</dd></div>
+          <div><dt>(04) Contact</dt><dd><a class="about__contact" href="#contact">お問い合わせフォームへ <i>↓</i></a></dd></div>
         </dl>
 
         <!--
@@ -458,6 +461,50 @@
         <li data-reveal><a class="sns__item" href="https://www.youtube.com/@yona72._" target="_blank" rel="noopener"><span class="sns__no">03</span><span class="sns__name">YouTube</span><span class="sns__what">VIDEO</span><span class="sns__id">@yona72._</span><span class="sns__arrow">↗</span></a></li>
         <li data-reveal><a class="sns__item" href="https://www.tiktok.com/@yona72._" target="_blank" rel="noopener"><span class="sns__no">04</span><span class="sns__name">TikTok</span><span class="sns__what">SHORT</span><span class="sns__id">@yona72._</span><span class="sns__arrow">↗</span></a></li>
       </ul>
+    </section>
+
+    <!-- ===== Contact =====
+         フォームの内容は FormSubmit(https://formsubmit.co)経由で、下の action のメールアドレスに届く。
+         ※ 最初の1回だけ、そのアドレスに FormSubmit から「Activate Form」のメールが届くので、ボタンを押して有効にする。
+           有効にした後に届くメールに書かれたランダムな文字列に、action のアドレス部分を置き換えると、アドレスをページに出さずに済む -->
+    <section class="section contact-sec" id="contact" data-section="04" data-name="Contact">
+      <header class="sec-head sec-head--contact">
+        <p class="sec-head__label" data-reveal>(GET IN TOUCH) <span>CONTACT</span></p>
+        <h2 class="sec-head__title" data-reveal>Contact</h2>
+        <p class="sec-head__v" aria-hidden="true">おたより</p>
+      </header>
+
+      <div class="contact">
+        <div class="contact__lead" data-reveal>
+          <p class="jp">お仕事のご依頼・ご相談、作品へのご感想など、お気軽にご連絡ください。<br>内容を確認のうえ、折り返しご連絡いたします。</p>
+          <p class="en">FEEL FREE TO REACH OUT — FOR WORK, COLLABORATIONS, OR JUST TO SAY HELLO.</p>
+        </div>
+
+        <form class="contact__form" action="https://formsubmit.co/0pr2w33t3vf413d@gmail.com" method="POST" data-contact data-reveal>
+          <input type="hidden" name="_subject" value="【yona。portfolio】お問い合わせが届きました">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" class="contact__honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <label class="field">
+            <span class="field__label"><b>(01)</b> Name <i>お名前</i></span>
+            <input class="field__input" type="text" name="name" autocomplete="name" required>
+          </label>
+          <label class="field">
+            <span class="field__label"><b>(02)</b> Email <i>メールアドレス</i></span>
+            <input class="field__input" type="email" name="email" autocomplete="email" inputmode="email" required>
+          </label>
+          <label class="field field--msg">
+            <span class="field__label"><b>(03)</b> Message <i>メッセージ</i></span>
+            <textarea class="field__input" name="message" rows="5" required></textarea>
+          </label>
+
+          <div class="contact__foot">
+            <p class="contact__status" data-contact-status role="status" aria-live="polite"></p>
+            <button class="contact__send" type="submit" data-contact-send>Send <i>→</i></button>
+          </div>
+        </form>
+      </div>
     </section>
     </div><!-- /.content -->
   </main>

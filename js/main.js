@@ -152,11 +152,13 @@ function updateCurrent() {
 // (画面が縦に長いと、SNS の上端が基準の位置まで上がりきらないことがあるため)
 const toneAbout = document.getElementById('about');
 const toneSns = document.getElementById('sns');
+const toneContact = document.getElementById('contact');   // 一番下の Contact は紫寄り
 function updateTone(atEnd) {
   const line = innerHeight * 0.6;
   let tone = '';
   if (toneAbout && toneAbout.getBoundingClientRect().top <= line) tone = 'about';
-  if (toneSns && (toneSns.getBoundingClientRect().top <= line || atEnd)) tone = 'sns';
+  if (toneSns && toneSns.getBoundingClientRect().top <= line) tone = 'sns';
+  if (toneContact && (toneContact.getBoundingClientRect().top <= line || atEnd)) tone = 'contact';
   if (tone) root.dataset.tone = tone; else delete root.dataset.tone;
 }
 addEventListener('scroll', () => requestAnimationFrame(updateCurrent), { passive: true });
@@ -291,3 +293,26 @@ document.querySelectorAll('[data-to-top], .site-footer__top').forEach(a => a.add
   scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 }));
+
+// ---- Contact フォーム:ページを移動せずに送信する(FormSubmit の ajax 窓口へ)----
+const contactForm = document.querySelector('[data-contact]');
+if (contactForm) {
+  const status = contactForm.querySelector('[data-contact-status]');
+  const send = contactForm.querySelector('[data-contact-send]');
+  const say = (msg, cls = '') => { status.textContent = msg; status.className = 'contact__status' + (cls ? ' ' + cls : ''); };
+  contactForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (contactForm._honey.value) return;            // ロボット対策(人には見えない欄)
+    send.disabled = true; say('送信しています…');
+    try {
+      const url = contactForm.action.replace('formsubmit.co/', 'formsubmit.co/ajax/');
+      const res = await fetch(url, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(contactForm) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.success === 'false' || data.success === false) throw new Error(data.message || res.status);
+      contactForm.reset();
+      say('送信しました。お問い合わせありがとうございます。', 'is-ok');
+    } catch (err) {
+      say('送信できませんでした。時間をおいてもう一度お試しください。', 'is-error');
+    } finally { send.disabled = false; }
+  });
+}
