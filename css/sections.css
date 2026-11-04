@@ -989,7 +989,7 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
 @media (max-width: 560px) {
   .contact__form { grid-template-columns: 1fr; padding: 20px 18px; }
   .contact__foot { flex-direction: column-reverse; align-items: stretch; }
-  .contact__send { justify-content: center; }
+  .contact__send { align-self: center; }   /* 下線が文字の長さに合うように、ボタンは文字の幅のまま中央に */
   .contact__lead { padding-left: 0; }
   .contact-sec .contact__form { margin-right: 0; }
   .contact-sec { padding-bottom: 100px; }   /* TOPボタンぶん */
@@ -1149,3 +1149,5 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
   --crystal-facets-back: var(--crystal-facets);
 }
 .crystal__glint { right: 20%; top: 17%; }
+/* スマホ:ミラーを横にスワイプして回せるように、横方向の指の動きはページのスクロールに使わない */
+@media (hover: none) { .work .work__thumb.crystal { touch-action: pan-y; } }

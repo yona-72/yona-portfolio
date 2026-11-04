@@ -35,24 +35,6 @@
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/sections.css">
 
-  <!-- 【提出用・一時的】ロゴと portfolio の間の名前。提出が終わったら、この <style> と本文の .hero__name の行を消す -->
-  <style>
-    .hero__name {
-      margin-top: var(--space-label);
-      font: 400 13px / 1 var(--f-serif);
-      letter-spacing: .5em;
-      margin-right: -.5em;            /* 字間ぶん右にずれる分を戻して中央をそろえる */
-      color: var(--c-ink);
-      transition: opacity 1s var(--ease), transform 1s var(--ease);
-    }
-    .hero__name + .hero__lead { margin-top: 12px; }   /* 名前と portfolio はひとかたまりに見えるよう近づける */
-    .hero:not(.is-revealed) .hero__name { opacity: .001; transform: translateY(10px); }
-    @media (scripting: none) { .hero__name { opacity: 1 !important; transform: none !important; } }
-    @media (max-width: 420px) {
-      .hero__name { font-size: 11.5px; letter-spacing: .42em; margin-right: -.42em; }
-      .hero__name + .hero__lead { margin-top: 10px; }
-    }
-  </style>
 </head>
 <body>
 
@@ -122,8 +104,6 @@
           </svg>
         </h1>
 
-        <!-- 【提出用・一時的】名前。提出が終わったらこの1行と、<head> の「提出用の名前」の <style> を消す -->
-        <p class="hero__name">福島 凪沙</p>
         <p class="hero__lead">portfolio</p>
 
         <!-- トップの Works / About / SNS のリンク(いまは非表示。戻すときはこのコメントを外す)

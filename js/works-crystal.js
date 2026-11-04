@@ -89,16 +89,39 @@ export function initWorksCrystals() {
     glint.className = 'crystal__glint'; glint.setAttribute('aria-hidden', 'true');
     thumb.appendChild(glint);
 
-    const v = { thumb, scene, rig, canvas, ctx, body, glint, visible: false, hover: false, turn: 0, tilt: { x: 0, y: 0 }, tiltT: { x: 0, y: 0 }, phase: i * 1.7, ready: false, flashAt: -9 };
+    const v = { thumb, scene, rig, canvas, ctx, body, glint, visible: false, hover: false, base: 0, drag: 0, turn: 0, tilt: { x: 0, y: 0 }, tiltT: { x: 0, y: 0 }, phase: i * 1.7, ready: false, flashAt: -9 };
     const sparkle = () => {
       v.flashAt = clock.getElapsedTime();
       glint.classList.remove('is-on'); void glint.offsetWidth; glint.classList.add('is-on');
     };
-    thumb.addEventListener('pointerdown', sparkle);
+    // マウスは押した瞬間、スマホはタップしたとき(スワイプで回したときは光らせない)
+    thumb.addEventListener('pointerdown', e => { if (e.pointerType !== 'touch') sparkle(); });
+    thumb.addEventListener('click', () => { if (v.touchTap) sparkle(); v.touchTap = false; });
     thumb.addEventListener('keydown', e => { if (e.key === 'Enter') sparkle(); });
 
-    thumb.addEventListener('pointerenter', () => { v.hover = true; });
-    thumb.addEventListener('pointerleave', () => { v.hover = false; v.tiltT.x = v.tiltT.y = 0; });
+    // マウス:ホバーで半回転。スマホ(指):横にスワイプすると、その向きにクルッと半回転(画像が切り替わる)
+    thumb.addEventListener('pointerenter', e => { if (e.pointerType !== 'touch') v.hover = true; });
+    thumb.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') { v.hover = false; v.tiltT.x = v.tiltT.y = 0; } });
+    let sx = 0, sy = 0, swiping = false, moved = false;
+    thumb.addEventListener('touchend', () => { v.touchTap = !moved; }, { capture: true });
+    thumb.addEventListener('touchstart', e => { const t0 = e.touches[0]; sx = t0.clientX; sy = t0.clientY; swiping = true; moved = false; v.drag = 0; }, { passive: true });
+    thumb.addEventListener('touchmove', e => {
+      if (!swiping) return;
+      const t0 = e.touches[0], dx = t0.clientX - sx, dy = t0.clientY - sy;
+      if (!moved && Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 8) { swiping = false; v.drag = 0; return; }   // 縦のスクロールはそのまま
+      if (Math.abs(dx) > 6) moved = true;
+      v.drag = dx / thumb.clientWidth * Math.PI;      // 指に合わせて少し回る
+    }, { passive: true });
+    const endSwipe = () => {
+      if (!swiping) return;
+      swiping = false;
+      if (Math.abs(v.drag) > 0.35) v.base += Math.sign(v.drag) * Math.PI;   // ある程度動かしたら、クルッと半回転
+      v.drag = 0;
+    };
+    thumb.addEventListener('touchend', endSwipe);
+    thumb.addEventListener('touchcancel', endSwipe);
+    // スワイプしたときは、リンクを開かない(タップのときだけ開く)
+    thumb.addEventListener('click', e => { if (moved) { e.preventDefault(); moved = false; } });
     thumb.addEventListener('focus', () => { v.hover = true; });
     thumb.addEventListener('blur', () => { v.hover = false; });
     thumb.addEventListener('pointermove', e => {
@@ -134,7 +157,7 @@ export function initWorksCrystals() {
       if (!v.visible) continue;
       sizeFor(v);
       // 回転:ホバー中は半回転(π)。やわらかく追いかける
-      const target = v.hover ? Math.PI : 0;
+      const target = (v.hover ? Math.PI : 0) + v.base + v.drag;
       v.turn += (target - v.turn) * (1 - Math.pow(0.0025, dt));
       v.tilt.x += (v.tiltT.x - v.tilt.x) * (1 - Math.pow(0.01, dt));
       v.tilt.y += (v.tiltT.y - v.tilt.y) * (1 - Math.pow(0.01, dt));
