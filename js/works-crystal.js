@@ -52,9 +52,6 @@ export function initWorksCrystals() {
     flatShading: true,
   });
   fresnel(shell, 0.0, 0.5);
-  // カットの稜線(白く光る細い線)
-  const edgeGeo = new THREE.EdgesGeometry(crystalGeo, 12);
-  const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.7 });
 
   // 光源:右上から白、左下からピンク、右下から水色(虹色の映り込みを出す)
   const lights = () => {
@@ -78,8 +75,7 @@ export function initWorksCrystals() {
     const body = makeCrystalMaterial(envTex, imgMin, imgSize, imgs[0], imgs[1] || imgs[0]);
     const crystal = new THREE.Mesh(crystalGeo, body); crystal.renderOrder = 1;
     const skin = new THREE.Mesh(crystalGeo, shell); skin.scale.setScalar(1.006); skin.renderOrder = 2;
-    const edges = new THREE.LineSegments(edgeGeo, edgeMat); edges.renderOrder = 3; edges.scale.setScalar(1.007);
-    rig.add(crystal, skin, edges);
+    rig.add(crystal, skin);
 
     const canvas = document.createElement('canvas');
     canvas.className = 'crystal__canvas';
@@ -160,8 +156,8 @@ function fresnel(mat, min, max) {
 // クリスタルの形:記念の盾のような、厚みのある板。
 // 正面と背面は平らな面(ここに画像が映る)、まわりは何段にもカットされた面取りで、光がきらきら反射する
 const OUTLINE = [
-  [0.10, 1.30], [0.36, 1.06], [0.58, 0.74], [0.78, 0.40], [0.90, 0.02], [0.86, -0.50], [0.78, -0.96], [0.66, -1.20],
-  [-0.66, -1.20], [-0.80, -0.98], [-0.88, -0.48], [-0.92, 0.06], [-0.76, 0.46], [-0.50, 0.86], [-0.22, 1.14],
+  [0.10, 1.26], [0.42, 1.06], [0.66, 0.76], [0.84, 0.40], [0.93, 0.02], [0.90, -0.50], [0.83, -0.98], [0.72, -1.20],
+  [-0.72, -1.20], [-0.85, -0.98], [-0.92, -0.48], [-0.95, 0.06], [-0.83, 0.48], [-0.58, 0.88], [-0.26, 1.14],
 ];
 // 輪郭を内側へ k だけ縮めた形(角の二等分線の向きにずらす)
 function inset(pts, k) {
@@ -186,8 +182,8 @@ function makeCrystalGeometry() {
   // [内側へのずれ, 奥行き] 正面 → 面取り(2段) → 側面 → 面取り(2段) → 背面
   const D = 0.17;
   const loops = [
-    [0.27, D], [0.17, D * 0.86], [0.08, D * 0.56], [0.02, D * 0.22],
-    [0.02, -D * 0.22], [0.08, -D * 0.56], [0.17, -D * 0.86], [0.27, -D],
+    [0.17, D], [0.10, D * 0.84], [0.045, D * 0.52], [0.01, D * 0.2],
+    [0.01, -D * 0.2], [0.045, -D * 0.52], [0.10, -D * 0.84], [0.17, -D],
   ].map(([k, z]) => inset(O, k).map(([x, y]) => new THREE.Vector3(x, y, z)));
   const pos = [];
   const tri = (a, b, c) => pos.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
@@ -218,7 +214,7 @@ function makeCrystalGeometry() {
     }
     g.computeVertexNormals();
   }
-  g.userData.face = inset(O, 0.27);   // 画像を映す平らな面の形
+  g.userData.face = inset(O, 0.17);   // 画像を映す平らな面の形
   return g;
 }
 
