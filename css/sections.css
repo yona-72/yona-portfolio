@@ -972,10 +972,8 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
   transition: color .4s var(--ease);
 }
 .contact__send i { font-style: normal; transition: transform .5s var(--ease); }
-.contact__send::before { content: ""; width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); transition: transform .6s var(--ease); }
 .contact__send::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform-origin: right center; }
 .contact__send:hover { color: var(--c-lilac); }
-.contact__send:hover::before { transform: rotate(225deg); }
 .contact__send:hover::after { animation: btn-line .9s var(--ease) both; }
 .contact__send:hover i { transform: translateX(6px); }
 .contact__send:disabled { opacity: .6; cursor: progress; }

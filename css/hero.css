@@ -104,7 +104,7 @@ html.is-intro .hero__logo:not(.is-drawing):not(.is-drawn) { opacity: 0; }
 
 /* スクロール案内 */
 .hero__scroll {
-  position: absolute; z-index: 1; left: 50%; bottom: max(18px, env(safe-area-inset-bottom));
+  position: absolute; z-index: 1; left: 50%; bottom: max(clamp(64px, 11vh, 110px), calc(env(safe-area-inset-bottom) + 48px));   /* 下の霧に埋もれないよう、少し上に */
   transform: translateX(-50%);
   font: 10px / 1 var(--f-mono); letter-spacing: .3em; text-transform: uppercase;
   color: var(--c-ink-soft); text-decoration: none;
