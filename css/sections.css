@@ -1094,51 +1094,25 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
 .works.is-pinned .work.is-active .work__thumb.crystal.is-3d { animation: none; }   /* 浮かぶ動きは3Dの方でつける */
 
 /* =============================================================
-   About の下:できること一覧の、流れるマーキー
-   少し傾けた一行。文字がひとつずつ、ゆるい波のように上下しながら右から左へ流れる
-   (流れる速さは .skills__track の animation、波の大きさは --wave、波の間隔は各語の --i)
+   About の下:できること一覧の、流れるテキスト
+   少し傾いた一本のゆるい波線(SVG)の上を、文字が右から左へ途切れなく流れ続ける。
+   目立たせないよう、細く・薄く。波の形と流れる速さは js/main.js の skills で調整
    ============================================================= */
 .skills {
   position: relative;
-  margin: clamp(64px, 9vw, 120px) calc(50% - 50vw) 0;   /* 画面の端から端まで */
-  padding: 34px 0;
-  overflow: hidden;
-  transform: rotate(-4deg);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  margin: clamp(56px, 8vw, 110px) calc(50% - 50vw) 0;   /* 画面の端から端まで */
+  transform: rotate(-3deg);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
   pointer-events: none;
 }
-.skills__track { display: flex; width: max-content; animation: skills-flow 46s linear infinite; }
-.skills__set { display: flex; flex: none; }
-.skills__w {
-  --wave: 10px;
-  flex: none; display: inline-block;
-  padding: 0 clamp(18px, 2.2vw, 30px);
-  font: 400 clamp(12px, 1.05vw, 14px) / 1 var(--f-mono);
-  letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
-  color: var(--c-ink-soft); opacity: .8;
-  animation: skills-wave 5.2s ease-in-out infinite;
+.skills__svg { display: block; width: 100%; height: clamp(90px, 9vw, 130px); overflow: visible; }
+.skills__text {
+  font: 300 15px / 1 var(--f-mono);
+  letter-spacing: .14em; text-transform: uppercase;
+  fill: var(--c-ink-soft); opacity: .45;
 }
-/* 語ごとに波のタイミングをずらす(となりの語が少し遅れて上下するので、波が伝わって見える) */
-.skills__set .skills__w:nth-child(12n+1)  { animation-delay: 0s; }
-.skills__set .skills__w:nth-child(12n+2)  { animation-delay: -.43s; }
-.skills__set .skills__w:nth-child(12n+3)  { animation-delay: -.87s; }
-.skills__set .skills__w:nth-child(12n+4)  { animation-delay: -1.3s; }
-.skills__set .skills__w:nth-child(12n+5)  { animation-delay: -1.73s; }
-.skills__set .skills__w:nth-child(12n+6)  { animation-delay: -2.17s; }
-.skills__set .skills__w:nth-child(12n+7)  { animation-delay: -2.6s; }
-.skills__set .skills__w:nth-child(12n+8)  { animation-delay: -3.03s; }
-.skills__set .skills__w:nth-child(12n+9)  { animation-delay: -3.47s; }
-.skills__set .skills__w:nth-child(12n+10) { animation-delay: -3.9s; }
-.skills__set .skills__w:nth-child(12n+11) { animation-delay: -4.33s; }
-.skills__set .skills__w:nth-child(12n+12) { animation-delay: -4.77s; }
-@keyframes skills-flow { to { transform: translateX(-50%); } }
-@keyframes skills-wave {
-  0%, 100% { transform: translateY(calc(var(--wave) * -1)) rotate(-1.5deg); }
-  50%      { transform: translateY(var(--wave)) rotate(1.5deg); }
-}
-@media (max-width: 560px) { .skills { transform: rotate(-5deg); padding: 26px 0; } .skills__w { --wave: 7px; } }
-@media (prefers-reduced-motion: reduce) { .skills__track, .skills__w { animation: none; } }
+@media (max-width: 560px) { .skills__text { font-size: 17px; } }
 
 /* クリックしたときの、クリスタル右上の星形のきらめき(js/works-crystal.js が .is-on を付ける) */
 .crystal__glint {
@@ -1165,3 +1139,13 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
   100% { opacity: 0; transform: scale(.55) rotate(25deg); }
 }
 @media (prefers-reduced-motion: reduce) { .crystal__glint.is-on { animation-duration: .01ms; } }
+
+/* まるいクリスタルのミラーにしたので、枠は正方形。3D が描けるまでの仮の表示(CSS)も円にする */
+.work .work__thumb.crystal {
+  aspect-ratio: 1; width: 86%;
+  --crystal-shape: circle(48% at 50% 50%);
+  --crystal-shape-back: circle(48% at 50% 50%);
+  --crystal-facets: radial-gradient(circle at 50% 50%, transparent 58%, rgba(255, 255, 255, .55) 66%, rgba(214, 196, 255, .5) 69%, transparent 71%);
+  --crystal-facets-back: var(--crystal-facets);
+}
+.crystal__glint { right: 20%; top: 17%; }

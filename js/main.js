@@ -321,3 +321,40 @@ if (contactForm) {
 // 失敗したとき(WebGL が使えないなど)は、CSS の平面のクリスタルのまま
 const loadCrystals = () => import('./works-crystal.js').then(m => m.initWorksCrystals()).catch(err => console.warn('crystal:', err));
 if ('requestIdleCallback' in window) requestIdleCallback(loadCrystals, { timeout: 1500 }); else setTimeout(loadCrystals, 600);
+
+// ---- About:できること一覧を、ゆるい波線の上で右から左へ流し続ける(sections.css の .skills)----
+// 波線(path)をつくり、その上に「項目 · 項目 · …」を何周ぶんか並べて、文字の位置(startOffset)をずらし続ける。
+// 1周ぶん進んだら0に戻すので、つなぎ目なく無限に流れる
+const skillsBox = document.querySelector('[data-skills]');
+if (skillsBox) {
+  const words = skillsBox.dataset.skills.split('/').map(w => w.trim()).filter(Boolean);
+  const path = skillsBox.querySelector('#skills-wave');
+  const tp = skillsBox.querySelector('[data-skills-path]');
+  const one = words.join('   ·   ') + '   ·   ';
+  // 波線:画面の外まで長く。振幅 14 / 波長 560
+  const W0 = -1600, W1 = 3600, A = 14, L = 560, Y = 60;
+  let d = `M ${W0} ${Y}`;
+  for (let x = W0; x < W1; x += L / 2) {
+    const up = ((x - W0) / (L / 2)) % 2 === 0 ? -1 : 1;
+    d += ` Q ${x + L / 4} ${Y + up * A * 2} ${x + L / 2} ${Y}`;
+  }
+  path.setAttribute('d', d);
+  tp.textContent = one.repeat(6);
+  const span = skillsBox.querySelector('.skills__text');
+  let unit = 0;
+  const measure = () => { tp.textContent = one; unit = tp.getComputedTextLength(); tp.textContent = one.repeat(Math.ceil(5200 / Math.max(unit, 1)) + 1); };
+  measure();
+  document.fonts?.ready.then(measure);
+  const speed = 34;   // 1秒に進む距離(大きいほど速い)
+  const reduceSkills = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let off = 0, prev = performance.now();
+  const tick = now => {
+    const dt = Math.min(0.1, (now - prev) / 1000); prev = now;
+    if (!reduceSkills && unit) {
+      off = (off + speed * dt) % unit;
+      tp.setAttribute('startOffset', String(1600 - 1600 % unit - off));   // 波線の画面の左端あたりから並べる
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}

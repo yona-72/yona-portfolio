@@ -454,13 +454,14 @@
 
       </div>
 
-      <!-- できること一覧:少し傾けた一行の文字が、ゆるく波打ちながら流れ続ける(sections.css の .skills)。
-           項目を増やす・変えるときは、下の2つの .skills__set を同じ内容にそろえる(2つ目はつなぎ目を消すための複製) -->
-      <div class="skills" aria-label="できること">
-        <div class="skills__track">
-          <div class="skills__set"><span class="skills__w">Web Design</span><span class="skills__w">Coding</span><span class="skills__w">UI Design</span><span class="skills__w">Graphic Design</span><span class="skills__w">DTP</span><span class="skills__w">Banner Design</span><span class="skills__w">Illustration</span><span class="skills__w">Character Design</span><span class="skills__w">Movie</span><span class="skills__w">Motion Graphics</span><span class="skills__w">3D Modeling</span><span class="skills__w">Game Making</span></div>
-          <div class="skills__set" aria-hidden="true"><span class="skills__w">Web Design</span><span class="skills__w">Coding</span><span class="skills__w">UI Design</span><span class="skills__w">Graphic Design</span><span class="skills__w">DTP</span><span class="skills__w">Banner Design</span><span class="skills__w">Illustration</span><span class="skills__w">Character Design</span><span class="skills__w">Movie</span><span class="skills__w">Motion Graphics</span><span class="skills__w">3D Modeling</span><span class="skills__w">Game Making</span></div>
-        </div>
+      <!-- できること一覧:少し傾いた一本の波線の上を、文字がゆっくり右から左へ流れ続ける(js/main.js の skills / sections.css の .skills)。
+           項目を変えるときは data-skills の中を「 / 」区切りで書き換える -->
+      <div class="skills" aria-label="できること" data-skills="Web Design / Coding / UI Design / Graphic Design / DTP / Banner Design / Illustration / Character Design / Movie / Motion Graphics / 3D Modeling / Game Making">
+        <svg class="skills__svg" viewBox="0 0 1440 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><path id="skills-wave" d=""/></defs>
+          <text class="skills__text"><textPath href="#skills-wave" data-skills-path></textPath></text>
+        </svg>
+        <p class="visually-hidden">Web Design、Coding、UI Design、Graphic Design、DTP、Banner Design、Illustration、Character Design、Movie、Motion Graphics、3D Modeling、Game Making</p>
       </div>
     </section>
 

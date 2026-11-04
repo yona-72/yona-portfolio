@@ -9,7 +9,7 @@
 // =============================================================
 import * as THREE from './vendor/three.module.min.js';
 
-const ASPECT = 100 / 124;          // 枠の縦横比(sections.css の .crystal と同じ)
+const ASPECT = 1;                  // 枠の縦横比(sections.css の .crystal と同じ。まるいミラーなので正方形)
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function initWorksCrystals() {
@@ -33,7 +33,7 @@ export function initWorksCrystals() {
   const envTex = makeEnvironment(renderer);
 
   // ---- クリスタルの形 ----
-  const crystalGeo = makeCrystalGeometry();
+  const crystalGeo = makeMirrorGeometry();
   crystalGeo.computeBoundingBox();
   const cb = crystalGeo.boundingBox;
   // 画像を映す範囲(クリスタルの正面いっぱい。少しだけ内側に寄せる)
@@ -49,9 +49,9 @@ export function initWorksCrystals() {
     iridescence: 1, iridescenceIOR: 1.3, iridescenceThicknessRange: [240, 620],
     clearcoat: 1, clearcoatRoughness: 0.02,
     envMap: envTex, envMapIntensity: 1.3,
-    flatShading: true,
+    flatShading: false,
   });
-  fresnel(shell, 0.0, 0.68);
+  fresnel(shell, 0.0, 0.8);
 
   // 光源:右上から白、左下からピンク、右下から水色(虹色の映り込みを出す)
   const lights = () => {
@@ -168,7 +168,25 @@ function fresnel(mat, min, max) {
 }
 
 // ---------------------------------------------------------------
-// クリスタルの形:記念の盾のような、厚みのある板。
+// まるいクリスタルのミラー:うすい円盤。正面と背面は平らで(ここに画像が映る)、ふちは丸く面取りされて光る
+function makeMirrorGeometry() {
+  const R = 1.12, D = 0.09, b = 0.12;      // 半径・厚み(半分)・ふちの丸みの幅
+  const prof = [new THREE.Vector2(0, -D)];
+  prof.push(new THREE.Vector2(R - b, -D));
+  for (let i = 1; i <= 10; i++) {           // ふちの丸み(半円に近いカーブ)
+    const a = -Math.PI / 2 + (i / 10) * Math.PI;
+    prof.push(new THREE.Vector2(R - b + Math.cos(a) * b, Math.sin(a) * D));
+  }
+  prof.push(new THREE.Vector2(0, D));
+  const g = new THREE.LatheGeometry(prof, 128);
+  g.rotateX(Math.PI / 2);                   // 円盤の正面をカメラに向ける
+  g.computeVertexNormals();
+  const n = 48;
+  g.userData.face = Array.from({ length: n }, (_, i) => [Math.cos(i / n * 6.2832) * (R - b), Math.sin(i / n * 6.2832) * (R - b)]);
+  return g;
+}
+
+// (以前の形)クリスタルの形:記念の盾のような、厚みのある板。
 // 正面と背面は平らな面(ここに画像が映る)、まわりは何段にもカットされた面取りで、光がきらきら反射する
 const OUTLINE = [
   [0.10, 1.26], [0.62, 0.84], [0.93, 0.12], [0.86, -0.82], [0.70, -1.20],
@@ -253,7 +271,7 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
     sheen: 0.25, sheenColor: new THREE.Color(0xe7d6ff), sheenRoughness: 0.4,
     envMap: envTex, envMapIntensity: 0.55,
     transparent: true,
-    flatShading: true,
+    flatShading: false,
   });
   mat.userData.u = u;
   mat.onBeforeCompile = sh => {
@@ -285,11 +303,11 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
           crystalFlat = flatW;
           // 光がガラスを通って分かれたときの、やわらかな虹色(トップのガラスの置物と同じ質感)。
           // 面の向きと位置でなめらかに色が流れ、回ったり揺れたりすると、色がゆっくり移り変わる
-          vec3 vn = normalize(cross(dFdx(vViewPosition), dFdy(vViewPosition)));
+          vec3 vn = normalize(vNormal);
           float t = vOP.x * 0.42 - vOP.y * 0.30 + vn.x * 0.55 + vn.y * 0.35 + uTime * 0.025;
           vec3 holo = 0.68 + 0.32 * cos(6.2831 * (t + vec3(0.0, 0.33, 0.67)));
           vec3 clear = vec3(0.95, 0.94, 1.0);
-          float shade = 0.86 + 0.14 * vn.z + 0.08 * vn.y;            // 面ごとのわずかな明暗(角ばった見え方)
+          float shade = 0.90 + 0.10 * vn.z + 0.06 * vn.y;            // ふちの丸みに沿った、なめらかな明暗
           vec3 bevel = mix(clear, holo, 0.75) * shade;
           // 中の画像が、面取りの面ではプリズムのように色ずれしてゆがんで映る(赤・緑・青を少しずつずらす)
           vec2 dp = sh2 * 0.05;
@@ -300,13 +318,17 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
             : vec3(texture2D(uImgB, clamp(q + dp, 0., 1.) * fit.xy + fit.zw).r, texture2D(uImgB, q * fit.xy + fit.zw).g, texture2D(uImgB, clamp(q - dp, 0., 1.) * fit.xy + fit.zw).b);
           bevel = mix(bevel, disp, 0.2);
           // 厚みの見え方:面取りの内側(画像との境目)ほど少し暗く、外のふちほど明るい
-          float depthK = clamp(abs(vOP.z) / 0.17, 0.0, 1.0);
+          float depthK = clamp(abs(vOP.z) / 0.09, 0.0, 1.0);
           bevel *= mix(1.08, 0.80, depthK);
           crystalHolo = holo;
           // 平らな面:画像の上に、ガラスの表面の虹色の反射と、やわらかな光の筋をうっすら重ねる
           float d = p.x - p.y * 0.55;
           float streak = smoothstep(0.34, 0.0, abs(d - 0.10)) * 0.09 + smoothstep(0.10, 0.0, abs(d + 0.30)) * 0.05;
+          // まるいガラスのミラー:ふちに向かって、うすいラベンダーの色と光がにじむ
+          float rr = length((p - 0.5) * 2.0);
           vec3 face = img + (holo - 0.68) * 0.07 + streak * 0.8;
+          face = mix(face, vec3(0.86, 0.80, 0.98), smoothstep(0.62, 1.0, rr) * 0.38);
+          face += vec3(1.0, 0.97, 1.0) * exp(-dot(p - vec2(0.30, 0.74), p - vec2(0.30, 0.74)) * 18.0) * 0.16;   // 左上のやわらかな映り込み
           diffuseColor.rgb = mix(bevel, face, flatW);
           crystalImg = mix(bevel * 0.8, face, flatW);
         }`)
