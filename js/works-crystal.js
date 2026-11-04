@@ -63,7 +63,7 @@ export function initWorksCrystals() {
     return g;
   };
 
-  const v_bodies = [];
+  const clock = new THREE.Clock();
   const views = thumbs.map((thumb, i) => {
     const imgs = thumb.querySelectorAll('img');
     const scene = new THREE.Scene();
@@ -75,7 +75,6 @@ export function initWorksCrystals() {
     // クリスタル本体:表側の面には ふだんの画像、裏側の面には ホバー画像が、中に閉じこめられたように映る
     const body = makeCrystalMaterial(envTex, imgMin, imgSize, imgs[0], imgs[1] || imgs[0]);
     const crystal = new THREE.Mesh(crystalGeo, body); crystal.renderOrder = 1;
-    v_bodies.push(body);
     const skin = new THREE.Mesh(crystalGeo, shell); skin.scale.setScalar(1.006); skin.renderOrder = 2;
     rig.add(crystal, skin);
 
@@ -85,7 +84,18 @@ export function initWorksCrystals() {
     thumb.appendChild(canvas);
     const ctx = canvas.getContext('2d');
 
-    const v = { thumb, scene, rig, canvas, ctx, visible: false, hover: false, turn: 0, tilt: { x: 0, y: 0 }, tiltT: { x: 0, y: 0 }, phase: i * 1.7, ready: false };
+    // クリックしたときの「キラッ」:右上に光が当たる(3D)+ 星形のきらめき(CSS の .crystal__glint)
+    const glint = document.createElement('span');
+    glint.className = 'crystal__glint'; glint.setAttribute('aria-hidden', 'true');
+    thumb.appendChild(glint);
+
+    const v = { thumb, scene, rig, canvas, ctx, body, glint, visible: false, hover: false, turn: 0, tilt: { x: 0, y: 0 }, tiltT: { x: 0, y: 0 }, phase: i * 1.7, ready: false, flashAt: -9 };
+    const sparkle = () => {
+      v.flashAt = clock.getElapsedTime();
+      glint.classList.remove('is-on'); void glint.offsetWidth; glint.classList.add('is-on');
+    };
+    thumb.addEventListener('pointerdown', sparkle);
+    thumb.addEventListener('keydown', e => { if (e.key === 'Enter') sparkle(); });
 
     thumb.addEventListener('pointerenter', () => { v.hover = true; });
     thumb.addEventListener('pointerleave', () => { v.hover = false; v.tiltT.x = v.tiltT.y = 0; });
@@ -116,7 +126,6 @@ export function initWorksCrystals() {
     if (w !== W || h !== H) { W = w; H = h; renderer.setSize(w, h, false); }
   }
 
-  const clock = new THREE.Clock();
   let last = 0;
   function frame() {
     const t = clock.getElapsedTime();
@@ -135,7 +144,10 @@ export function initWorksCrystals() {
       v.rig.rotation.x = s * Math.sin(tt * 0.33) * 0.05 + v.tilt.x;
       v.rig.rotation.z = s * Math.sin(tt * 0.27) * 0.035;
       v.rig.position.y = s * Math.sin(tt * 0.8) * 0.06;
-      v_bodies.forEach(m => { m.userData.u.uTime.value = t; });
+      const bu = v.body.userData.u;
+      bu.uTime.value = t;
+      const ft = t - v.flashAt;                                       // クリックしてからの時間
+      bu.uFlash.value = ft < 0 || ft > 1.6 ? 0 : Math.min(1, ft / 0.08) * Math.exp(-ft * 3.2);
       renderer.render(v.scene, camera);
       v.ctx.clearRect(0, 0, v.canvas.width, v.canvas.height);
       v.ctx.drawImage(renderer.domElement, 0, 0, v.canvas.width, v.canvas.height);
@@ -232,13 +244,14 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
     uRefr: { value: 0.22 },       // 面ごとのずれ(屈折)の大きさ
     uEmis: { value: 0.16 },       // 画像の明るさ(内側から光っているように)
     uTime: { value: 0 },
+    uFlash: { value: 0 },         // クリックしたときの光(0〜1)
   };
   const mat = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff, metalness: 0, roughness: 0.12,
+    color: 0xffffff, metalness: 0, roughness: 0.06,
     iridescence: 0.7, iridescenceIOR: 1.3, iridescenceThicknessRange: [260, 600],
     clearcoat: 1, clearcoatRoughness: 0.03,
     sheen: 0.25, sheenColor: new THREE.Color(0xe7d6ff), sheenRoughness: 0.4,
-    envMap: envTex, envMapIntensity: 0.6,
+    envMap: envTex, envMapIntensity: 0.55,
     transparent: true,
     flatShading: true,
   });
@@ -254,8 +267,8 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
         uniform sampler2D uImgA; uniform sampler2D uImgB;
         uniform vec4 uFitA; uniform vec4 uFitB;
         uniform vec2 uMin; uniform vec2 uSize;
-        uniform float uRefr; uniform float uEmis; uniform float uTime;
-        vec3 crystalImg = vec3(0.); float crystalFlat = 1.0;`)
+        uniform float uRefr; uniform float uEmis; uniform float uTime; uniform float uFlash;
+        vec3 crystalImg = vec3(0.); float crystalFlat = 1.0; vec3 crystalHolo = vec3(1.);`)
       .replace('#include <map_fragment>', `#include <map_fragment>
         {
           vec3 on = normalize(vON);
@@ -278,7 +291,18 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
           vec3 clear = vec3(0.95, 0.94, 1.0);
           float shade = 0.86 + 0.14 * vn.z + 0.08 * vn.y;            // 面ごとのわずかな明暗(角ばった見え方)
           vec3 bevel = mix(clear, holo, 0.75) * shade;
-          bevel = mix(bevel, img, 0.12);                            // 中の画像がゆがんでうっすら映る
+          // 中の画像が、面取りの面ではプリズムのように色ずれしてゆがんで映る(赤・緑・青を少しずつずらす)
+          vec2 dp = sh2 * 0.05;
+          vec4 fit = front ? uFitA : uFitB;
+          vec2 q = clamp(p, 0.0, 1.0);
+          vec3 disp = front
+            ? vec3(texture2D(uImgA, clamp(q + dp, 0., 1.) * fit.xy + fit.zw).r, texture2D(uImgA, q * fit.xy + fit.zw).g, texture2D(uImgA, clamp(q - dp, 0., 1.) * fit.xy + fit.zw).b)
+            : vec3(texture2D(uImgB, clamp(q + dp, 0., 1.) * fit.xy + fit.zw).r, texture2D(uImgB, q * fit.xy + fit.zw).g, texture2D(uImgB, clamp(q - dp, 0., 1.) * fit.xy + fit.zw).b);
+          bevel = mix(bevel, disp, 0.2);
+          // 厚みの見え方:面取りの内側(画像との境目)ほど少し暗く、外のふちほど明るい
+          float depthK = clamp(abs(vOP.z) / 0.17, 0.0, 1.0);
+          bevel *= mix(1.08, 0.80, depthK);
+          crystalHolo = holo;
           // 平らな面:画像の上に、ガラスの表面の虹色の反射と、やわらかな光の筋をうっすら重ねる
           float d = p.x - p.y * 0.55;
           float streak = smoothstep(0.34, 0.0, abs(d - 0.10)) * 0.09 + smoothstep(0.10, 0.0, abs(d + 0.30)) * 0.05;
@@ -286,7 +310,16 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
           diffuseColor.rgb = mix(bevel, face, flatW);
           crystalImg = mix(bevel * 0.8, face, flatW);
         }`)
-      .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += crystalImg * uEmis;')
+      .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+        totalEmissiveRadiance += crystalImg * uEmis;
+        // クリックしたときの光:画面の右上あたりに強い光が当たり、光の帯が斜めに走る
+        {
+          vec2 vp = -vViewPosition.xy;
+          float gd = length(vp - vec2(0.50, 0.86));
+          float spot = exp(-gd * gd * 12.0) * 1.7;
+          float band = smoothstep(0.20, 0.0, abs(vp.x * 0.8 + vp.y * 0.6 - mix(-0.7, 1.7, uFlash))) * 0.55;
+          totalEmissiveRadiance += (vec3(1.0) + (crystalHolo - 0.68) * 0.9) * (spot + band) * uFlash;
+        }`)
       // 面取りの面は透けて、うしろ(ページの背景)が見える
       .replace('#include <opaque_fragment>', '#include <opaque_fragment>\ngl_FragColor.a = mix(0.62, 1.0, crystalFlat);');
   };

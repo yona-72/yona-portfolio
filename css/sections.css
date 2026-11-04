@@ -1092,3 +1092,76 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
 .work__thumb.crystal.is-3d .crystal__canvas { opacity: 1; }
 .work__thumb.crystal.is-3d .crystal__spin { opacity: 0; transition: opacity .8s var(--ease); }
 .works.is-pinned .work.is-active .work__thumb.crystal.is-3d { animation: none; }   /* 浮かぶ動きは3Dの方でつける */
+
+/* =============================================================
+   About の下:できること一覧の、流れるマーキー
+   少し傾けた一行。文字がひとつずつ、ゆるい波のように上下しながら右から左へ流れる
+   (流れる速さは .skills__track の animation、波の大きさは --wave、波の間隔は各語の --i)
+   ============================================================= */
+.skills {
+  position: relative;
+  margin: clamp(64px, 9vw, 120px) calc(50% - 50vw) 0;   /* 画面の端から端まで */
+  padding: 34px 0;
+  overflow: hidden;
+  transform: rotate(-4deg);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  pointer-events: none;
+}
+.skills__track { display: flex; width: max-content; animation: skills-flow 46s linear infinite; }
+.skills__set { display: flex; flex: none; }
+.skills__w {
+  --wave: 10px;
+  flex: none; display: inline-block;
+  padding: 0 clamp(18px, 2.2vw, 30px);
+  font: 400 clamp(12px, 1.05vw, 14px) / 1 var(--f-mono);
+  letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+  color: var(--c-ink-soft); opacity: .8;
+  animation: skills-wave 5.2s ease-in-out infinite;
+}
+/* 語ごとに波のタイミングをずらす(となりの語が少し遅れて上下するので、波が伝わって見える) */
+.skills__set .skills__w:nth-child(12n+1)  { animation-delay: 0s; }
+.skills__set .skills__w:nth-child(12n+2)  { animation-delay: -.43s; }
+.skills__set .skills__w:nth-child(12n+3)  { animation-delay: -.87s; }
+.skills__set .skills__w:nth-child(12n+4)  { animation-delay: -1.3s; }
+.skills__set .skills__w:nth-child(12n+5)  { animation-delay: -1.73s; }
+.skills__set .skills__w:nth-child(12n+6)  { animation-delay: -2.17s; }
+.skills__set .skills__w:nth-child(12n+7)  { animation-delay: -2.6s; }
+.skills__set .skills__w:nth-child(12n+8)  { animation-delay: -3.03s; }
+.skills__set .skills__w:nth-child(12n+9)  { animation-delay: -3.47s; }
+.skills__set .skills__w:nth-child(12n+10) { animation-delay: -3.9s; }
+.skills__set .skills__w:nth-child(12n+11) { animation-delay: -4.33s; }
+.skills__set .skills__w:nth-child(12n+12) { animation-delay: -4.77s; }
+@keyframes skills-flow { to { transform: translateX(-50%); } }
+@keyframes skills-wave {
+  0%, 100% { transform: translateY(calc(var(--wave) * -1)) rotate(-1.5deg); }
+  50%      { transform: translateY(var(--wave)) rotate(1.5deg); }
+}
+@media (max-width: 560px) { .skills { transform: rotate(-5deg); padding: 26px 0; } .skills__w { --wave: 7px; } }
+@media (prefers-reduced-motion: reduce) { .skills__track, .skills__w { animation: none; } }
+
+/* クリックしたときの、クリスタル右上の星形のきらめき(js/works-crystal.js が .is-on を付ける) */
+.crystal__glint {
+  position: absolute; z-index: 2; right: 25%; top: 19%;
+  width: 96px; height: 96px; margin: -48px -48px 0 0;
+  pointer-events: none; opacity: 0;
+  background:
+    radial-gradient(closest-side, #fff, rgba(255, 255, 255, .6) 14%, rgba(255, 255, 255, 0) 36%),
+    linear-gradient(90deg, transparent, #fff 50%, transparent) center / 100% 2px no-repeat,
+    linear-gradient(0deg,  transparent, #fff 50%, transparent) center / 2px 100% no-repeat;
+  filter: drop-shadow(0 0 2px rgba(170, 140, 230, .9)) drop-shadow(0 0 8px rgba(190, 160, 255, .85)) drop-shadow(0 0 18px rgba(255, 190, 230, .7));
+}
+.crystal__glint::after {   /* 斜めの短い光(きらめきの2本目) */
+  content: ""; position: absolute; inset: 22%;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 236, 248, .9) 50%, transparent) center / 100% 1.5px no-repeat,
+    linear-gradient(0deg,  transparent, rgba(228, 244, 255, .9) 50%, transparent) center / 1.5px 100% no-repeat;
+  transform: rotate(45deg);
+}
+.crystal__glint.is-on { animation: crystal-glint-star .75s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes crystal-glint-star {
+  0%   { opacity: 0; transform: scale(.2) rotate(-30deg); }
+  22%  { opacity: 1; transform: scale(1.15) rotate(0deg); }
+  100% { opacity: 0; transform: scale(.55) rotate(25deg); }
+}
+@media (prefers-reduced-motion: reduce) { .crystal__glint.is-on { animation-duration: .01ms; } }
