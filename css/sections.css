@@ -569,7 +569,7 @@ a.work__thumb:focus-visible { outline: none; }   /* 水滴の形で外枠が切�
 }
 .about__role { margin-top: 26px; font: 400 10.5px / 1.9 var(--f-mono); letter-spacing: .22em; }   /* yona。から気持ち離す */
 .about__role span { display: inline-block; margin-top: 6px; margin-left: 3.2em; color: var(--c-ink-soft); }   /* 2行の間も少しあける */
-.about__text .en { opacity: .6; }   /* 日本語の説明文より薄くして、コントラストをつける */
+.about__text .en, .contact__lead .en { opacity: .6; }   /* 日本語の説明文より薄くして、コントラストをつける */
 .about__text { grid-column: 6 / 12; display: grid; gap: 1.2em; padding-top: 24px; }
 .about__facts {
   grid-column: 2 / 8; margin: 0;
