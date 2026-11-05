@@ -26,7 +26,7 @@ export function initWorksCrystals() {
   renderer.toneMapping = THREE.NoToneMapping;   // 画像の色をそのまま出す
 
   const camera = new THREE.PerspectiveCamera(26, ASPECT, 0.1, 50);
-  camera.position.set(0, 0.04, 6.3);
+  camera.position.set(0, 0.04, 5.7);   // 近づけるほどミラーが大きく映る
   camera.lookAt(0, 0.04, 0);
 
   // ---- 映り込みの環境:トップの部屋の光(白い窓・ピンク・水色・ラベンダー)を、ぼかした光の箱で作る ----
@@ -44,21 +44,21 @@ export function initWorksCrystals() {
 
   // 表面をおおう、うすいガラスの膜:正面を向いた面は透け、斜めの面・ふちほど光を映して白く光る(フレネル)
   const shell = new THREE.MeshPhysicalMaterial({
-    color: 0xf6f0ff, metalness: 0, roughness: 0.03,
+    color: 0xeee2ff, metalness: 0, roughness: 0.03,
     transparent: true, depthWrite: false,
-    iridescence: 1, iridescenceIOR: 1.3, iridescenceThicknessRange: [240, 620],
+    iridescence: 0.25, iridescenceIOR: 1.3, iridescenceThicknessRange: [300, 420],   // 虹色は控えめにして、紫の光を主役に
     clearcoat: 1, clearcoatRoughness: 0.02,
     envMap: envTex, envMapIntensity: 1.3,
     flatShading: false,
   });
   fresnel(shell, 0.0, 0.8);
 
-  // 光源:右上から白、左下からピンク、右下から水色(虹色の映り込みを出す)
+  // 光源:右上から白、左下からピンクがかった紫、右下からラベンダー
   const lights = () => {
     const g = new THREE.Group();
     const key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(2.5, 3.5, 4); g.add(key);
-    const pink = new THREE.PointLight(0xffb8e0, 6, 12); pink.position.set(-2.6, -1.2, 2.6); g.add(pink);
-    const cyan = new THREE.PointLight(0xb6e6ff, 5, 12); cyan.position.set(2.8, -1.8, 1.8); g.add(cyan);
+    const pink = new THREE.PointLight(0xe2b6ff, 6, 12); pink.position.set(-2.6, -1.2, 2.6); g.add(pink);
+    const cyan = new THREE.PointLight(0xb9a2ff, 5, 12); cyan.position.set(2.8, -1.8, 1.8); g.add(cyan);
     g.add(new THREE.AmbientLight(0xf1e8ff, 0.2));
     return g;
   };
@@ -169,8 +169,14 @@ export function initWorksCrystals() {
       v.rig.position.y = s * Math.sin(tt * 0.8) * 0.06;
       const bu = v.body.userData.u;
       bu.uTime.value = t;
-      const ft = t - v.flashAt;                                       // クリックしてからの時間
-      bu.uFlash.value = ft < 0 || ft > 1.6 ? 0 : Math.min(1, ft / 0.08) * Math.exp(-ft * 3.2);
+      // クリックしてからの時間:ミラーがふわっと光の方へ傾き、反射の光が表面を流れていく
+      const ft = t - v.flashAt;
+      const on = ft >= 0 && ft < 1.3;
+      const kick = on ? Math.sin(Math.PI * Math.min(1, ft / 1.2)) * Math.exp(-ft * 1.2) : 0;
+      v.rig.rotation.x -= kick * 0.10;
+      v.rig.rotation.y += kick * 0.16;
+      bu.uSweep.value = on ? Math.min(1, ft / 0.8) : 0;
+      bu.uFlash.value = on ? smooth(0, 0.12, ft) * (1 - smooth(0.6, 1.1, ft)) : 0;
       renderer.render(v.scene, camera);
       v.ctx.clearRect(0, 0, v.canvas.width, v.canvas.height);
       v.ctx.drawImage(renderer.domElement, 0, 0, v.canvas.width, v.canvas.height);
@@ -180,6 +186,8 @@ export function initWorksCrystals() {
   }
   requestAnimationFrame(frame);
 }
+
+function smooth(a, b, x) { const k = Math.min(1, Math.max(0, (x - a) / (b - a))); return k * k * (3 - 2 * k); }
 
 // 面の向きで透け具合を変える(正面:min 〜 ふち:max)
 function fresnel(mat, min, max) {
@@ -285,11 +293,12 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
     uRefr: { value: 0.22 },       // 面ごとのずれ(屈折)の大きさ
     uEmis: { value: 0.16 },       // 画像の明るさ(内側から光っているように)
     uTime: { value: 0 },
-    uFlash: { value: 0 },         // クリックしたときの光(0〜1)
+    uFlash: { value: 0 },         // クリックしたときの光の強さ(0〜1)
+    uSweep: { value: 0 },         // 光が表面をなでていく位置(0→1)
   };
   const mat = new THREE.MeshPhysicalMaterial({
     color: 0xffffff, metalness: 0, roughness: 0.06,
-    iridescence: 0.7, iridescenceIOR: 1.3, iridescenceThicknessRange: [260, 600],
+    iridescence: 0.2, iridescenceIOR: 1.3, iridescenceThicknessRange: [300, 420],
     clearcoat: 1, clearcoatRoughness: 0.03,
     sheen: 0.25, sheenColor: new THREE.Color(0xe7d6ff), sheenRoughness: 0.4,
     envMap: envTex, envMapIntensity: 0.55,
@@ -308,7 +317,7 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
         uniform sampler2D uImgA; uniform sampler2D uImgB;
         uniform vec4 uFitA; uniform vec4 uFitB;
         uniform vec2 uMin; uniform vec2 uSize;
-        uniform float uRefr; uniform float uEmis; uniform float uTime; uniform float uFlash;
+        uniform float uRefr; uniform float uEmis; uniform float uTime; uniform float uFlash; uniform float uSweep;
         vec3 crystalImg = vec3(0.); float crystalFlat = 1.0; vec3 crystalHolo = vec3(1.);`)
       .replace('#include <map_fragment>', `#include <map_fragment>
         {
@@ -328,12 +337,15 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
           // 面の向きと位置でなめらかに色が流れ、回ったり揺れたりすると、色がゆっくり移り変わる
           vec3 vn = normalize(vNormal);
           float t = vOP.x * 0.42 - vOP.y * 0.30 + vn.x * 0.55 + vn.y * 0.35 + uTime * 0.025;
-          vec3 holo = 0.68 + 0.32 * cos(6.2831 * (t + vec3(0.0, 0.33, 0.67)));
+          // サイトに合わせて、虹色ではなく ラベンダー〜すみれ色〜うすいピンクの間で色が流れる
+          float w1 = 0.5 + 0.5 * cos(6.2831 * t), w2 = 0.5 + 0.5 * cos(6.2831 * (t * 1.7 + 0.3));
+          vec3 holo = mix(vec3(0.66, 0.55, 0.94), vec3(0.93, 0.86, 1.0), w1);
+          holo = mix(holo, vec3(0.92, 0.72, 0.96), w2 * 0.35);
           vec3 clear = vec3(0.95, 0.94, 1.0);
           float shade = 0.90 + 0.10 * vn.z + 0.06 * vn.y;            // ふちの丸みに沿った、なめらかな明暗
           vec3 bevel = mix(clear, holo, 0.75) * shade;
           // 中の画像が、面取りの面ではプリズムのように色ずれしてゆがんで映る(赤・緑・青を少しずつずらす)
-          vec2 dp = sh2 * 0.05;
+          vec2 dp = sh2 * 0.02;   // 色ずれは小さく(虹色のふちにならないように)
           vec4 fit = front ? uFitA : uFitB;
           vec2 q = clamp(p, 0.0, 1.0);
           vec3 disp = front
@@ -357,13 +369,19 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
         }`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
         totalEmissiveRadiance += crystalImg * uEmis;
-        // クリックしたときの光:画面の右上あたりに強い光が当たり、光の帯が斜めに走る
+        // クリックしたときの光:ミラーが少し傾いて光を受け、反射の光が表面を斜めになでていく。
+        // その光が右上のふちに届いた瞬間、ふちが一点だけ強く光る(本物のガラスが光を拾うときの光り方)
         {
           vec2 vp = -vViewPosition.xy;
-          float gd = length(vp - vec2(0.50, 0.86));
-          float spot = exp(-gd * gd * 12.0) * 1.7;
-          float band = smoothstep(0.20, 0.0, abs(vp.x * 0.8 + vp.y * 0.6 - mix(-0.7, 1.7, uFlash))) * 0.55;
-          totalEmissiveRadiance += (vec3(1.0) + (crystalHolo - 0.68) * 0.9) * (spot + band) * uFlash;
+          float pos = mix(-1.9, 1.9, uSweep);
+          float dd = vp.x * 0.70 + vp.y * 0.71 - pos;
+          float sheen = exp(-dd * dd * 5.0) * 0.22 + exp(-dd * dd * 70.0) * 0.38;   // やわらかな光+細く明るい芯
+          vec3 vn2 = normalize(vNormal);
+          float facing = max(0.0, dot(normalize(vn2.xy + vec2(1e-4)), vec2(0.75, 0.66)));
+          float hit = exp(-pow(pos - 1.05, 2.0) * 7.0);                 // 光が右上のふちに届いたとき
+          float rim = pow(facing, 30.0) * (1.0 - crystalFlat) * hit * 2.6;
+          vec3 lightCol = vec3(1.0, 0.98, 1.0) + (crystalHolo - 0.8) * 0.25;
+          totalEmissiveRadiance += lightCol * (sheen + rim) * uFlash;
         }`)
       // 面取りの面は透けて、うしろ(ページの背景)が見える
       .replace('#include <opaque_fragment>', '#include <opaque_fragment>\ngl_FragColor.a = mix(0.62, 1.0, crystalFlat);');
@@ -404,7 +422,7 @@ function makeEnvironment(renderer) {
         vec3 c = mix(low, mid, smoothstep(0., .55, y));
         c = mix(c, high, smoothstep(.55, 1., y));
         c += vec3(.10,.02,.06) * smoothstep(.2,-.6, vP.x);   // 左はピンク寄り
-        c += vec3(.0,.05,.09) * smoothstep(.2,.8, vP.x);     // 右は水色寄り
+        c += vec3(.04,.0,.09) * smoothstep(.2,.8, vP.x);     // 右はすみれ色寄り
         gl_FragColor = vec4(c, 1.);
       }`,
   }));
@@ -417,8 +435,8 @@ function makeEnvironment(renderer) {
   panel(0xffffff, 8, 5, 3.5, 3, 5, 5);      // 右上の窓の光
   panel(0xffffff, 7, 0.6, 7, -2.2, 1, 6);   // 縦に細い光(面のふちが白く光る)
   panel(0x6f5a92, 1, 4, 6, 0, 0, 7);        // 正面のやや暗いプラム(面に濃淡をつける)
-  panel(0xffc4e4, 3, 4, 4, -6, -1, 3);      // 左のピンク
-  panel(0xbfe8ff, 3, 4, 3, 6, -2, 1);       // 右の水色
+  panel(0xeec4f4, 3, 4, 4, -6, -1, 3);      // 左のうすいピンク紫
+  panel(0xcbb6ff, 3, 4, 3, 6, -2, 1);       // 右のラベンダー
   panel(0xd8c8ff, 2.5, 6, 3, 0, -5, -4);    // 下・奥のラベンダー
   panel(0xffffff, 3, 2, 6, -4, 3, -5);      // 背中側の白
   const pm = new THREE.PMREMGenerator(renderer);

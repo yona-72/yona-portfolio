@@ -1114,40 +1114,42 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
 }
 @media (max-width: 560px) { .skills__text { font-size: 17px; } }
 
-/* クリックしたときの、クリスタル右上の星形のきらめき(js/works-crystal.js が .is-on を付ける) */
+/* クリックしたときの、ふちのきらめき(js/works-crystal.js が .is-on を付ける)
+   反射の光が右上のふちに届いた瞬間に、小さな光の点がにじみ、細い光の筋がすっと伸びて、ちらっと瞬いて消える */
 .crystal__glint {
-  position: absolute; z-index: 2; right: 25%; top: 19%;
-  width: 96px; height: 96px; margin: -48px -48px 0 0;
+  position: absolute; z-index: 2; right: 19.5%; top: 19.5%;
+  width: 150px; height: 150px; margin: -75px -75px 0 0;
   pointer-events: none; opacity: 0;
   background:
-    radial-gradient(closest-side, #fff, rgba(255, 255, 255, .6) 14%, rgba(255, 255, 255, 0) 36%),
-    linear-gradient(90deg, transparent, #fff 50%, transparent) center / 100% 2px no-repeat,
-    linear-gradient(0deg,  transparent, #fff 50%, transparent) center / 2px 100% no-repeat;
-  filter: drop-shadow(0 0 2px rgba(170, 140, 230, .9)) drop-shadow(0 0 8px rgba(190, 160, 255, .85)) drop-shadow(0 0 18px rgba(255, 190, 230, .7));
+    radial-gradient(circle, #fff 0, #fff 2px, rgba(255, 255, 255, .8) 3.5px, rgba(232, 220, 255, .42) 9%, rgba(214, 196, 255, 0) 24%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .95) 50%, rgba(255, 255, 255, 0)) center / 100% 1px no-repeat,
+    linear-gradient(0deg,  rgba(255, 255, 255, 0), rgba(255, 255, 255, .85) 50%, rgba(255, 255, 255, 0)) center / 1px 56% no-repeat;
+  filter: drop-shadow(0 0 2px rgba(196, 168, 255, .95)) drop-shadow(0 0 9px rgba(190, 160, 255, .55));
 }
-.crystal__glint::after {   /* 斜めの短い光(きらめきの2本目) */
-  content: ""; position: absolute; inset: 22%;
+.crystal__glint::after {   /* 斜めの、ごく短くかすかな光 */
+  content: ""; position: absolute; inset: 36%;
   background:
-    linear-gradient(90deg, transparent, rgba(255, 236, 248, .9) 50%, transparent) center / 100% 1.5px no-repeat,
-    linear-gradient(0deg,  transparent, rgba(228, 244, 255, .9) 50%, transparent) center / 1.5px 100% no-repeat;
+    linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .55) 50%, rgba(255, 255, 255, 0)) center / 100% 1px no-repeat,
+    linear-gradient(0deg,  rgba(255, 255, 255, 0), rgba(255, 255, 255, .55) 50%, rgba(255, 255, 255, 0)) center / 1px 100% no-repeat;
   transform: rotate(45deg);
 }
-.crystal__glint.is-on { animation: crystal-glint-star .75s cubic-bezier(.2, .7, .2, 1) both; }
-@keyframes crystal-glint-star {
-  0%   { opacity: 0; transform: scale(.2) rotate(-30deg); }
-  22%  { opacity: 1; transform: scale(1.15) rotate(0deg); }
-  100% { opacity: 0; transform: scale(.55) rotate(25deg); }
+.crystal__glint.is-on { animation: crystal-glint-twinkle 1.05s cubic-bezier(.25, .6, .3, 1) .48s both; }
+@keyframes crystal-glint-twinkle {
+  0%   { opacity: 0;   transform: scale(.35); }
+  14%  { opacity: 1;   transform: scale(1); }
+  30%  { opacity: .55; transform: scale(.86); }
+  44%  { opacity: .95; transform: scale(1.04); }
+  100% { opacity: 0;   transform: scale(.7); }
 }
-@media (prefers-reduced-motion: reduce) { .crystal__glint.is-on { animation-duration: .01ms; } }
+@media (prefers-reduced-motion: reduce) { .crystal__glint.is-on { animation-duration: .01ms; animation-delay: 0s; } }
 
 /* まるいクリスタルのミラーにしたので、枠は正方形。3D が描けるまでの仮の表示(CSS)も円にする */
 .work .work__thumb.crystal {
-  aspect-ratio: 1; width: 86%;
-  --crystal-shape: circle(48% at 50% 50%);
-  --crystal-shape-back: circle(48% at 50% 50%);
-  --crystal-facets: radial-gradient(circle at 50% 50%, transparent 58%, rgba(255, 255, 255, .55) 66%, rgba(214, 196, 255, .5) 69%, transparent 71%);
+  aspect-ratio: 1; width: 92%;
+  --crystal-shape: circle(43% at 50% 50%);
+  --crystal-shape-back: circle(43% at 50% 50%);
+  --crystal-facets: radial-gradient(circle at 50% 50%, transparent 51%, rgba(240, 230, 255, .55) 57%, rgba(190, 160, 250, .55) 60%, transparent 61%);
   --crystal-facets-back: var(--crystal-facets);
 }
-.crystal__glint { right: 20%; top: 17%; }
 /* スマホ:ミラーを横にスワイプして回せるように、横方向の指の動きはページのスクロールに使わない */
 @media (hover: none) { .work .work__thumb.crystal { touch-action: pan-y; } }
