@@ -54,8 +54,8 @@
 }
 .hero__lead {
   /* ロゴに気持ちだけ近づけて、そのぶん上へ。下の余白を同じだけ詰めて、ロゴの位置は変えない */
-  margin-top: calc(var(--space-label) * .6);
-  margin-bottom: calc(var(--space-label) * -.4);
+  margin-top: calc(var(--space-label) * .35);
+  margin-bottom: calc(var(--space-label) * -.65);
 }
 .hero__actions { margin-top: var(--space-actions); }
 
