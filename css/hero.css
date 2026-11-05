@@ -52,7 +52,11 @@
   padding: clamp(12px, 3vh, 40px) clamp(8px, 2vw, 32px);
   text-align: center;
 }
-.hero__lead { margin-top: var(--space-label); }
+.hero__lead {
+  /* ロゴに気持ちだけ近づけて、そのぶん上へ。下の余白を同じだけ詰めて、ロゴの位置は変えない */
+  margin-top: calc(var(--space-label) * .6);
+  margin-bottom: calc(var(--space-label) * -.4);
+}
 .hero__actions { margin-top: var(--space-actions); }
 
 /* 他のJSオブジェクトの置き場。サイズはここで調整 */
