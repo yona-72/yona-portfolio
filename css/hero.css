@@ -108,7 +108,7 @@ html.is-intro .hero__logo:not(.is-drawing):not(.is-drawn) { opacity: 0; }
 
 /* スクロール案内 */
 .hero__scroll {
-  position: absolute; z-index: 1; left: 50%; bottom: max(clamp(84px, 14vh, 140px), calc(env(safe-area-inset-bottom) + 64px));   /* 下の霧に埋もれないよう、少し上に */
+  position: absolute; z-index: 1; left: 50%; bottom: max(calc(100% - var(--arch-top) - var(--arch-height) + clamp(20px, 3.5vh, 36px)), calc(env(safe-area-inset-bottom) + 64px));   /* 背景のアーチの枠の内側、下のほうに置く */
   transform: translateX(-50%);
   font: 10px / 1 var(--f-mono); letter-spacing: .3em; text-transform: uppercase;
   color: var(--c-ink-soft); text-decoration: none;
