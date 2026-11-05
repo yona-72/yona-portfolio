@@ -1146,9 +1146,9 @@ textarea.field__input { resize: vertical; height: clamp(6.5em, 20vh, 11em); min-
 
 /* まるいクリスタルのミラーにしたので、枠は正方形。3D が描けるまでの仮の表示(CSS)も円にする */
 .work .work__thumb.crystal {
-  aspect-ratio: 1; width: 92%;
-  --crystal-shape: circle(43% at 50% 50%);
-  --crystal-shape-back: circle(43% at 50% 50%);
+  aspect-ratio: 1; width: 98%;
+  --crystal-shape: circle(44% at 50% 50%);
+  --crystal-shape-back: circle(44% at 50% 50%);
   --crystal-facets: radial-gradient(circle at 50% 50%, transparent 51%, rgba(240, 230, 255, .55) 57%, rgba(190, 160, 250, .55) 60%, transparent 61%);
   --crystal-facets-back: var(--crystal-facets);
 }
