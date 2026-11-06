@@ -405,11 +405,13 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
           face *= mix(0.95, 1.03, p.y + sl.y * 0.3);
           face = mix(face, vec3(0.90, 0.86, 0.99), smoothstep(0.80, 1.02, rr) * 0.14);
           face += vec3(1.0, 0.97, 1.0) * exp(-dot(p - vec2(0.30, 0.76) - sl * 0.25, p - vec2(0.30, 0.76) - sl * 0.25) * 16.0) * 0.06;   // 左上のやわらかな映り込み
-          diffuseColor.rgb = mix(bevel, face, flatW);
-          crystalImg = mix(bevel * 0.8, face, flatW);
+          // 画像の面は、ライトの色(ピンク・紫)に左右されず、元の画像の明るさ・色のまま見えるようにする
+          // (ライトの影響は3割だけ残して、傾いたときの自然な明暗にする)
+          diffuseColor.rgb = mix(bevel, face * 0.3, flatW);
+          crystalImg = mix(bevel * 0.8 * uEmis, face * 0.74, flatW);
         }`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
-        totalEmissiveRadiance += crystalImg * uEmis;
+        totalEmissiveRadiance += crystalImg;
         // クリックしたときの光:ミラーが少し傾いて光を受け、反射の光が表面を斜めになでていく。
         // その光が右上のふちに届いた瞬間、ふちが一点だけ強く光る(本物のガラスが光を拾うときの光り方)
         {
