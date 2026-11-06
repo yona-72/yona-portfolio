@@ -328,7 +328,7 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
     uFitA: { value: new THREE.Vector4(1, 1, 0, 0) }, uFitB: { value: new THREE.Vector4(1, 1, 0, 0) },
     uMin: { value: imgMin }, uSize: { value: imgSize },
     uRefr: { value: 0.22 },       // 面ごとのずれ(屈折)の大きさ
-    uEmis: { value: 0.16 },       // 画像の明るさ(内側から光っているように)
+    uEmis: { value: 0.1 },       // 画像の明るさ(内側から光っているように)
     uTime: { value: 0 },
     uFlash: { value: 0 },         // クリックしたときの光の強さ(0〜1)
     uSweep: { value: 0 },         // 光が表面をなでていく位置(0→1)
@@ -336,9 +336,9 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
   const mat = new THREE.MeshPhysicalMaterial({
     color: 0xffffff, metalness: 0, roughness: 0.02,
     iridescence: 0.15, iridescenceIOR: 1.3, iridescenceThicknessRange: [300, 420],
-    clearcoat: 1, clearcoatRoughness: 0.0,
-    sheen: 0.12, sheenColor: new THREE.Color(0xe7d6ff), sheenRoughness: 0.4,
-    envMap: envTex, envMapIntensity: 0.85,   // 鏡のように、まわりの光をはっきり映す
+    clearcoat: 0.45, clearcoatRoughness: 0.02,
+    sheen: 0.06, sheenColor: new THREE.Color(0xe7d6ff), sheenRoughness: 0.4,
+    envMap: envTex, envMapIntensity: 0.32,   // 映り込みは控えめに(画像がしっかり見えるように)
     transparent: true,
     flatShading: false,
   });
@@ -400,11 +400,11 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
           float d = p.x - p.y * 0.55 + sl.x - sl.y * 0.5;
           float streak = smoothstep(0.30, 0.0, abs(d - 0.12)) * 0.11 + smoothstep(0.07, 0.0, abs(d + 0.26)) * 0.08 + smoothstep(0.035, 0.0, abs(d + 0.36)) * 0.05;
           float rr = length((p - 0.5) * 2.0);
-          vec3 face = img + (holo - 0.68) * 0.05 + streak * vec3(0.98, 0.96, 1.0);
+          vec3 face = img + (holo - 0.68) * 0.03 + streak * 0.45 * vec3(0.98, 0.96, 1.0);
           // 鏡の銀の面:上は明るく、下はほんの少しだけ沈む(鏡に部屋の光が映っている感じ)
           face *= mix(0.95, 1.03, p.y + sl.y * 0.3);
-          face = mix(face, vec3(0.90, 0.86, 0.99), smoothstep(0.78, 1.02, rr) * 0.22);
-          face += vec3(1.0, 0.97, 1.0) * exp(-dot(p - vec2(0.30, 0.76) - sl * 0.25, p - vec2(0.30, 0.76) - sl * 0.25) * 16.0) * 0.14;   // 左上のやわらかな映り込み
+          face = mix(face, vec3(0.90, 0.86, 0.99), smoothstep(0.80, 1.02, rr) * 0.14);
+          face += vec3(1.0, 0.97, 1.0) * exp(-dot(p - vec2(0.30, 0.76) - sl * 0.25, p - vec2(0.30, 0.76) - sl * 0.25) * 16.0) * 0.06;   // 左上のやわらかな映り込み
           diffuseColor.rgb = mix(bevel, face, flatW);
           crystalImg = mix(bevel * 0.8, face, flatW);
         }`)
