@@ -429,22 +429,47 @@ function makeCrystalMaterial(envTex, imgMin, imgSize, imgA, imgB) {
       // 面取りの面は透けて、うしろ(ページの背景)が見える
       .replace('#include <opaque_fragment>', '#include <opaque_fragment>\ngl_FragColor.a = mix(0.9, 1.0, crystalFlat);');
   };
+  // 画像をテクスチャにする。スマホ(特に iPhone)では、読み込み直後や非表示の画像だと
+  // 中身がまだ空のまま描かれて真っ黒になることがあるので、
+  //   ・decode() で画像の準備ができるのを待つ
+  //   ・下地を白で塗ってから描く(空でも黒くならない)
+  //   ・描いた結果が空なら、少し待って描き直す
   const load = (img, key, fitKey) => {
     if (!img) return;
-    const apply = () => {
-      if (!img.naturalWidth) return;
+    let tries = 0;
+    const draw = () => {
+      if (!img.naturalWidth) return false;
       const k = Math.min(1, 1024 / Math.max(img.naturalWidth, img.naturalHeight));
       const c = document.createElement('canvas');
       c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
-      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      const cx = c.getContext('2d');
+      cx.fillStyle = '#ffffff'; cx.fillRect(0, 0, c.width, c.height);
+      cx.drawImage(img, 0, 0, c.width, c.height);
+      // 中央付近の数点を見て、白の下地しかない(=画像が描けていない)なら失敗あつかい
+      let drawn = false;
+      try {
+        for (const [fx, fy] of [[.5, .5], [.3, .3], [.7, .6], [.4, .8]]) {
+          const d = cx.getImageData(Math.floor(c.width * fx), Math.floor(c.height * fy), 1, 1).data;
+          if (d[0] < 250 || d[1] < 250 || d[2] < 250) { drawn = true; break; }
+        }
+      } catch (e) { drawn = true; }
+      if (!drawn && tries < 6) return false;
+      const old = u[key].value;
       const tex = new THREE.CanvasTexture(c);
       tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
       // cover:枠より横長の画像は左右を、縦長の画像は上下を切る
       const ia = c.width / c.height, fa = imgSize.x / imgSize.y;
       u[fitKey].value.set(...(ia > fa ? [fa / ia, 1, (1 - fa / ia) / 2, 0] : [1, ia / fa, 0, (1 - ia / fa) / 2]));
       u[key].value = tex;
+      if (old && old.isCanvasTexture) old.dispose();
+      return true;
     };
-    if (img.complete && img.naturalWidth) apply(); else img.addEventListener('load', apply, { once: true });
+    const attempt = () => {
+      const go = () => { if (!draw() && tries++ < 6) setTimeout(attempt, 400); };
+      if (img.decode) img.decode().then(go, go); else go();
+    };
+    if (img.complete && img.naturalWidth) attempt();
+    img.addEventListener('load', attempt);
   };
   load(imgA, 'uImgA', 'uFitA'); load(imgB, 'uImgB', 'uFitB');
   return mat;
