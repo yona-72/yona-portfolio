@@ -624,25 +624,21 @@ a.work__thumb:focus-visible { outline: none; }   /* 水滴の形で外枠が切�
 .frame__index { transition: opacity .5s var(--ease-soft); }
 html.is-end .frame__index { opacity: 0; }   /* 一番下ではフッターと重ならないように隠す */
 html.is-intro .frame { opacity: 0; }
-/* 縦書きの文字の上下の飾り:ロゴの「o」の中にあるのと同じ、細い4つ光のきらめき。縦に少し長い形(以前は十字) */
+/* 縦書きの文字の上下の飾り:「< >」を縦にした形。文字の上に「∧」、下に「∨」で、文字をやさしくはさむ(以前は十字) */
 .frame__plus {
   position: absolute; top: var(--y);
   left: calc(var(--x) * (100% - 2 * var(--gutter) * .5) + var(--gutter) * .5 - 7px);
   width: 14px; height: 14px;
   background: currentColor;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cpath d='M10 0C10.5 9 13.2 13.2 20 14C13.2 14.8 10.5 19 10 28C9.5 19 6.8 14.8 0 14C6.8 13.2 9.5 9 10 0Z'/%3E%3C/svg%3E") center / 9px 14px no-repeat;
-          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 28'%3E%3Cpath d='M10 0C10.5 9 13.2 13.2 20 14C13.2 14.8 10.5 19 10 28C9.5 19 6.8 14.8 0 14C6.8 13.2 9.5 9 10 0Z'/%3E%3C/svg%3E") center / 9px 14px no-repeat;
-  opacity: .45;
-  animation: frame-twinkle 5.5s ease-in-out infinite;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpolyline points='2.5,9.5 7,4.5 11.5,9.5' fill='none' stroke='black' stroke-width='1.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px 14px no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpolyline points='2.5,9.5 7,4.5 11.5,9.5' fill='none' stroke='black' stroke-width='1.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px 14px no-repeat;
+  opacity: .55;
 }
-.frame__plus:nth-child(2n) { animation-delay: -2.7s; }
-.frame__plus:nth-child(3)  { animation-delay: -1.3s; }
-@keyframes frame-twinkle {   /* ときどき、ほんの少しだけ明るくなる */
-  0%, 100% { opacity: .38; transform: scale(.9); }
-  50%      { opacity: .62; transform: scale(1); }
+.frame__plus:nth-child(2n) {   /* 下側(70%)は下向き */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpolyline points='2.5,4.5 7,9.5 11.5,4.5' fill='none' stroke='black' stroke-width='1.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpolyline points='2.5,4.5 7,9.5 11.5,4.5' fill='none' stroke='black' stroke-width='1.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-@media (prefers-reduced-motion: reduce) { .frame__plus { animation: none; } }
-/* 縦書きの文字は、上下のきらめき(34% と 70%)のちょうど真ん中に置く。きらめきの中心は top から 7px 下 */
+/* 縦書きの文字は、上下の飾り(34% と 70%)のちょうど真ん中に置く。飾りの中心は top から 7px 下 */
 .frame__v {
   position: absolute; top: calc((34% + 70%) / 2 + 7px); transform: translateY(-50%);
   writing-mode: vertical-rl;
