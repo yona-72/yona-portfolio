@@ -624,15 +624,25 @@ a.work__thumb:focus-visible { outline: none; }   /* 水滴の形で外枠が切�
 .frame__index { transition: opacity .5s var(--ease-soft); }
 html.is-end .frame__index { opacity: 0; }   /* 一番下ではフッターと重ならないように隠す */
 html.is-intro .frame { opacity: 0; }
+/* 縦書きの文字の上下の飾り:ロゴの「o」の中にあるのと同じ、細い4つ光のきらめき(以前は十字) */
 .frame__plus {
   position: absolute; top: var(--y);
   left: calc(var(--x) * (100% - 2 * var(--gutter) * .5) + var(--gutter) * .5 - 7px);
   width: 14px; height: 14px;
-  background: linear-gradient(currentColor, currentColor) center / 100% 1px no-repeat,
-              linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat;
-  opacity: .55;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0C10.6 6.4 13.6 9.4 20 10C13.6 10.6 10.6 13.6 10 20C9.4 13.6 6.4 10.6 0 10C6.4 9.4 9.4 6.4 10 0Z'/%3E%3C/svg%3E") center / 11px 11px no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 0C10.6 6.4 13.6 9.4 20 10C13.6 10.6 10.6 13.6 10 20C9.4 13.6 6.4 10.6 0 10C6.4 9.4 9.4 6.4 10 0Z'/%3E%3C/svg%3E") center / 11px 11px no-repeat;
+  opacity: .45;
+  animation: frame-twinkle 5.5s ease-in-out infinite;
 }
-/* 縦書きの文字は、上下の十字(34% と 70%)のちょうど真ん中に置く。十字の中心は top から 7px 下 */
+.frame__plus:nth-child(2n) { animation-delay: -2.7s; }
+.frame__plus:nth-child(3)  { animation-delay: -1.3s; }
+@keyframes frame-twinkle {   /* ときどき、ほんの少しだけ明るくなる */
+  0%, 100% { opacity: .38; transform: scale(.9); }
+  50%      { opacity: .62; transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .frame__plus { animation: none; } }
+/* 縦書きの文字は、上下のきらめき(34% と 70%)のちょうど真ん中に置く。きらめきの中心は top から 7px 下 */
 .frame__v {
   position: absolute; top: calc((34% + 70%) / 2 + 7px); transform: translateY(-50%);
   writing-mode: vertical-rl;
