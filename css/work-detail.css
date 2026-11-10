@@ -25,17 +25,18 @@
 .detail__fig--2 { grid-column: 6 / 12; grid-row: 2; }
 .detail__frame {
   position: relative; overflow: hidden;
-  border-radius: 22px;
+  border-radius: 0;   /* 角丸にしない、シンプルな四角の枠 */
   background:
     radial-gradient(70% 60% at 50% 35%, rgba(255, 255, 255, .45), transparent 70%),
     linear-gradient(135deg, var(--c-scene-lilac), var(--c-scene-blush) 50%, var(--c-scene-floor));
   box-shadow: 0 34px 70px -40px rgba(110, 80, 160, .55);
   isolation: isolate;
 }
-/* 枠の形。detail__frame--wide / --arch / --square を html 側で付け替えれば形が変わる */
-.detail__frame--wide   { aspect-ratio: 3 / 2; }                                                /* 横長 */
-.detail__frame--arch   { aspect-ratio: 4 / 5; border-radius: 999px 999px 22px 22px; }          /* ファーストビューと同じアーチ形 */
-.detail__frame--square { aspect-ratio: 1; border-radius: 50%; }                                /* まるい枠(トップの水滴に合わせて) */
+/* 枠の形。detail__frame--wide / --arch / --square を html 側で付け替えれば形が変わる
+   (以前のアーチ形・まるい枠は、どちらも少し縦長のシンプルな長方形にした) */
+.detail__frame--wide   { aspect-ratio: 3 / 2; }   /* 横長 */
+.detail__frame--arch   { aspect-ratio: 4 / 5; }   /* 少し縦長の長方形 */
+.detail__frame--square { aspect-ratio: 4 / 5; }   /* 少し縦長の長方形 */
 /* 3枚目(画像が3枚ある作品ページだけ):2枚目の左下に、少し小さめに置く */
 .detail__fig--3 { grid-column: 2 / 6; grid-row: 3; margin-top: calc(-1 * clamp(40px, 10vw, 180px)); }
 .detail__fig--3 .detail__cap { justify-content: flex-start; }
@@ -165,7 +166,7 @@
 .piece__fig .detail__frame { width: var(--w); max-width: 100%; }
 .piece__fig .detail__frame--wide   { --w: calc(var(--a) * 1.22); }
 .piece__fig .detail__frame--arch   { --w: calc(var(--a) * .9); }
-.piece__fig .detail__frame--square { --w: var(--a); }
+.piece__fig .detail__frame--square { --w: calc(var(--a) * .9); }
 .piece:nth-child(even) .detail__cap { justify-content: flex-end; }
 
 .piece__no { font: 400 10.5px / 1 var(--f-mono); letter-spacing: .2em; }
@@ -208,7 +209,6 @@
   transition: opacity .4s var(--ease), transform .4s var(--ease);
   pointer-events: none;
 }
-.piece__fig .detail__frame--square::before { right: 50%; bottom: 10%; margin-right: -19px; }
 .piece__fig .detail__frame:hover::before,
 .piece__fig .detail__frame:focus-visible::before { opacity: 1; transform: none; }
 /* 画像が無い枠(IMAGE 01 の文字)は、文字の方を優先 */
@@ -233,7 +233,7 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 .lightbox__media {
   max-width: 100%; max-height: calc(100vh - 220px); max-height: calc(100svh - 220px);   /* 上のボタンと下の見出しの分をあける */
   width: auto; height: auto; object-fit: contain;
-  border-radius: 14px;
+  border-radius: 0;
   box-shadow: 0 40px 90px -40px rgba(70, 50, 110, .65);
   background: #fff;
   transform: scale(.96); transition: transform .6s var(--ease);
