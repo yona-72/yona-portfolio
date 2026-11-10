@@ -21,7 +21,7 @@
 <body>
   <!-- =============================================================
        作品ページ No.07(ゲーム DREAMY CLOUD CITY。ファイル名は work-10)
-       ・画面写真は images/works/detail/10-game-1-title.jpg・10-game-2-play.jpg
+       ・プレイ動画は videos/10-game-play.mp4(はじめの画面は images/works/detail/10-game-play-poster.jpg)
        ・操作説明は下の .howto の表。ゲームのURLは https://yona-72.github.io/dream-cloudcity/
        ============================================================= -->
 
@@ -61,9 +61,8 @@
         <div class="detail-toc-wrap" data-reveal>
           <p class="detail-toc-label">(CONTENTS)</p>
           <ul class="detail-toc">
-            <li><a href="#piece-1"><span>01</span>Title Screen</a></li>
-            <li><a href="#piece-2"><span>02</span>Play Screen</a></li>
-            <li><a href="#howto"><span>03</span>How to Play</a></li>
+            <li><a href="#piece-1"><span>01</span>Play Movie</a></li>
+            <li><a href="#howto"><span>02</span>How to Play</a></li>
           </ul>
         </div>
         <div class="detail__body" data-reveal>
@@ -83,41 +82,26 @@
       </div>
 
       <div class="pieces">
-        <!-- 01:タイトル画面 -->
+        <!-- 01:プレイ動画(タイトル画面 → プレイ → クリアまで) -->
         <article class="piece" id="piece-1">
           <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--game" data-label="IMAGE 01">
-              <img src="images/works/detail/10-game-1-title.jpg" alt="DREAMY CLOUD CITY タイトル画面" data-detail-img>
+            <div class="detail__frame detail__frame--game detail__frame--movie" data-label="MOVIE">
+              <video src="videos/10-game-play.mp4" poster="images/works/detail/10-game-play-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="DREAMY CLOUD CITY プレイ動画"></video>
             </div>
-            <figcaption class="detail__cap">(01) Title Screen</figcaption>
+            <figcaption class="detail__cap">(01) Play Movie</figcaption>
           </figure>
           <div class="piece__text" data-reveal>
-            <p class="piece__no">(01) <span>/ 02</span></p>
-            <h2 class="piece__title">Title Screen</h2>
-            <p class="piece__jp">タイトル画面</p>
-            <p class="piece__desc">夜のネオンの街を背景にしたタイトル画面です。ロゴや文字もドット絵で描き、操作方法をひと目で分かるように表示しています。</p>
-          </div>
-        </article>
-        <!-- 02:プレイ画面 -->
-        <article class="piece" id="piece-2">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--game" data-label="IMAGE 02">
-              <img src="images/works/detail/10-game-2-play.jpg" alt="DREAMY CLOUD CITY プレイ画面" data-detail-img>
-            </div>
-            <figcaption class="detail__cap">(02) Play Screen</figcaption>
-          </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(02) <span>/ 02</span></p>
-            <h2 class="piece__title">Play Screen</h2>
-            <p class="piece__jp">プレイ画面</p>
-            <p class="piece__desc">うさぎに乗った主人公が、雲の街をゴールに向かって進みます。ゴールの手前では大きなUFOが現れ、最後まで気が抜けない演出にしています。</p>
+            <p class="piece__no">(01) <span>/ 01</span></p>
+            <h2 class="piece__title">Play Movie</h2>
+            <p class="piece__jp">プレイ動画</p>
+            <p class="piece__desc">タイトル画面からゴールまでのプレイ動画です。夜のネオンの街を背景に、ロゴや文字もドット絵で描いています。うさぎに乗った主人公が、雲の街をゴールに向かって進みます。ゴールの手前では大きなUFOが現れ、最後まで気が抜けない演出にしています。</p>
           </div>
         </article>
       </div>
 
       <!-- 操作説明 -->
       <section class="howto" id="howto" data-reveal>
-        <p class="detail-toc-label">(03) HOW TO PLAY</p>
+        <p class="detail-toc-label">(02) HOW TO PLAY</p>
         <h2 class="howto__title">How to Play</h2>
         <p class="howto__jp">操作方法</p>
         <div class="howto__grid">

@@ -324,6 +324,7 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 .detail__frame--game { aspect-ratio: 4 / 3; }
 .piece__fig .detail__frame--game { --w: calc(var(--a) * 1.16); }
 .detail__frame--game img { image-rendering: pixelated; }
+.detail__frame--game.detail__frame--movie { aspect-ratio: 1280 / 890; }   /* プレイ動画は、画面がまるごと見えるように動画と同じ比率 */
 .game-play { justify-self: start; margin-top: 14px; font-size: 12px; }
 
 /* ゲームの操作説明 */
