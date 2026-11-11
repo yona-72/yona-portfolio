@@ -84,7 +84,7 @@
     var list = items(); if (!list.length) return;
     current = (i + list.length) % list.length;
     var frame = list[current];
-    var piece = frame.closest('.piece');
+    var piece = frame.closest('.piece, .site');
     var old = stage.querySelector('.lightbox__media'); if (old) old.remove();
     var src = frame.querySelector('img, video'), el;
     if (src.tagName === 'VIDEO') {
@@ -93,12 +93,24 @@
       el.controls = true; el.autoplay = true; el.loop = true; el.muted = true; el.playsInline = true;
     } else {
       el = document.createElement('img');
-      el.src = src.currentSrc || src.src; el.alt = src.alt || '';
+      // data-full があれば、枠に見えている画像の代わりに、そちら(ページ全体の画像など)を大きく出す
+      el.src = frame.getAttribute('data-full') || src.currentSrc || src.src; el.alt = src.alt || '';
     }
     el.className = 'lightbox__media';
     // 縦に長い画像(高さが幅の2倍以上)は、スクロールして全部見られる表示にする
-    var long = src.tagName === 'IMG' && src.naturalHeight > src.naturalWidth * 2;
+    var long = src.tagName === 'IMG' && !frame.getAttribute('data-full') && src.naturalHeight > src.naturalWidth * 2;
     stage.classList.toggle('is-long', long);
+    // data-full の画像は、読み込めた時点で縦に長いかを判定する
+    if (frame.getAttribute('data-full') && el.tagName === 'IMG') {
+      var chk = function () {
+        if (el.naturalHeight > el.naturalWidth * 2) {
+          stage.classList.add('is-long');
+          var jp = box.querySelector('[data-lb-jp]');
+          if (jp.textContent.indexOf('SCROLL') < 0) jp.textContent += '  ―  SCROLL ↓';
+        }
+      };
+      if (el.complete && el.naturalWidth) setTimeout(chk, 0); else el.addEventListener("load", chk);
+    }
     stage.scrollTop = 0;
     stage.insertBefore(el, stage.firstChild);
     box.querySelector('[data-lb-title]').textContent = piece ? (piece.querySelector('.piece__title') || {}).textContent || '' : '';
