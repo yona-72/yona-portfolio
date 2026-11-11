@@ -429,3 +429,8 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 /* 画像そのものが白い背景ごとデザインされているとき(動画用イラストのまとめなど):枠いっぱいに表示 */
 .site__frame--full .site__shot,
 .site__frame--full:hover .site__shot { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; box-shadow: none; transform: none; }
+
+/* 画像を枠の中央に、上下左右とも必ず収める(縦長のイラスト・ポスターが下で切れないように) */
+.site__frame .site__shot,
+.site__frame video.site__shot { position: absolute; inset: 0; margin: auto; width: auto; height: auto; max-width: 64%; max-height: 74%; }
+.site__frame--full .site__shot, .site__frame--full:hover .site__shot { inset: 0; margin: 0; width: 100%; height: 100%; max-width: none; max-height: none; }
