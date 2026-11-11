@@ -434,3 +434,14 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 .site__frame .site__shot,
 .site__frame video.site__shot { position: absolute; inset: 0; margin: auto; width: auto; height: auto; max-width: 64%; max-height: 74%; }
 .site__frame--full .site__shot, .site__frame--full:hover .site__shot { inset: 0; margin: 0; width: 100%; height: 100%; max-width: none; max-height: none; }
+
+/* Webデザイン:ページ全体の長い画像を、上から同じ大きさで見せる(下は枠の下端で切れる) */
+.site__frame--page .site__shot,
+.site__frame--page:hover .site__shot {
+  position: absolute; inset: auto; top: 12%; left: 50%; margin: 0;
+  width: 44%; height: 88%; max-width: none; max-height: none;
+  object-fit: cover; object-position: top center;
+  transform: translateX(-50%);
+  box-shadow: 0 0 0 1px rgba(40, 30, 60, .06), 0 10px 22px -10px rgba(40, 30, 60, .22), 0 30px 50px -30px rgba(40, 30, 60, .28);
+}
+.site__frame--page:hover .site__shot { transform: translateX(-50%) translateY(-2%); }
