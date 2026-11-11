@@ -426,3 +426,6 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 .game-movie__frame { width: 100%; aspect-ratio: 1280 / 890; box-shadow: none; }
 .game-movie__frame::after { display: none; }
 .game-movie .game-play { justify-self: center; margin-top: 0; }
+/* 画像そのものが白い背景ごとデザインされているとき(動画用イラストのまとめなど):枠いっぱいに表示 */
+.site__frame--full .site__shot,
+.site__frame--full:hover .site__shot { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; box-shadow: none; transform: none; }
