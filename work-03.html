@@ -59,8 +59,8 @@
         <p class="sec-head__v" aria-hidden="true">さくひん</p>
       </header>
 
-      <!-- このページ全体の説明と、中の作品の一覧 -->
-      <div class="detail-intro">
+      <!-- 中の作品の一覧 -->
+      <div class="detail-intro detail-intro--toc-only">
         <div class="detail-toc-wrap" data-reveal>
           <p class="detail-toc-label">(CONTENTS)</p>
           <ul class="detail-toc">
@@ -68,51 +68,39 @@
             <li><a href="#piece-2"><span>02</span>Booth Design</a></li>
           </ul>
         </div>
-        <div class="detail__body" data-reveal>
-          <p class="work__index">(03) <span>— 2026</span></p>
-          <h2 class="work__title"><span class="work__title-sub">パンフレット・チラシ・ブースデザイン等</span><span class="work__title-main">Print & Booth</span></h2>
-          <p class="work__en">PRINT / BOOTH DESIGN</p>
-          <span class="tagbox">PRINT</span>
-          <p class="work__desc">チラシ・ポスター・パンフレットなどの紙媒体と、ブースのデザインのまとめです。クライアントの要望はもちろん、情報の順番と余白を整理し、見る人が迷わず受け取れる形に組み立てています。</p>
-          <dl class="work__spec">
-            <div><dt>Role</dt><dd>Design / Layout</dd></div>
-            <div><dt>Tool</dt><dd>Illustrator / InDesign</dd></div>
-            <div><dt>Year</dt><dd>2026</dd></div>
-          </dl>
-        </div>
       </div>
 
-      <div class="pieces">
-        <!-- 01:チラシ・ポスター・パンフレット -->
-        <article class="piece" id="piece-1">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--wide" data-label="IMAGE 01">
-              <img src="images/works/detail/03-print-booth-1-print.jpg" alt="チラシ・ポスター・パンフレット" data-detail-img>
+      <!-- 作品の一覧(2列)。白い背景の中央に作品を置いた形。押すと大きく表示される -->
+      <div class="sites">
+        <article class="site" id="piece-1">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 01">
+              <img class="site__shot" src="images/works/detail/03-print-booth-1-print.jpg" alt="チラシ・ポスター・パンフレット" loading="lazy" data-detail-img>
             </div>
             <figcaption class="detail__cap">(01) Print</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(01) <span>/ 02</span></p>
-            <h2 class="piece__title">Print</h2>
-            <p class="piece__jp">チラシ・ポスター・パンフレット</p>
-            <p class="piece__desc">チラシやポスター、パンフレットなどの紙媒体のデザインです。遠くからでも目に留まり、手に取ると必要な情報がすぐに分かるよう、見出しと写真のメリハリや情報の順番を整理しています。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Print</h2>
+          <p class="piece__jp visually-hidden">チラシ・ポスター・パンフレット</p>
         </article>
-        <!-- 02:ブースデザイン -->
-        <article class="piece" id="piece-2">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--arch" data-label="IMAGE 02">
-              <img src="images/works/detail/03-print-booth-2-booth.jpg" alt="ブースデザイン" data-detail-img>
+        <article class="site" id="piece-2">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 02">
+              <img class="site__shot" src="images/works/detail/03-print-booth-2-booth.jpg" alt="ブースデザイン" loading="lazy" data-detail-img>
             </div>
             <figcaption class="detail__cap">(02) Booth Design</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(02) <span>/ 02</span></p>
-            <h2 class="piece__title">Booth Design</h2>
-            <p class="piece__jp">ブースデザイン</p>
-            <p class="piece__desc">実際に制作したブースのデザイン案になります。離れた場所からでも目を引き、立ち寄った人が自然に内容を受け取れるよう、立体物の配置・色味・見せ方をトータルで考え制作いたしました。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Booth Design</h2>
+          <p class="piece__jp visually-hidden">ブースデザイン</p>
         </article>
+      </div>
+
+      <!-- 大きく見せるカット(同じ大きさで縦に並べる)。押すと、上の一覧の同じ作品が大きく表示される -->
+      <div class="mocks">
+        <figure class="piece__fig mock" data-reveal>
+          <div class="detail__frame mock__frame" data-alias="piece-1" data-label="IMAGE 01">
+            <img class="mock__media" src="images/works/detail/03-print-booth-1-print.jpg" alt="チラシ・ポスター・パンフレット" loading="lazy" data-detail-img>
+          </div>
+        </figure>
       </div>
 
       <!-- ほかの作品へ -->

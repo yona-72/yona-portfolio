@@ -78,13 +78,18 @@
   var current = -1, lastFocus = null;
 
   // 中身が入っている枠だけを対象にする(画像が無い枠は押せない)
-  function items() { return frames.filter(function (f) { return f.querySelector('img, video'); }); }
+  function items() { return frames.filter(function (f) { return f.querySelector('img, video') && !f.hasAttribute('data-alias'); }); }
+  // 大きく見せるカット(data-alias="piece-3" など)を押したら、一覧の同じ作品を大きく表示する
+  function target(f) {
+    var id = f.getAttribute('data-alias');
+    return id ? (document.querySelector('#' + id + ' .detail__frame') || f) : f;
+  }
 
   function show(i) {
     var list = items(); if (!list.length) return;
     current = (i + list.length) % list.length;
     var frame = list[current];
-    var piece = frame.closest('.piece, .site');
+    var piece = frame.closest('.piece, .site, .game-movie');
     var old = stage.querySelector('.lightbox__media'); if (old) old.remove();
     var src = frame.querySelector('img, video'), el;
     if (src.tagName === 'VIDEO') {
@@ -138,9 +143,9 @@
     f.setAttribute('tabindex', '0');
     f.setAttribute('role', 'button');
     f.setAttribute('aria-label', '拡大して見る');
-    f.addEventListener('click', function () { if (f.querySelector('img, video')) open(f); });
+    f.addEventListener('click', function () { if (f.querySelector('img, video')) open(target(f)); });
     f.addEventListener('keydown', function (e) {
-      if ((e.key === 'Enter' || e.key === ' ') && f.querySelector('img, video')) { e.preventDefault(); open(f); }
+      if ((e.key === 'Enter' || e.key === ' ') && f.querySelector('img, video')) { e.preventDefault(); open(target(f)); }
     });
   });
   closeBtn.addEventListener('click', close);

@@ -57,30 +57,58 @@
         <p class="sec-head__v" aria-hidden="true">いらすと</p>
       </header>
 
-      <p class="gallery__lead" data-reveal><span class="tagbox">ILLUSTRATION</span><span class="gallery__note">画像を押すと大きく表示されます</span></p>
+      <!-- 作品の一覧(2列)。白い背景の中央に作品を置いた形。押すと大きく表示される -->
+      <div class="sites">
+        <article class="site" id="piece-1">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 01">
+              <img class="site__shot" src="images/works/detail/08-illustration-1-girl.jpg" alt="イラスト" loading="lazy" data-detail-img>
+            </div>
+          </figure>
+          <h2 class="piece__title visually-hidden">Illustration 01</h2>
+          <p class="piece__jp visually-hidden">イラスト</p>
+        </article>
+        <article class="site" id="piece-2">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 02">
+              <img class="site__shot" src="images/works/detail/08-illustration-2-white.jpg" alt="イラスト" loading="lazy" data-detail-img>
+            </div>
+          </figure>
+          <h2 class="piece__title visually-hidden">Illustration 02</h2>
+          <p class="piece__jp visually-hidden">イラスト</p>
+        </article>
+        <article class="site" id="piece-3">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 03">
+              <img class="site__shot" src="images/works/detail/08-illustration-3-space.jpg" alt="イラスト" loading="lazy" data-detail-img>
+            </div>
+          </figure>
+          <h2 class="piece__title visually-hidden">Illustration 03</h2>
+          <p class="piece__jp visually-hidden">イラスト</p>
+        </article>
+        <article class="site" id="piece-4">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 04">
+              <img class="site__shot" src="images/works/detail/08-illustration-4-garland.jpg" alt="イラスト" loading="lazy" data-detail-img>
+            </div>
+          </figure>
+          <h2 class="piece__title visually-hidden">Illustration 04</h2>
+          <p class="piece__jp visually-hidden">イラスト</p>
+        </article>
+      </div>
 
-      <!-- イラストのギャラリー(大きさの違う絵を、すき間なく積み上げる) -->
-      <div class="gallery">
-          <figure class="piece__fig gallery__item" data-reveal>
-            <div class="detail__frame" data-label="IMAGE 01">
-              <img src="images/works/detail/08-illustration-1-girl.jpg" alt="イラスト1" loading="lazy" data-detail-img>
-            </div>
-          </figure>
-          <figure class="piece__fig gallery__item" data-reveal>
-            <div class="detail__frame" data-label="IMAGE 02">
-              <img src="images/works/detail/08-illustration-2-white.jpg" alt="イラスト2" loading="lazy" data-detail-img>
-            </div>
-          </figure>
-          <figure class="piece__fig gallery__item" data-reveal>
-            <div class="detail__frame" data-label="IMAGE 03">
-              <img src="images/works/detail/08-illustration-3-space.jpg" alt="イラスト3" loading="lazy" data-detail-img>
-            </div>
-          </figure>
-          <figure class="piece__fig gallery__item" data-reveal>
-            <div class="detail__frame" data-label="IMAGE 04">
-              <img src="images/works/detail/08-illustration-4-garland.jpg" alt="イラスト4" loading="lazy" data-detail-img>
-            </div>
-          </figure>
+      <!-- 大きく見せるカット(同じ大きさで縦に並べる)。押すと、上の一覧の同じ作品が大きく表示される -->
+      <div class="mocks">
+        <figure class="piece__fig mock" data-reveal>
+          <div class="detail__frame mock__frame" data-alias="piece-3" data-label="IMAGE 03">
+            <img class="mock__media" src="images/works/detail/08-illustration-3-space.jpg" alt="イラスト" loading="lazy" data-detail-img>
+          </div>
+        </figure>
+        <figure class="piece__fig mock" data-reveal>
+          <div class="detail__frame mock__frame" data-alias="piece-4" data-label="IMAGE 04">
+            <img class="mock__media" src="images/works/detail/08-illustration-4-garland.jpg" alt="イラスト" loading="lazy" data-detail-img>
+          </div>
+        </figure>
       </div>
 
       <!-- ほかの作品へ -->

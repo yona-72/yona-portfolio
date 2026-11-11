@@ -328,11 +328,11 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 .game-play { justify-self: start; margin-top: 14px; font-size: 12px; }
 
 /* ゲームの操作説明 */
-.howto { margin-top: clamp(90px, 12vw, 170px); display: grid; gap: 10px; scroll-margin-top: 120px; }
-.howto__title { font: 400 clamp(2.4rem, 4.6vw, 3.8rem) / 1 var(--f-display); letter-spacing: .02em; }
+.howto { margin-top: clamp(80px, 10vw, 140px); display: grid; gap: 8px; scroll-margin-top: 120px; max-width: 1000px; margin-inline: auto; width: 100%; }
+.howto__title { font: 400 clamp(1.8rem, 3vw, 2.6rem) / 1 var(--f-display); letter-spacing: .02em; }
 .howto__jp { font: 400 12.5px / 1.6 var(--f-serif); letter-spacing: .12em; color: var(--c-ink-soft); }
 .howto__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); margin-top: 24px; }
-.howto__col { padding: clamp(22px, 3vw, 36px); border-radius: 22px; background: rgba(255, 255, 255, .55); border: 1px solid rgba(255, 255, 255, .9); box-shadow: 0 24px 60px -40px rgba(110, 80, 160, .55); }
+.howto__col { padding: 0; }   /* 枠や影はつけず、線だけのシンプルな表に */
 .howto__label { display: flex; align-items: center; gap: 12px; font: 400 13px / 1.4 var(--f-serif); letter-spacing: .1em; margin-bottom: 14px; }
 .howto__label--tips { margin-top: 28px; }
 .howto__list { margin: 0; border-top: 1px solid var(--c-line); }
@@ -405,3 +405,24 @@ html.lightbox-open, html.lightbox-open body { overflow: hidden; }
 @media (max-width: 760px) {
   .sites { grid-template-columns: 1fr; }
 }
+
+/* 2列の一覧に動画を置くとき(3Dのページ):画像と同じように中央に置く */
+.site__frame video.site__shot { position: relative; inset: auto; width: auto; height: auto; max-width: 66%; max-height: 72%; object-fit: contain; }
+/* 縦長の作品(ポスター・イラストなど)も見えやすいように、少しだけ大きく */
+.site__frame .site__shot { max-height: 76%; }
+
+/* 大きく見せるカット:一覧の下に、同じ大きさで縦に並べる(雑誌の見開きのような横長) */
+.mocks { display: grid; gap: clamp(20px, 2.6vw, 36px); margin-top: clamp(56px, 7vw, 100px); }
+.mock { margin: 0; width: 100%; justify-self: stretch; max-width: none; grid-column: 1 / -1; grid-row: auto; }
+.mock .mock__frame { width: 100%; max-width: none; }
+.mock__frame { width: 100%; aspect-ratio: 2 / 1; box-shadow: none; }
+.mock__frame::after { display: none; }
+.mock__frame .mock__media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 760px) { .mock__frame { aspect-ratio: 3 / 2; } }
+
+/* ゲームのページ:プレイ動画を大きく1つだけ置き、その下に「Play game」 */
+.game-movie { display: grid; justify-items: center; gap: clamp(22px, 3vw, 34px); max-width: 1000px; margin-inline: auto; scroll-margin-top: 120px; }
+.game-movie__fig { margin: 0; width: 100%; }
+.game-movie__frame { width: 100%; aspect-ratio: 1280 / 890; box-shadow: none; }
+.game-movie__frame::after { display: none; }
+.game-movie .game-play { justify-self: center; margin-top: 0; }

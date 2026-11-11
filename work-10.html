@@ -56,52 +56,20 @@
         <p class="sec-head__v" aria-hidden="true">げーむ</p>
       </header>
 
-      <!-- このページ全体の説明と、中の一覧 -->
-      <div class="detail-intro">
-        <div class="detail-toc-wrap" data-reveal>
-          <p class="detail-toc-label">(CONTENTS)</p>
-          <ul class="detail-toc">
-            <li><a href="#piece-1"><span>01</span>Play Movie</a></li>
-            <li><a href="#howto"><span>02</span>How to Play</a></li>
-          </ul>
-        </div>
-        <div class="detail__body" data-reveal>
-          <p class="work__index">(07) <span>— 2026</span></p>
-          <h2 class="work__title"><span class="work__title-sub">ゲーム</span><span class="work__title-main">Dreamy Cloud City</span></h2>
-          <p class="work__en">2D SIDE-SCROLLING ACTION GAME</p>
-          <span class="tagbox">GAME</span>
-          <p class="work__desc">2次元の自分を模したキャラクターが主人公の、ブラウザで遊べるゲームです。自身でリリースした楽曲「ラビアクト」をBGMに使い、その曲の世界観をドット絵の街と空で表現しました。</p>
-          <p class="work__desc">ジャンルは「2D横スクロールアクション(プラットフォーマー)」。足場を飛び移りながら右へ進み、ジェムを集め、敵を踏んで倒しながらゴールを目指します。</p>
-          <dl class="work__spec">
-            <div><dt>Role</dt><dd>Planning / Character / Music</dd></div>
-            <div><dt>Tool</dt><dd>HTML5 Canvas / JavaScript</dd></div>
-            <div><dt>Play</dt><dd>PC / スマートフォン(ブラウザ)</dd></div>
-          </dl>
-          <a class="btn btn--ink btn--flip game-play" href="https://yona-72.github.io/dream-cloudcity/" target="_blank" rel="noopener"><span class="btn__roll"><span>Play game ↗</span><span aria-hidden="true">Play game ↗</span></span></a>
-        </div>
-      </div>
-
-      <div class="pieces">
-        <!-- 01:プレイ動画(タイトル画面 → プレイ → クリアまで) -->
-        <article class="piece" id="piece-1">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--game detail__frame--movie" data-label="MOVIE">
-              <video src="videos/10-game-play.mp4" poster="images/works/detail/10-game-play-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="DREAMY CLOUD CITY プレイ動画"></video>
-            </div>
-            <figcaption class="detail__cap">(01) Play Movie</figcaption>
-          </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(01) <span>/ 01</span></p>
-            <h2 class="piece__title">Play Movie</h2>
-            <p class="piece__jp">プレイ動画</p>
-            <p class="piece__desc">タイトル画面からゴールまでのプレイ動画です。夜のネオンの街を背景に、ロゴや文字もドット絵で描いています。うさぎに乗った主人公が、雲の街をゴールに向かって進みます。ゴールの手前では大きなUFOが現れ、最後まで気が抜けない演出にしています。</p>
+      <!-- プレイ動画(タイトル画面 → プレイ → クリアまで)。押すと大きく表示される -->
+      <div class="game-movie" id="piece-1">
+        <figure class="piece__fig game-movie__fig" data-reveal>
+          <div class="detail__frame game-movie__frame" data-label="MOVIE">
+            <video src="videos/10-game-play.mp4" poster="images/works/detail/10-game-play-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="DREAMY CLOUD CITY プレイ動画"></video>
           </div>
-        </article>
+        </figure>
+        <h2 class="piece__title visually-hidden">Dreamy Cloud City</h2>
+        <p class="piece__jp visually-hidden">プレイ動画</p>
+        <a class="btn btn--ink btn--flip game-play" href="https://yona-72.github.io/dream-cloudcity/" target="_blank" rel="noopener" data-reveal><span class="btn__roll"><span>Play game ↗</span><span aria-hidden="true">Play game ↗</span></span></a>
       </div>
 
       <!-- 操作説明 -->
       <section class="howto" id="howto" data-reveal>
-        <p class="detail-toc-label">(02) HOW TO PLAY</p>
         <h2 class="howto__title">How to Play</h2>
         <p class="howto__jp">操作方法</p>
         <div class="howto__grid">
@@ -132,7 +100,6 @@
             </ul>
           </div>
         </div>
-        <a class="btn btn--ink btn--flip game-play" href="https://yona-72.github.io/dream-cloudcity/" target="_blank" rel="noopener"><span class="btn__roll"><span>Play game ↗</span><span aria-hidden="true">Play game ↗</span></span></a>
       </section>
 
       <!-- ほかの作品へ -->

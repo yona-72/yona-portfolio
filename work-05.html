@@ -61,8 +61,8 @@
         <p class="sec-head__v" aria-hidden="true">さくひん</p>
       </header>
 
-      <!-- このページ全体の説明と、中の作品の一覧 -->
-      <div class="detail-intro">
+      <!-- 中の作品の一覧 -->
+      <div class="detail-intro detail-intro--toc-only">
         <div class="detail-toc-wrap" data-reveal>
           <p class="detail-toc-label">(CONTENTS)</p>
           <ul class="detail-toc">
@@ -72,81 +72,64 @@
             <li><a href="#piece-4"><span>04</span>Jelly</a></li>
           </ul>
         </div>
-        <div class="detail__body" data-reveal>
-          <p class="work__index">(05) <span>— 2026</span></p>
-          <h2 class="work__title"><span class="work__title-sub">Blender 3Dオブジェクト</span><span class="work__title-main">3D Objects</span></h2>
-          <p class="work__en">3D MODELING</p>
-          <span class="tagbox">3D</span>
-          <p class="work__desc">Blenderで制作した3Dオブジェクトのまとめです。金属の重さ、布のやわらかさ、ガラスの透明感と、質感のまったく違うモデルを、それぞれの素材がいちばんそれらしく見える光で仕上げました。</p>
-          <dl class="work__spec">
-            <div><dt>Role</dt><dd>Modeling / Render</dd></div>
-            <div><dt>Tool</dt><dd>Blender</dd></div>
-            <div><dt>Year</dt><dd>2026</dd></div>
-          </dl>
-        </div>
       </div>
 
-      <div class="pieces">
-        <!-- 01:リサイクル工場の機械(動画:音なしで自動再生・くり返し) -->
-        <article class="piece" id="piece-1">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--wide" data-label="VIDEO 01">
-              <video src="videos/05-3d-objects-1-machine.mp4" poster="images/works/detail/05-3d-objects-1-machine-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="リサイクル工場の機械"></video>
+      <!-- 作品の一覧(2列)。白い背景の中央に作品を置いた形。押すと大きく表示される -->
+      <div class="sites">
+        <article class="site" id="piece-1">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 01">
+              <video class="site__shot" src="videos/05-3d-objects-1-machine.mp4" poster="images/works/detail/05-3d-objects-1-machine-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="リサイクル工場の機械"></video>
             </div>
             <figcaption class="detail__cap">(01) Recycling Machine</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(01) <span>/ 04</span></p>
-            <h2 class="piece__title">Recycling Machine</h2>
-            <p class="piece__jp">リサイクル工場の機械</p>
-            <p class="piece__desc">リサイクル工場で使われる大型の機械をモデリングしました。細かな部品まで組み立て、ゴミが大小分別され処理される流れを再現しております。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Recycling Machine</h2>
+          <p class="piece__jp visually-hidden">リサイクル工場の機械</p>
         </article>
-        <!-- 02:馬のぬいぐるみ -->
-        <article class="piece" id="piece-2">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--square" data-label="IMAGE 02">
-              <img src="images/works/detail/05-3d-objects-2-horse-v2.jpg" alt="馬のぬいぐるみ" data-detail-img>
+        <article class="site" id="piece-2">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 02">
+              <img class="site__shot" src="images/works/detail/05-3d-objects-2-horse-v2.jpg" alt="馬のぬいぐるみ" loading="lazy" data-detail-img>
             </div>
             <figcaption class="detail__cap">(02) Horse Plush</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(02) <span>/ 04</span></p>
-            <h2 class="piece__title">Horse Plush</h2>
-            <p class="piece__jp">馬のぬいぐるみ</p>
-            <p class="piece__desc">ふわふわとした質感を目指した、ぬいぐるみのモデルです。ふくらみのやわらかさが伝わるよう、毛並みと光の当て方を調整しました。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Horse Plush</h2>
+          <p class="piece__jp visually-hidden">馬のぬいぐるみ</p>
         </article>
-        <!-- 03:光の反射の実験 ガラスオブジェクト -->
-        <article class="piece" id="piece-3">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--wide" data-label="IMAGE 03">
-              <img src="images/works/detail/05-3d-objects-3-glass.jpg" alt="光の反射の実験 ガラスオブジェクト" data-detail-img>
+        <article class="site" id="piece-3">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 03">
+              <img class="site__shot" src="images/works/detail/05-3d-objects-3-glass.jpg" alt="光の反射の実験 ガラスオブジェクト" loading="lazy" data-detail-img>
             </div>
             <figcaption class="detail__cap">(03) Glass Objects</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(03) <span>/ 04</span></p>
-            <h2 class="piece__title">Glass Objects</h2>
-            <p class="piece__jp">光の反射の実験 ガラスオブジェクト</p>
-            <p class="piece__desc">光の反射と屈折を試すために制作したガラスのオブジェクトです。背景の色や光の位置・色を変えながら、透明なものに映り込む表情を探りました。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Glass Objects</h2>
+          <p class="piece__jp visually-hidden">光の反射の実験 ガラスオブジェクト</p>
         </article>
-        <!-- 04:ゼリー(アニメーション)(動画:音なしで自動再生・くり返し) -->
-        <article class="piece" id="piece-4">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--wide" data-label="VIDEO 04">
-              <video src="videos/05-3d-objects-4-jelly.mp4" poster="images/works/detail/05-3d-objects-4-jelly-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="ゼリー(アニメーション)"></video>
+        <article class="site" id="piece-4">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 04">
+              <video class="site__shot" src="videos/05-3d-objects-4-jelly.mp4" poster="images/works/detail/05-3d-objects-4-jelly-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="ゼリー(アニメーション)"></video>
             </div>
             <figcaption class="detail__cap">(04) Jelly</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(04) <span>/ 04</span></p>
-            <h2 class="piece__title">Jelly</h2>
-            <p class="piece__jp">ゼリー(アニメーション)</p>
-            <p class="piece__desc">さくらんぼとクリームをのせたゼリーのアニメーションです。透明感のあるゼリーの質感と、ゆっくり回り込むカメラの動きで、ぷるんとした立体感を表現しました。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Jelly</h2>
+          <p class="piece__jp visually-hidden">ゼリー(アニメーション)</p>
         </article>
+      </div>
+
+      <!-- 大きく見せるカット(同じ大きさで縦に並べる)。押すと、上の一覧の同じ作品が大きく表示される -->
+      <div class="mocks">
+        <figure class="piece__fig mock" data-reveal>
+          <div class="detail__frame mock__frame" data-alias="piece-3" data-label="IMAGE 03">
+            <img class="mock__media" src="images/works/detail/05-3d-objects-3-glass.jpg" alt="光の反射の実験 ガラスオブジェクト" loading="lazy" data-detail-img>
+          </div>
+        </figure>
+        <figure class="piece__fig mock" data-reveal>
+          <div class="detail__frame mock__frame" data-alias="piece-4" data-label="IMAGE 04">
+            <video class="mock__media" src="videos/05-3d-objects-4-jelly.mp4" poster="images/works/detail/05-3d-objects-4-jelly-poster.jpg" autoplay muted loop playsinline preload="metadata" aria-label="ゼリー(アニメーション)"></video>
+          </div>
+        </figure>
       </div>
 
       <!-- ほかの作品へ -->

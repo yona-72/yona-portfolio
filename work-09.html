@@ -59,8 +59,8 @@
         <p class="sec-head__v" aria-hidden="true">さくひん</p>
       </header>
 
-      <!-- このページ全体の説明と、中の作品の一覧 -->
-      <div class="detail-intro">
+      <!-- 中の作品の一覧 -->
+      <div class="detail-intro detail-intro--toc-only">
         <div class="detail-toc-wrap" data-reveal>
           <p class="detail-toc-label">(CONTENTS)</p>
           <ul class="detail-toc">
@@ -69,66 +69,54 @@
             <li><a href="#piece-3"><span>03</span>Poster</a></li>
           </ul>
         </div>
-        <div class="detail__body" data-reveal>
-          <p class="work__index">(02) <span>— 2026</span></p>
-          <h2 class="work__title"><span class="work__title-sub">その他デジタルデザイン</span><span class="work__title-main">Digital Design</span></h2>
-          <p class="work__en">BANNER / ILLUSTRATION / POSTER</p>
-          <span class="tagbox">GRAPHIC</span>
-          <p class="work__desc">バナー、動画用イラスト、ポスターなど、Web以外のデジタルデザインのまとめです。見る人の視線の流れや情報の見やすさを考えながら、デザインで伝える・魅せることを大切に制作しています。</p>
-          <dl class="work__spec">
-            <div><dt>Role</dt><dd>Design / Illustration</dd></div>
-            <div><dt>Tool</dt><dd>Photoshop / Illustrator</dd></div>
-            <div><dt>Year</dt><dd>2026</dd></div>
-          </dl>
-        </div>
       </div>
 
-      <div class="pieces">
-        <!-- 01:バナー -->
-        <article class="piece" id="piece-1">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--arch" data-label="IMAGE 01">
-              <img src="images/works/detail/02-banner-web-2-banner.jpg" alt="バナー" data-detail-img>
+      <!-- 作品の一覧(2列)。白い背景の中央に作品を置いた形。押すと大きく表示される -->
+      <div class="sites">
+        <article class="site" id="piece-1">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 01">
+              <img class="site__shot" src="images/works/detail/02-banner-web-2-banner.jpg" alt="バナー" loading="lazy" data-detail-img>
             </div>
             <figcaption class="detail__cap">(01) Banner</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(01) <span>/ 03</span></p>
-            <h2 class="piece__title">Banner</h2>
-            <p class="piece__jp">バナー</p>
-            <p class="piece__desc">Webサイトや広告、SNSで使うバナーです。目を惹くデザインで見つけてもらいやすく、かつ限られたスペースでもひと目で内容が伝わるよう、言葉の大きさと配色のバランスも考えて制作しています。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Banner</h2>
+          <p class="piece__jp visually-hidden">バナー</p>
         </article>
-        <!-- 02:動画用イラスト(Illustrator のパスで制作)。バナーと左右逆の配置 -->
-        <article class="piece" id="piece-2">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--arch" data-label="IMAGE 02">
-              <img src="images/works/detail/02-banner-web-3-illustration.jpg" alt="動画用イラスト" data-detail-img>
+        <article class="site" id="piece-2">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 02">
+              <img class="site__shot" src="images/works/detail/02-banner-web-3-illustration.jpg" alt="動画用イラスト(Illustrator パスイラスト)" loading="lazy" data-detail-img>
             </div>
             <figcaption class="detail__cap">(02) Illustration</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(02) <span>/ 03</span></p>
-            <h2 class="piece__title">Illustration</h2>
-            <p class="piece__jp">動画用イラスト(Illustrator パスイラスト)</p>
-            <p class="piece__desc">動画の素材として使うために、Illustratorのパスで描いたイラストです。どのように使用するかを相談し合いながら、パーツを分けて描いています。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Illustration</h2>
+          <p class="piece__jp visually-hidden">動画用イラスト(Illustrator パスイラスト)</p>
         </article>
-        <!-- 03:デジタルデザインのポスター -->
-        <article class="piece" id="piece-3">
-          <figure class="piece__fig" data-reveal>
-            <div class="detail__frame detail__frame--poster" data-label="IMAGE 03">
-              <img src="images/works/detail/09-digital-3-poster.jpg" alt="ポスター Lost in electronic" data-detail-img>
+        <article class="site" id="piece-3">
+          <figure class="piece__fig site__fig" data-reveal>
+            <div class="detail__frame site__frame" data-label="IMAGE 03">
+              <img class="site__shot" src="images/works/detail/09-digital-3-poster.jpg" alt="デジタルデザインのポスター「Lost in electronic」" loading="lazy" data-detail-img>
             </div>
             <figcaption class="detail__cap">(03) Poster</figcaption>
           </figure>
-          <div class="piece__text" data-reveal>
-            <p class="piece__no">(03) <span>/ 03</span></p>
-            <h2 class="piece__title">Poster</h2>
-            <p class="piece__jp">デジタルデザインのポスター「Lost in electronic」</p>
-            <p class="piece__desc">電子音楽の中に溶け込んでいくような浮遊感をテーマにした、デジタルデザインのポスターです。写真にシャボン玉や光の帯を重ね、紫の空気感とタイポグラフィで世界観をまとめました。</p>
-          </div>
+          <h2 class="piece__title visually-hidden">Poster</h2>
+          <p class="piece__jp visually-hidden">デジタルデザインのポスター「Lost in electronic」</p>
         </article>
+      </div>
+
+      <!-- 大きく見せるカット(同じ大きさで縦に並べる)。押すと、上の一覧の同じ作品が大きく表示される -->
+      <div class="mocks">
+        <figure class="piece__fig mock" data-reveal>
+          <div class="detail__frame mock__frame" data-alias="piece-1" data-label="IMAGE 01">
+            <img class="mock__media" src="images/works/detail/02-banner-web-2-banner.jpg" alt="バナー" loading="lazy" data-detail-img>
+          </div>
+        </figure>
+        <figure class="piece__fig mock" data-reveal>
+          <div class="detail__frame mock__frame" data-alias="piece-2" data-label="IMAGE 02">
+            <img class="mock__media" src="images/works/detail/02-banner-web-3-illustration.jpg" alt="動画用イラスト(Illustrator パスイラスト)" loading="lazy" data-detail-img>
+          </div>
+        </figure>
       </div>
 
       <!-- ほかの作品へ -->
