@@ -346,12 +346,16 @@ a.work__more:hover { opacity: .7; }
   margin-top: calc(clamp(56px, 9vw, 120px) * -.4);
 }
 .works.is-pinned .works__stage {
+  /* 下のバーの位置と高さ。作品の文章は、ここから必ず --bar-gap 以上あけて上に収める */
+  --bar-b: clamp(48px, 7.5vh, 72px);
+  --bar-h: 52px;   /* 下に作品名が付くぶんの高さ */
+  --bar-gap: clamp(22px, 4svh, 48px);
   position: sticky; top: 0;
   height: 100vh; height: 100svh;
   padding: clamp(84px, 11vh, 120px) 0 clamp(92px, 13vh, 130px);
 }
 .works.is-pinned .work {
-  position: absolute; inset: clamp(84px, 11vh, 120px) 0 clamp(92px, 13vh, 130px);
+  position: absolute; inset: clamp(84px, 11vh, 120px) 0 calc(var(--bar-b) + var(--bar-h) + var(--bar-gap));
   opacity: 0;
   pointer-events: none;
   perspective: 1600px;            /* 奥行きのある空間。数字が小さいほど遠近感が強くなる */
@@ -444,7 +448,8 @@ a.work__more:hover { opacity: .7; }
    満ちるほど色も濃くなる */
 .works-bar { display: none; }
 .works.is-pinned .works-bar {
-  position: absolute; left: 0; right: 0; bottom: clamp(48px, 7.5vh, 72px);   /* 左下の番号と重ならない高さ */
+  position: absolute; left: 0; right: 0; bottom: var(--bar-b);   /* 左下の番号と重ならない高さ */
+  min-height: var(--bar-h);
   display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
   gap: clamp(16px, 3vw, 40px);
 }
@@ -829,15 +834,24 @@ html.has-reveal [data-reveal].is-inview { opacity: 1; transform: none; filter: n
   .site-footer__thanks, .site-footer__bars { display: none; }
 }
 @media (max-width: 900px) {
-  .works.is-pinned .work, .works.is-pinned .work:nth-child(even) { flex-direction: column; gap: 22px; }
+  /* 縦に並ぶとき:文章は自然な高さのまま、画像は残った高さいっぱいまでの大きさに自動で伸び縮みする。
+     画面が小さくても大きくても、文章と下のバーが近づきすぎない */
+  .works.is-pinned .work, .works.is-pinned .work:nth-child(even) {
+    display: grid; grid-template-rows: minmax(0, 1fr) auto; justify-items: center; align-content: center;
+    row-gap: clamp(14px, 2.6svh, 28px);
+  }
   .works.is-pinned .work:nth-child(n) .work__body { width: min(420px, 88%); transform: none; }
-  .works.is-pinned .work__media, .works.is-pinned .work:nth-child(n) .work__media { width: min(400px, 82%, 40svh); align-self: center; }
+  .works.is-pinned .work__media, .works.is-pinned .work:nth-child(n) .work__media {
+    width: auto; height: 100%; min-height: 0; aspect-ratio: 1; max-width: min(400px, 82vw);
+    display: grid; align-content: center; justify-self: center;
+  }
   .works.is-pinned .work__desc-en, .works.is-pinned .work__spec { display: none; }
   .works.is-pinned .work__desc { margin-top: 4px; font-size: 12.5px; line-height: 1.9; }
   .works-bar__pct { display: none; }
 }
 @media (max-width: 560px) {
-  .works.is-pinned .works-bar { grid-template-columns: auto minmax(0, 1fr); gap: 14px; bottom: 56px; }   /* 左下の番号と重ならないように少し上げる */
+  .works.is-pinned .works__stage { --bar-b: 56px; --bar-h: 26px; }   /* 左下の番号と重ならないように少し上げる */
+  .works.is-pinned .works-bar { grid-template-columns: auto minmax(0, 1fr); gap: 14px; }
   .works-bar__count b { font-size: 18px; }
   .works-bar__list button em { display: none; }
 }
